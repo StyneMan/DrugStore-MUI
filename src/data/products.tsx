@@ -3,7 +3,7 @@ import prod2 from "../assets/images/product2.png"
 import noprod from "../assets/images/no_prod_image.png"
 
 export interface ProductModel {
-    id: number;
+  id: number;
   image: string;
   name: string;
   price: number;

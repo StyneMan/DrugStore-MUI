@@ -14,16 +14,7 @@ import { Avatar, Box, Typography } from "@mui/material";
 
 import inventoryImage from "../../assets/images/inventory_2.svg";
 
-// function CustomToolbar() {
-//   return (
-//     <GridToolbarContainer>
-//       <GridToolbarColumnsButton />
-//       <GridToolbarFilterButton />
-//       <GridToolbarDensitySelector />
-//       <GridToolbarExport />
-//     </GridToolbarContainer>
-//   );
-// }
+
 
 export default function ProductsTable() {
   const columns = [

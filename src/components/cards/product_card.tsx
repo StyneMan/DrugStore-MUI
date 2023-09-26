@@ -17,7 +17,7 @@ export default function ProductCard({ product }: ProductProps) {
         justifyContent={"space-between"}
         alignItems={"start"}
       >
-        <img src={product.image} alt="" height={144} width={"100%"} />
+        <img src={product.image} alt="" height={175} width={"100%"} />
         <Box
           flexDirection={"column"}
           justifyContent={"space-between"}

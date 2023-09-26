@@ -6,6 +6,7 @@ import Activity from "./screens/activity"
 import Reports from "./screens/reports"
 import Customers from "./screens/customers"
 import Support from "./screens/support"
+import AddCustomer from "./screens/customers/add_customer"
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/dashboard/activity" element={<Activity />} />
         <Route path="/dashboard/reports" element={<Reports />} />
         <Route path="/dashboard/customers" element={<Customers />} />
+        <Route path="/dashboard/customers/new" element={<AddCustomer />} />
         <Route path="/dashboard/supports" element={<Support />} />
       </Route>
      </Routes>
