@@ -16,7 +16,9 @@ import {
   AppBar,
   Avatar,
   Button,
+  Card,
   IconButton,
+  Popper,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -32,6 +34,7 @@ import GridViewIcon from "@mui/icons-material/GridView";
 import ReportIcon from "@mui/icons-material/Report";
 import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
+import ProfileDropDownContent from "../profile/dropdown_content";
 
 type Anchor = "top" | "left" | "bottom" | "right";
 
@@ -69,6 +72,15 @@ export default function Dashboard() {
   const currlocation = useLocation();
   //   const [open, setOpen] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popper" : undefined;
 
   const drawerListItems = [
     {
@@ -236,10 +248,35 @@ export default function Dashboard() {
                 flexDirection={"row"}
                 justifyContent={"end"}
               >
-                <Avatar
-                  sx={{ width: 56, height: 56 }}
-                  src="https://images.generated.photos/yHB68S2StFH13k8q8doQsZa0Ol3MAgQnZ2LrdDoMvCs/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MDE2NDQ5LmpwZw.jpg"
-                />
+                <IconButton onClick={handleClick}>
+                  <Avatar
+                    sx={{ width: 56, height: 56 }}
+                    src="https://images.generated.photos/yHB68S2StFH13k8q8doQsZa0Ol3MAgQnZ2LrdDoMvCs/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MDE2NDQ5LmpwZw.jpg"
+                  />
+                </IconButton>
+                <Popper
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  placement="bottom-end"
+                  sx={{ zIndex: 500 }}
+                >
+                  <Box
+                    bgcolor={"white"}
+                    zIndex={2000}
+                    mt={4}
+                    width={"20vw"}
+                    minWidth={150}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    justifyContent={"start"}
+                    alignItems={"stretch"}
+                  >
+                    <Card elevation={10} sx={{ p: 2 }}>
+                      <ProfileDropDownContent />
+                    </Card>
+                  </Box>
+                </Popper>
               </Box>
             </Toolbar>
           </AppBar>

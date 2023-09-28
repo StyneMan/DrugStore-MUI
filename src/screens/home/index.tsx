@@ -3,12 +3,9 @@ import {
   Box,
   Button,
   Card,
-  FormControl,
   Grid,
   IconButton,
-  MenuItem,
   Popper,
-  Select,
   SelectChangeEvent,
   Tab,
   Tabs,
@@ -25,7 +22,7 @@ import ProductTab from "./tabs/products";
 import ProductsTable from "../../components/tables/product_table";
 import Orders from "./tabs/orders";
 import OrderSummary from "./components/order_summary";
-import { ArrowDropDown, Close, Search } from "@mui/icons-material";
+import { ArrowDropDown, Search } from "@mui/icons-material";
 
 interface TabPanelProps {
   children?: React.ReactNode;
