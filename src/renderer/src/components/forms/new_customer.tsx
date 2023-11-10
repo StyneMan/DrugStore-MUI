@@ -18,6 +18,11 @@ import {
 import { useFormik } from "formik";
 
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import APIService from "../../service/api_service";
+import { getDatabase } from "../../../../main/database";
+import { setLoading } from "../../redux/slices/loader";
+import toast from "react-hot-toast";
 
 type CustomerProps = {
   firstName: string;
@@ -33,6 +38,9 @@ type CustomerProps = {
 
 export default function NewCustomerForm() {
   const [value, setValue] = React.useState();
+  const dispatch = useDispatch();
+  const isOnline = useSelector((state) => state.loader.isOnline);
+  const dbasePath = useSelector((state) => state.database.dbasePath);
 
   const customerSchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required"),
@@ -42,9 +50,9 @@ export default function NewCustomerForm() {
       .required("First name is required"),
     gender: Yup.string().required("Gender is required"),
     mobileID: Yup.string().required("Mobile ID is required"),
-    phoneNumber: Yup.number()
+    phoneNumber: Yup.string()
       .max(11, "Maximum allowed is 11 digits")
-      .required("Gender is required"),
+      .required("Phone number is required"),
     date: Yup.string().required("Date is required"),
     homeAddress: Yup.string().required("Home address is required"),
     shippingAddress: Yup.string().required("Shipping address is required"),
@@ -62,11 +70,52 @@ export default function NewCustomerForm() {
     phoneNumber: null,
   };
 
+  function formatDateToYMD(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
   const formik = useFormik({
     initialValues,
     validationSchema: customerSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      dispatch(setLoading(true));
       console.log(values.emailAddress);
+
+      const payload = {
+        id: new Date().getTime(),
+        email: values.emailAddress,
+        user_type: "user_customer",
+        first_name: values.firstName,
+        last_name: values.lastName,
+        gender: values.gender,
+        dob: formatDateToYMD(new Date(values.date)),
+        contact_number: values.phoneNumber,
+        permanent_address: values.homeAddress,
+        current_address: values.shippingAddress,
+      };
+
+      try {
+        if (isOnline) {
+          //  Save Online here
+          const data = await APIService.addNewCustomer(payload);
+          console.log("NEW CUSTOMER RESPONSE ", data);
+        }
+
+        const db = await getDatabase(`${dbasePath}`);
+        db.users.insert(payload);
+
+        console.log(payload);
+        dispatch(setLoading(false));
+        toast.success("New customer added successfully.");
+      } catch (error: any) {
+        console.log(error);
+        dispatch(setLoading(false));
+        toast.error(error?.response?.data?.message ?? "");
+      }
     },
   });
 
@@ -303,7 +352,7 @@ export default function NewCustomerForm() {
           type="submit"
           variant="contained"
           sx={{ py: 1, px: 4 }}
-          onClick={() => handleSubmit}
+          onClick={() => handleSubmit()}
         >
           Add New Customer
         </Button>

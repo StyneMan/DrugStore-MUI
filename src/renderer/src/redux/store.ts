@@ -5,6 +5,7 @@ import searchReducer from "./slices/search";
 import purchaseReducer from "./slices/purchase";
 import productReducer from "./slices/product";
 import categoryReducer from "./slices/categories";
+import databaseReducer from "./slices/database"
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     purchase: purchaseReducer,
     product: productReducer,
     category: categoryReducer,
+    database: databaseReducer,
   },
 });
 

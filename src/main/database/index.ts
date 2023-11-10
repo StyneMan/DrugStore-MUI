@@ -16,6 +16,11 @@ import { draftSchema } from "./schemas/draftschema";
 import { categorySchema } from "./schemas/categorySchema";
 import { authSchema } from "./schemas/authSchema";
 import { paymentMethodSchema } from "./schemas/paymentMethodSchema";
+import { businessLocationSchema } from "./schemas/businessLocationSchema";
+import { cashRegisterSchema } from "./schemas/cashRegisterSchema";
+import { stockSchema } from "./schemas/stockSchema";
+import { productSchema } from "./schemas/productSchema";
+import { userSchema } from "./schemas/userSchema";
 
 addRxPlugin(RxDBQueryBuilderPlugin);
 addRxPlugin(RxDBDevModePlugin);
@@ -83,6 +88,34 @@ export async function getDatabase(name: string) {
       }),
       ignoreDuplicate: true
     });
+
+    // console.log("creating cart-collection..");
+    await db.addCollections({
+      business_locations: { 
+        schema: businessLocationSchema,
+      },
+    });
+
+     // console.log("creating cart-collection..");
+     await db.addCollections({
+      cash_registers: { 
+        schema: cashRegisterSchema,
+      },
+    });
+
+     // console.log("creating cart-collection..");
+     await db.addCollections({
+      product_stock_reports: { 
+        schema: stockSchema,
+      },
+    });
+
+     // console.log("creating draft-collection..");
+     await db.addCollections({
+      products: {
+        schema: productSchema,
+      },
+    });
  
     // console.log("creating cart-collection..");
     await db.addCollections({
@@ -116,6 +149,13 @@ export async function getDatabase(name: string) {
      await db.addCollections({
       paymentmethods: {
         schema: paymentMethodSchema,
+      },
+    });
+
+     // console.log("creating payment-method-collection..");
+     await db.addCollections({
+      users: {
+        schema: userSchema,
       },
     });
 

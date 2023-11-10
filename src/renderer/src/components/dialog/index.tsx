@@ -1,6 +1,6 @@
 import * as React from "react";
 // import Button from '@mui/material/Button';
-import Dialog from "@mui/material/Dialog";
+import Dialog, { DialogProps } from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { Box, IconButton } from "@mui/material";
@@ -28,6 +28,8 @@ export default function CustomDialog({
   content,
   showClose = true,
 }: CustomDialogProps) {
+  const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("xs");
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -36,6 +38,7 @@ export default function CustomDialog({
     <div>
       <Dialog
         open={open}
+        maxWidth={maxWidth}
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}

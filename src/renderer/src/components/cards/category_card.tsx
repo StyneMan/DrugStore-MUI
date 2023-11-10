@@ -5,6 +5,7 @@ import {
   setItemClicked,
   setSelectedCategoryItems,
 } from "../../redux/slices/categories";
+import { setFilteredProducts } from "../../redux/slices/search";
 
 interface CategoryProps {
   item: any;
@@ -13,24 +14,24 @@ interface CategoryProps {
 export default function CategoryCard({ item }: CategoryProps) {
   const dispatch = useDispatch();
   const [itemCount, setItemCount] = React.useState(0);
-  const [selectedItems, setSelectedItems] = React.useState([]);
+  const [selectedItems, setSelectedItems] = React.useState<any[]>([]);
 
   const products = useSelector((state) => state.product.products);
 
   React.useEffect(() => {
     if (products) {
-      console.log("PRODUCTS :: ", products);
-      const filtered = products?.data?.filter(
-        (ite: any) =>
-          ite?.category?.name?.toLowerCase() === item?.name.toLowerCase()
+      // console.log("PRODUCTS :: ", products);
+      const filtered = products?.filter(
+        (ite: any) => ite?._data?.category?.name === item?._data?.name
       );
 
       setItemCount(filtered.length);
 
       setSelectedItems(filtered);
-      console.log("FILTERED :: ", filtered);
+      setFilteredProducts(products);
+      // console.log("FILTERED :: ", filtered);
     }
-  }, [item?.name, products]);
+  }, [item?._data?.name, products]);
 
   return (
     <Box
@@ -46,6 +47,8 @@ export default function CategoryCard({ item }: CategoryProps) {
       component={ListItemButton}
       onClick={() => {
         dispatch(setItemClicked(true));
+        console.log("ONKJ :: KK ", selectedItems);
+
         dispatch(setSelectedCategoryItems(selectedItems));
       }}
     >
@@ -64,7 +67,7 @@ export default function CategoryCard({ item }: CategoryProps) {
           color={item?.foreColor}
           gutterBottom
         >
-          {item?.name}
+          {item?._data?.name}
         </Typography>
         <Typography
           fontSize={13}

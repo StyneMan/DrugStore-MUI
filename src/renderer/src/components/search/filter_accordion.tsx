@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilteredProducts, setSorting } from "../../redux/slices/search";
+import { getDatabase } from "../../../../main/database";
 
 interface Props {
   setAnchorEl: any;
@@ -48,7 +49,10 @@ export default function CollapseSection({ setAnchorEl }: Props) {
 
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
-  const [open5, setOpen5] = React.useState(false);
+  const [open3, setOpen3] = React.useState(false);
+
+  const [categories, setCategories] = React.useState<any[]>([]);
+  // const [products, setProducts] = React.useState<any[]>([]);
 
   const [sortLowHigh, setSortLowHigh] = React.useState(false);
   const [sortHighLow, setSortHighLow] = React.useState(false);
@@ -59,19 +63,44 @@ export default function CollapseSection({ setAnchorEl }: Props) {
   const [value, setValue] = React.useState<number[]>([0, 20]);
 
   const sorting = useSelector((state) => state.search.sorting);
-  const categories = useSelector((state) => state.category.categories);
+  // const categories = useSelector((state) => state.category.categories);
+  const dbasePath = useSelector((state) => state.database.dbasePath);
   const filteredProducts = useSelector(
     (state) => state.search.filteredProducts
   );
-  const products = useSelector(
-    (state) => state.product.products
-  );
+  const products = useSelector((state) => state.product.products);
+
+  // console.log("UNFILTARED :: ", products);
+  // console.log("FILTARED :: ", filteredProducts);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
 
     console.log("CURRENT VAL", newValue);
   };
+
+  async function getCategories() {
+    try {
+      const db = await getDatabase(dbasePath);
+
+      db.categories.find().$.subscribe(async function (mCategories) {
+        if (!mCategories) {
+          console.log("EMPTY DATABASE ::: ");
+          return;
+        }
+        setCategories(mCategories);
+      });
+    } catch (error) {
+      console.log("CATCH ERROR ::: ", error);
+    }
+  }
+
+  // console.log("CATEGORIY CHECK  :: ", products?.data);
+
+  React.useEffect(() => {
+    getCategories();
+    // setProducts(mproducts);
+  }, []);
 
   React.useEffect(() => {
     if (sorting?.name === "alphabet-sort") {
@@ -100,58 +129,61 @@ export default function CollapseSection({ setAnchorEl }: Props) {
 
     if (sorting?.name === "alphabet-sort") {
       if (sorting?.value === "a-z") {
-        const sortedData = filteredProducts?.slice().sort((a, b) => {
+        const sortedData = products?.slice().sort((a, b) => {
+          console.log("DATA INSPECT : ", a);
+
           // Use localeCompare for case-insensitive sorting
-          return a.name.localeCompare(b.name);
+          return a?._data?.name?.localeCompare(b?._data?.name);
         });
+
+        // console.log("SORTED PRODUCTS ==>> ", sortedData);
 
         dispatch(setFilteredProducts(sortedData));
       } else {
-        const sortedData = filteredProducts?.slice().sort((a, b) => {
+        const sortedData = products?.slice().sort((a, b) => {
           // Use localeCompare for case-insensitive sorting
-          return b.name.localeCompare(a.name);
+          return b?._data?.name?.localeCompare(a?._data?.name);
         });
+        // console.log("SORTED PRODUCTS ==>> ", sortedData);
         dispatch(setFilteredProducts(sortedData));
       }
     } else if (sorting?.name === "price-sort") {
-      console.log("HERE ??>>> ");
-
       if (sorting?.value === "low-high") {
-        const sortedData = filteredProducts?.slice().sort((a, b) => {
+        const sortedData = products?.slice().sort((a, b) => {
           // Use localeCompare for case-insensitive sorting
-          return (
-            parseInt(
-              a.product_variations[0]?.variations[0]?.default_sell_price
-            ) -
-            parseInt(b.product_variations[0]?.variations[0]?.default_sell_price)
-          );
+          console.log("A VALUS ", a?._data?.product_variations[0]?.variations[0]?.default_sell_price);
+          console.log("B VALUE ", b?._data?.product_variations[0]?.variations[0]?.default_sell_price);
+
+          const aVal = `${a?._data?.product_variations[0]?.variations[0]?.default_sell_price}` || '0.0';
+          const bVal = `${b?._data?.product_variations[0]?.variations[0]?.default_sell_price}` || '0.0';
+
+          return parseFloat(aVal) - parseFloat(bVal);
         });
-        console.log("SORTED HE ... ", sortedData);
+        // console.log("SORTED HE ... ", sortedData);
 
         dispatch(setFilteredProducts(sortedData));
       } else {
-        const sortedData = filteredProducts?.slice().sort((a, b) => {
+        const sortedData = products?.sort((a, b) => {
           // Use localeCompare for case-insensitive sorting
           return (
             parseInt(
-              b.product_variations[0]?.variations[0]?.default_sell_price
+              b?._data?.product_variations[0]?.variations[0]?.default_sell_price
             ) -
-            parseInt(a.product_variations[0]?.variations[0]?.default_sell_price)
+            parseInt(
+              a?._data?.product_variations[0]?.variations[0]?.default_sell_price
+            )
           );
         });
-        console.log("SORTED HL ... ", sortedData);
+        // console.log("SORTED HL ... ", sortedData);
         dispatch(setFilteredProducts(sortedData));
       }
     } else if (sorting?.name === "category-sort") {
       console.log("HERE ??>>> ");
 
-      const filteredData = filteredProducts
-        ?.slice()
-        .filter(
-          (item: any) =>
-            item?.category?.name.toLowerCase() === sorting?.value.toLowerCase()
-        );
-      console.log("SORTED HE ... ", filteredData);
+      const filteredData = products?.filter(
+        (item: any) =>
+          item?.category?.name.toLowerCase() === sorting?.value.toLowerCase()
+      );
 
       dispatch(setFilteredProducts(filteredData));
     }
@@ -327,14 +359,14 @@ export default function CollapseSection({ setAnchorEl }: Props) {
         alignItems={"center"}
         mt={1}
       >
-        <IconButton onClick={() => setOpen5(!open5)}>
-          {open5 ? <ArrowDropUpIcon /> : <ArrowRightIcon />}
+        <IconButton onClick={() => setOpen3(!open3)}>
+          {open3 ? <ArrowDropUpIcon /> : <ArrowRightIcon />}
         </IconButton>
         <Typography fontSize={14} fontWeight={700} color={"black"} px={1}>
           Category
         </Typography>
       </Box>
-      {open5 && (
+      {open3 && (
         <Box
           display={"flex"}
           mx={6}
@@ -350,7 +382,7 @@ export default function CollapseSection({ setAnchorEl }: Props) {
               defaultValue="female"
               name="radio-buttons-group"
             >
-              {categories?.data?.map((item: any, index: number) => (
+              {categories?.map((item: any, index: number) => (
                 <FormControlLabel
                   key={index}
                   value={item?.name}
@@ -358,11 +390,11 @@ export default function CollapseSection({ setAnchorEl }: Props) {
                   label={item?.name}
                   onChange={(e, checked) => {
                     // console.log("ChANGHS ---- ", e.target?.value);
-                    console.log("ChANGHS ---- ", checked);
+                    console.log("ChANGHS ---- ", item?.name);
                     dispatch(
                       setSorting({
                         name: "category-sort",
-                        value: `${e.target?.value}`,
+                        value: `${item?.name}`,
                       })
                     );
                   }}

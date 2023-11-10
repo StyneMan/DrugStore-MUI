@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import React from "react";
 
-import { tempPaymentMethods } from "../../../data/payment_methods";
-import { getDatabase } from "../../../database";
+// import { tempPaymentMethods } from "../../../data/payment_methods";
+import { getDatabase } from "../../../../../main/database";
 import { NumericFormat } from "react-number-format";
 import { ToastBar, Toaster, toast } from "react-hot-toast";
 import { CheckCircleOutline } from "@mui/icons-material";
@@ -19,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import CustomDialog from "../../../components/dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../../redux/slices/loader";
+import { RootState } from "../../../redux/store";
+import { setPaymentMethods } from "../../../redux/slices/purchase";
 
 export default function OrderSummary() {
   const [subTotal, setSubTotal] = React.useState(0);
@@ -28,13 +30,20 @@ export default function OrderSummary() {
   const [open, setOpen] = React.useState(false);
   const [isSelected, setSelected] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
+  const [selectedMethod, setSelectedMethod] = React.useState<string | null>(
+    null
+  );
   const [deviceType, setDeviceType] = React.useState("mobile");
-  const [paymentMethods, setPaymentMethods] = React.useState<any>([]);
+  // const [paymentMethods, setPaymentMethods] = React.useState<any>([]);
 
   const dispatch = useDispatch();
 
   const currentCustomer = useSelector(
     (state) => state.purchase.currentCustomer
+  );
+  const dbasePath = useSelector((state: RootState) => state.database.dbasePath);
+  const paymentMethods = useSelector(
+    (state: RootState) => state.purchase.paymentMethods
   );
 
   const navigate = useNavigate();
@@ -44,7 +53,7 @@ export default function OrderSummary() {
 
   async function getCarts() {
     try {
-      const db = await getDatabase("drugstore");
+      const db = await getDatabase(dbasePath);
 
       db.carts
         .find()
@@ -72,14 +81,19 @@ export default function OrderSummary() {
           setTax(tx);
           setTotal(tx + summer);
         });
+
+        console.log("DATABASE CONTENT RIGHT HERE ::: ", db);
+        
     } catch (error) {
       console.log("CATCH ERROR ::: ", error);
     }
   }
 
+  // console.log("CURRENT CUSTOMIRAMITE :: ", currentCustomer);
+
   async function getPaymentMethods() {
     try {
-      const db = await getDatabase("drugstore");
+      const db = await getDatabase(dbasePath);
 
       db.paymentmethods.find().$.subscribe(async function (pMethod) {
         if (!pMethod) {
@@ -91,12 +105,7 @@ export default function OrderSummary() {
         console.log("p METHODS ::: ", pMethod[0]?._data);
 
         const mArray = Object.values(pMethod[0]?._data?.methods);
-
-        console.log("ARRA T METHODS ::: ", mArray);
-
-        setPaymentMethods(mArray?.slice(0, 5));
-
-        // setData(heroes);
+        dispatch(setPaymentMethods(mArray));
       });
     } catch (error) {
       console.log("CATCH ERROR ::: ", error);
@@ -305,10 +314,10 @@ export default function OrderSummary() {
                   component={Button}
                   onClick={() => {
                     setSelectedIndex(index);
+                    setSelectedMethod(item);
                     setSelected(true);
                   }}
                 >
-                  {/* {item?.icon} */}
                   <Typography
                     fontSize={13}
                     textAlign={"center"}
@@ -343,7 +352,12 @@ export default function OrderSummary() {
               onClick={() => {
                 navigate("/dashboard/paymentmethod", {
                   state: {
-                    paymentMethod: tempPaymentMethods[selectedIndex]?.name,
+                    paymentMethod: selectedMethod,
+                    tax: tax,
+                    total: total,
+                    subTotal: subTotal,
+                    customer: currentCustomer,
+                    customerName: `${currentCustomer?.first_name} ${currentCustomer?.last_name}`
                   },
                 });
               }}
@@ -363,7 +377,9 @@ export default function OrderSummary() {
               onClick={async () => {
                 try {
                   dispatch(setLoading(true));
-                  const db = await getDatabase("drugstore");
+                  const db = await getDatabase(
+                    `${localStorage.getItem("dbPath")}`
+                  );
                   const draftObj = {
                     id: new Date().getTime().toString(),
                     customer: currentCustomer,

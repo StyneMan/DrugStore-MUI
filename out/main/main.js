@@ -1,12 +1,16 @@
 "use strict";
 const electron$1 = require("electron");
-const require$$9 = require("path");
+const path$1 = require("node:path");
 const require$$3 = require("util");
-const require$$4 = require("fs");
+const fs$3 = require("fs");
 const require$$5 = require("crypto");
 const require$$6 = require("os");
 const require$$7 = require("events");
 const require$$8 = require("net");
+const require$$0$3 = require("path");
+const require$$0$4 = require("constants");
+const require$$0$5 = require("stream");
+const require$$5$1 = require("assert");
 function _interopNamespaceDefault(e) {
   const n = Object.create(null, { [Symbol.toStringTag]: { value: "Module" } });
   if (e) {
@@ -23,7 +27,7 @@ function _interopNamespaceDefault(e) {
   n.default = e;
   return Object.freeze(n);
 }
-const require$$9__namespace = /* @__PURE__ */ _interopNamespaceDefault(require$$9);
+const path__namespace = /* @__PURE__ */ _interopNamespaceDefault(path$1);
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
@@ -98,10 +102,10 @@ UnsubscriptionError.UnsubscriptionError = createErrorClass_1$5.createErrorClass(
 var arrRemove$1 = {};
 Object.defineProperty(arrRemove$1, "__esModule", { value: true });
 arrRemove$1.arrRemove = void 0;
-function arrRemove(arr, item) {
-  if (arr) {
-    var index = arr.indexOf(item);
-    0 <= index && arr.splice(index, 1);
+function arrRemove(arr2, item) {
+  if (arr2) {
+    var index = arr2.indexOf(item);
+    0 <= index && arr2.splice(index, 1);
   }
 }
 arrRemove$1.arrRemove = arrRemove;
@@ -362,12 +366,12 @@ function reportUnhandledError(err) {
   });
 }
 reportUnhandledError$1.reportUnhandledError = reportUnhandledError;
-var noop$1 = {};
-Object.defineProperty(noop$1, "__esModule", { value: true });
-noop$1.noop = void 0;
-function noop() {
+var noop$2 = {};
+Object.defineProperty(noop$2, "__esModule", { value: true });
+noop$2.noop = void 0;
+function noop$1() {
 }
-noop$1.noop = noop;
+noop$2.noop = noop$1;
 var NotificationFactories = {};
 Object.defineProperty(NotificationFactories, "__esModule", { value: true });
 NotificationFactories.createNotification = NotificationFactories.nextNotification = NotificationFactories.errorNotification = NotificationFactories.COMPLETE_NOTIFICATION = void 0;
@@ -449,7 +453,7 @@ errorContext$1.captureError = captureError;
   var Subscription_12 = Subscription$1;
   var config_12 = config;
   var reportUnhandledError_12 = reportUnhandledError$1;
-  var noop_12 = noop$1;
+  var noop_12 = noop$2;
   var NotificationFactories_1 = NotificationFactories;
   var timeoutProvider_12 = timeoutProvider;
   var errorContext_12 = errorContext$1;
@@ -2011,7 +2015,7 @@ var async = {};
   exports.asyncScheduler = new AsyncScheduler_12.AsyncScheduler(AsyncAction_12.AsyncAction);
   exports.async = exports.asyncScheduler;
 })(async);
-var queue = {};
+var queue$1 = {};
 var QueueAction$1 = {};
 var __extends$4 = commonjsGlobal && commonjsGlobal.__extends || function() {
   var extendStatics = function(d, b) {
@@ -2113,7 +2117,7 @@ QueueScheduler$1.QueueScheduler = QueueScheduler;
   var QueueScheduler_1 = QueueScheduler$1;
   exports.queueScheduler = new QueueScheduler_1.QueueScheduler(QueueAction_1.QueueAction);
   exports.queue = exports.queueScheduler;
-})(queue);
+})(queue$1);
 var animationFrame = {};
 var AnimationFrameAction$1 = {};
 var __extends$2 = commonjsGlobal && commonjsGlobal.__extends || function() {
@@ -2407,8 +2411,8 @@ Object.defineProperty(args, "__esModule", { value: true });
 args.popNumber = args.popScheduler = args.popResultSelector = void 0;
 var isFunction_1$l = isFunction$1;
 var isScheduler_1$3 = isScheduler$1;
-function last$4(arr) {
-  return arr[arr.length - 1];
+function last$4(arr2) {
+  return arr2[arr2.length - 1];
 }
 function popResultSelector(args2) {
   return isFunction_1$l.isFunction(last$4(args2)) ? args2.pop() : void 0;
@@ -3616,7 +3620,7 @@ var argsArgArrayOrObject$1 = {};
 Object.defineProperty(argsArgArrayOrObject$1, "__esModule", { value: true });
 argsArgArrayOrObject$1.argsArgArrayOrObject = void 0;
 var isArray$3 = Array.isArray;
-var getPrototypeOf$1 = Object.getPrototypeOf, objectProto = Object.prototype, getKeys = Object.keys;
+var getPrototypeOf$2 = Object.getPrototypeOf, objectProto = Object.prototype, getKeys = Object.keys;
 function argsArgArrayOrObject(args2) {
   if (args2.length === 1) {
     var first_1 = args2[0];
@@ -3637,7 +3641,7 @@ function argsArgArrayOrObject(args2) {
 }
 argsArgArrayOrObject$1.argsArgArrayOrObject = argsArgArrayOrObject;
 function isPOJO(obj) {
-  return obj && typeof obj === "object" && getPrototypeOf$1(obj) === objectProto;
+  return obj && typeof obj === "object" && getPrototypeOf$2(obj) === objectProto;
 }
 var createObject$1 = {};
 Object.defineProperty(createObject$1, "__esModule", { value: true });
@@ -4276,7 +4280,7 @@ var never = {};
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.never = exports.NEVER = void 0;
   var Observable_12 = Observable$2;
-  var noop_12 = noop$1;
+  var noop_12 = noop$2;
   exports.NEVER = new Observable_12.Observable(noop_12.noop);
   function never2() {
     return exports.NEVER;
@@ -4297,7 +4301,7 @@ onErrorResumeNext$1.onErrorResumeNext = void 0;
 var Observable_1$6 = Observable$2;
 var argsOrArgArray_1$6 = argsOrArgArray$1;
 var OperatorSubscriber_1$O = OperatorSubscriber$1;
-var noop_1$c = noop$1;
+var noop_1$c = noop$2;
 var innerFrom_1$u = innerFrom$1;
 function onErrorResumeNext() {
   var sources = [];
@@ -4600,7 +4604,7 @@ var buffer$1 = {};
 Object.defineProperty(buffer$1, "__esModule", { value: true });
 buffer$1.buffer = void 0;
 var lift_1$Y = lift;
-var noop_1$b = noop$1;
+var noop_1$b = noop$2;
 var OperatorSubscriber_1$J = OperatorSubscriber$1;
 var innerFrom_1$o = innerFrom$1;
 function buffer(closingNotifier) {
@@ -4841,7 +4845,7 @@ var Subscription_1$2 = Subscription$1;
 var lift_1$V = lift;
 var innerFrom_1$n = innerFrom$1;
 var OperatorSubscriber_1$G = OperatorSubscriber$1;
-var noop_1$a = noop$1;
+var noop_1$a = noop$2;
 var arrRemove_1$2 = arrRemove$1;
 function bufferToggle(openings, closingSelector) {
   return lift_1$V.operate(function(source, subscriber) {
@@ -4888,7 +4892,7 @@ var bufferWhen$1 = {};
 Object.defineProperty(bufferWhen$1, "__esModule", { value: true });
 bufferWhen$1.bufferWhen = void 0;
 var lift_1$U = lift;
-var noop_1$9 = noop$1;
+var noop_1$9 = noop$2;
 var OperatorSubscriber_1$F = OperatorSubscriber$1;
 var innerFrom_1$m = innerFrom$1;
 function bufferWhen(closingSelector) {
@@ -4980,8 +4984,8 @@ Object.defineProperty(toArray$2, "__esModule", { value: true });
 toArray$2.toArray = void 0;
 var reduce_1$3 = reduce$2;
 var lift_1$R = lift;
-var arrReducer = function(arr, value) {
-  return arr.push(value), arr;
+var arrReducer = function(arr2, value) {
+  return arr2.push(value), arr2;
 };
 function toArray$1() {
   return lift_1$R.operate(function(source, subscriber) {
@@ -5250,7 +5254,7 @@ var debounce$1 = {};
 Object.defineProperty(debounce$1, "__esModule", { value: true });
 debounce$1.debounce = void 0;
 var lift_1$N = lift;
-var noop_1$8 = noop$1;
+var noop_1$8 = noop$2;
 var OperatorSubscriber_1$C = OperatorSubscriber$1;
 var innerFrom_1$j = innerFrom$1;
 function debounce(durationSelector) {
@@ -5381,7 +5385,7 @@ Object.defineProperty(ignoreElements$1, "__esModule", { value: true });
 ignoreElements$1.ignoreElements = void 0;
 var lift_1$J = lift;
 var OperatorSubscriber_1$y = OperatorSubscriber$1;
-var noop_1$7 = noop$1;
+var noop_1$7 = noop$2;
 function ignoreElements() {
   return lift_1$J.operate(function(source, subscriber) {
     source.subscribe(OperatorSubscriber_1$y.createOperatorSubscriber(subscriber, noop_1$7.noop));
@@ -5451,7 +5455,7 @@ Object.defineProperty(distinct$1, "__esModule", { value: true });
 distinct$1.distinct = void 0;
 var lift_1$H = lift;
 var OperatorSubscriber_1$w = OperatorSubscriber$1;
-var noop_1$6 = noop$1;
+var noop_1$6 = noop$2;
 var innerFrom_1$h = innerFrom$1;
 function distinct(keySelector, flushes) {
   return lift_1$H.operate(function(source, subscriber) {
@@ -6410,15 +6414,15 @@ function repeatWhen(notifier) {
   });
 }
 repeatWhen$1.repeatWhen = repeatWhen;
-var retry$1 = {};
-Object.defineProperty(retry$1, "__esModule", { value: true });
-retry$1.retry = void 0;
+var retry$2 = {};
+Object.defineProperty(retry$2, "__esModule", { value: true });
+retry$2.retry = void 0;
 var lift_1$o = lift;
 var OperatorSubscriber_1$j = OperatorSubscriber$1;
 var identity_1$4 = identity$1;
 var timer_1$1 = timer$1;
 var innerFrom_1$c = innerFrom$1;
-function retry(configOrCount) {
+function retry$1(configOrCount) {
   if (configOrCount === void 0) {
     configOrCount = Infinity;
   }
@@ -6477,7 +6481,7 @@ function retry(configOrCount) {
     subscribeForRetry();
   });
 }
-retry$1.retry = retry;
+retry$2.retry = retry$1;
 var retryWhen$1 = {};
 Object.defineProperty(retryWhen$1, "__esModule", { value: true });
 retryWhen$1.retryWhen = void 0;
@@ -6518,7 +6522,7 @@ Object.defineProperty(sample$2, "__esModule", { value: true });
 sample$2.sample = void 0;
 var innerFrom_1$a = innerFrom$1;
 var lift_1$m = lift;
-var noop_1$5 = noop$1;
+var noop_1$5 = noop$2;
 var OperatorSubscriber_1$h = OperatorSubscriber$1;
 function sample$1(notifier) {
   return lift_1$m.operate(function(source, subscriber) {
@@ -6824,7 +6828,7 @@ skipUntil$1.skipUntil = void 0;
 var lift_1$g = lift;
 var OperatorSubscriber_1$d = OperatorSubscriber$1;
 var innerFrom_1$7 = innerFrom$1;
-var noop_1$4 = noop$1;
+var noop_1$4 = noop$2;
 function skipUntil(notifier) {
   return lift_1$g.operate(function(source, subscriber) {
     var taking = false;
@@ -6949,7 +6953,7 @@ takeUntil$1.takeUntil = void 0;
 var lift_1$b = lift;
 var OperatorSubscriber_1$a = OperatorSubscriber$1;
 var innerFrom_1$5 = innerFrom$1;
-var noop_1$3 = noop$1;
+var noop_1$3 = noop$2;
 function takeUntil(notifier) {
   return lift_1$b.operate(function(source, subscriber) {
     innerFrom_1$5.innerFrom(notifier).subscribe(OperatorSubscriber_1$a.createOperatorSubscriber(subscriber, function() {
@@ -7162,7 +7166,7 @@ window$2.window = void 0;
 var Subject_1$4 = Subject$1;
 var lift_1$6 = lift;
 var OperatorSubscriber_1$5 = OperatorSubscriber$1;
-var noop_1$2 = noop$1;
+var noop_1$2 = noop$2;
 var innerFrom_1$3 = innerFrom$1;
 function window$1(windowBoundaries) {
   return lift_1$6.operate(function(source, subscriber) {
@@ -7367,7 +7371,7 @@ var Subscription_1 = Subscription$1;
 var lift_1$3 = lift;
 var innerFrom_1$2 = innerFrom$1;
 var OperatorSubscriber_1$2 = OperatorSubscriber$1;
-var noop_1$1 = noop$1;
+var noop_1$1 = noop$2;
 var arrRemove_1 = arrRemove$1;
 function windowToggle(openings, closingSelector) {
   return lift_1$3.operate(function(source, subscriber) {
@@ -7504,7 +7508,7 @@ var lift_1$1 = lift;
 var OperatorSubscriber_1 = OperatorSubscriber$1;
 var innerFrom_1 = innerFrom$1;
 var identity_1 = identity$1;
-var noop_1 = noop$1;
+var noop_1 = noop$2;
 var args_1 = args;
 function withLatestFrom() {
   var inputs = [];
@@ -7696,7 +7700,7 @@ zipWith$1.zipWith = zipWith;
   Object.defineProperty(exports, "asyncScheduler", { enumerable: true, get: function() {
     return async_12.asyncScheduler;
   } });
-  var queue_1 = queue;
+  var queue_1 = queue$1;
   Object.defineProperty(exports, "queue", { enumerable: true, get: function() {
     return queue_1.queue;
   } });
@@ -7740,7 +7744,7 @@ zipWith$1.zipWith = zipWith;
   Object.defineProperty(exports, "pipe", { enumerable: true, get: function() {
     return pipe_12.pipe;
   } });
-  var noop_12 = noop$1;
+  var noop_12 = noop$2;
   Object.defineProperty(exports, "noop", { enumerable: true, get: function() {
     return noop_12.noop;
   } });
@@ -8173,7 +8177,7 @@ zipWith$1.zipWith = zipWith;
   Object.defineProperty(exports, "repeatWhen", { enumerable: true, get: function() {
     return repeatWhen_1.repeatWhen;
   } });
-  var retry_1 = retry$1;
+  var retry_1 = retry$2;
   Object.defineProperty(exports, "retry", { enumerable: true, get: function() {
     return retry_1.retry;
   } });
@@ -8360,8 +8364,8 @@ utilsArray.toArray = toArray;
 function lastOfArray(ar) {
   return ar[ar.length - 1];
 }
-function shuffleArray(arr) {
-  return arr.slice(0).sort(() => Math.random() - 0.5);
+function shuffleArray(arr2) {
+  return arr2.slice(0).sort(() => Math.random() - 0.5);
 }
 function toArray(input) {
   return Array.isArray(input) ? input.slice(0) : [input];
@@ -8421,8 +8425,8 @@ function sumNumberArray(array2) {
   }
   return count2;
 }
-function maxOfNumbers(arr) {
-  return Math.max(...arr);
+function maxOfNumbers(arr2) {
+  return Math.max(...arr2);
 }
 function appendToArray(ar, add2) {
   var amount = add2.length;
@@ -8957,17 +8961,17 @@ function createHasher(options2) {
         }
       }
     },
-    array(arr, unordered) {
+    array(arr2, unordered) {
       unordered = unordered === void 0 ? options2.unorderedArrays !== false : unordered;
-      write("array:" + arr.length + ":");
-      if (!unordered || arr.length <= 1) {
-        for (const entry of arr) {
+      write("array:" + arr2.length + ":");
+      if (!unordered || arr2.length <= 1) {
+        for (const entry of arr2) {
           this.dispatch(entry);
         }
         return;
       }
       const contextAdditions = /* @__PURE__ */ new Map();
-      const entries2 = arr.map((entry) => {
+      const entries2 = arr2.map((entry) => {
         const hasher = createHasher(options2);
         hasher.dispatch(entry);
         for (const [key, value] of hasher.getContext()) {
@@ -9038,58 +9042,58 @@ function createHasher(options2) {
     regexp(regex2) {
       return write("regex:" + regex2.toString());
     },
-    uint8array(arr) {
+    uint8array(arr2) {
       write("uint8array:");
-      return this.dispatch(Array.prototype.slice.call(arr));
+      return this.dispatch(Array.prototype.slice.call(arr2));
     },
-    uint8clampedarray(arr) {
+    uint8clampedarray(arr2) {
       write("uint8clampedarray:");
-      return this.dispatch(Array.prototype.slice.call(arr));
+      return this.dispatch(Array.prototype.slice.call(arr2));
     },
-    int8array(arr) {
+    int8array(arr2) {
       write("int8array:");
-      return this.dispatch(Array.prototype.slice.call(arr));
+      return this.dispatch(Array.prototype.slice.call(arr2));
     },
-    uint16array(arr) {
+    uint16array(arr2) {
       write("uint16array:");
-      return this.dispatch(Array.prototype.slice.call(arr));
+      return this.dispatch(Array.prototype.slice.call(arr2));
     },
-    int16array(arr) {
+    int16array(arr2) {
       write("int16array:");
-      return this.dispatch(Array.prototype.slice.call(arr));
+      return this.dispatch(Array.prototype.slice.call(arr2));
     },
-    uint32array(arr) {
+    uint32array(arr2) {
       write("uint32array:");
-      return this.dispatch(Array.prototype.slice.call(arr));
+      return this.dispatch(Array.prototype.slice.call(arr2));
     },
-    int32array(arr) {
+    int32array(arr2) {
       write("int32array:");
-      return this.dispatch(Array.prototype.slice.call(arr));
+      return this.dispatch(Array.prototype.slice.call(arr2));
     },
-    float32array(arr) {
+    float32array(arr2) {
       write("float32array:");
-      return this.dispatch(Array.prototype.slice.call(arr));
+      return this.dispatch(Array.prototype.slice.call(arr2));
     },
-    float64array(arr) {
+    float64array(arr2) {
       write("float64array:");
-      return this.dispatch(Array.prototype.slice.call(arr));
+      return this.dispatch(Array.prototype.slice.call(arr2));
     },
-    arraybuffer(arr) {
+    arraybuffer(arr2) {
       write("arraybuffer:");
-      return this.dispatch(new Uint8Array(arr));
+      return this.dispatch(new Uint8Array(arr2));
     },
     url(url) {
       return write("url:" + url.toString());
     },
     map(map2) {
       write("map:");
-      const arr = [...map2];
-      return this.array(arr, options2.unorderedSets !== false);
+      const arr2 = [...map2];
+      return this.array(arr2, options2.unorderedSets !== false);
     },
     set(set2) {
       write("set:");
-      const arr = [...set2];
-      return this.array(arr, options2.unorderedSets !== false);
+      const arr2 = [...set2];
+      return this.array(arr2, options2.unorderedSets !== false);
     },
     file(file) {
       write("file:");
@@ -9789,12 +9793,12 @@ var isObject$1 = (value) => {
 };
 var disallowedKeys = /* @__PURE__ */ new Set(["__proto__", "prototype", "constructor"]);
 var digits = new Set("0123456789");
-function getPathSegments(path) {
+function getPathSegments(path2) {
   var parts = [];
   var currentSegment = "";
   var currentPart = "start";
   var isIgnoring = false;
-  for (var character of path) {
+  for (var character of path2) {
     switch (character) {
       case "\\": {
         if (currentPart === "index") {
@@ -9916,14 +9920,14 @@ function assertNotStringIndex(object2, key) {
     throw new Error("Cannot use string index");
   }
 }
-function getProperty(object2, path, value) {
-  if (Array.isArray(path)) {
-    path = path.join(".");
+function getProperty(object2, path2, value) {
+  if (Array.isArray(path2)) {
+    path2 = path2.join(".");
   }
-  if (!isObject$1(object2) || typeof path !== "string") {
+  if (!isObject$1(object2) || typeof path2 !== "string") {
     return value === void 0 ? object2 : value;
   }
-  var pathArray = getPathSegments(path);
+  var pathArray = getPathSegments(path2);
   if (pathArray.length === 0) {
     return value;
   }
@@ -9943,15 +9947,15 @@ function getProperty(object2, path, value) {
   }
   return object2 === void 0 ? value : object2;
 }
-function setProperty(object2, path, value) {
-  if (Array.isArray(path)) {
-    path = path.join(".");
+function setProperty(object2, path2, value) {
+  if (Array.isArray(path2)) {
+    path2 = path2.join(".");
   }
-  if (!isObject$1(object2) || typeof path !== "string") {
+  if (!isObject$1(object2) || typeof path2 !== "string") {
     return object2;
   }
   var root = object2;
-  var pathArray = getPathSegments(path);
+  var pathArray = getPathSegments(path2);
   for (var index = 0; index < pathArray.length; index++) {
     var key = pathArray[index];
     assertNotStringIndex(object2, key);
@@ -9964,11 +9968,11 @@ function setProperty(object2, path, value) {
   }
   return root;
 }
-function deleteProperty(object2, path) {
-  if (!isObject$1(object2) || typeof path !== "string") {
+function deleteProperty(object2, path2) {
+  if (!isObject$1(object2) || typeof path2 !== "string") {
     return false;
   }
-  var pathArray = getPathSegments(path);
+  var pathArray = getPathSegments(path2);
   for (var index = 0; index < pathArray.length; index++) {
     var key = pathArray[index];
     assertNotStringIndex(object2, key);
@@ -9982,11 +9986,11 @@ function deleteProperty(object2, path) {
     }
   }
 }
-function hasProperty(object2, path) {
-  if (!isObject$1(object2) || typeof path !== "string") {
+function hasProperty(object2, path2) {
+  if (!isObject$1(object2) || typeof path2 !== "string") {
     return false;
   }
-  var pathArray = getPathSegments(path);
+  var pathArray = getPathSegments(path2);
   if (pathArray.length === 0) {
     return false;
   }
@@ -9998,11 +10002,11 @@ function hasProperty(object2, path) {
   }
   return true;
 }
-function escapePath(path) {
-  if (typeof path !== "string") {
+function escapePath(path2) {
+  if (typeof path2 !== "string") {
     throw new TypeError("Expected a string");
   }
-  return path.replace(/[\\.[]/g, "\\$&");
+  return path2.replace(/[\\.[]/g, "\\$&");
 }
 function entries(value) {
   if (Array.isArray(value)) {
@@ -10159,8 +10163,8 @@ function deepClone$1(src2) {
   }
   return dest;
 }
-var clone$1 = deepClone$1;
-utilsObject.clone = clone$1;
+var clone$3 = deepClone$1;
+utilsObject.clone = clone$3;
 function overwriteGetterForCaching(obj, getterName, value) {
   Object.defineProperty(obj, getterName, {
     get: function() {
@@ -10752,11 +10756,11 @@ function requireInheritsLoose() {
   return inheritsLoose.exports;
 }
 var wrapNativeSuper = { exports: {} };
-var getPrototypeOf = { exports: {} };
+var getPrototypeOf$1 = { exports: {} };
 var hasRequiredGetPrototypeOf;
 function requireGetPrototypeOf() {
   if (hasRequiredGetPrototypeOf)
-    return getPrototypeOf.exports;
+    return getPrototypeOf$1.exports;
   hasRequiredGetPrototypeOf = 1;
   (function(module) {
     function _getPrototypeOf(o) {
@@ -10766,8 +10770,8 @@ function requireGetPrototypeOf() {
       return _getPrototypeOf(o);
     }
     module.exports = _getPrototypeOf, module.exports.__esModule = true, module.exports["default"] = module.exports;
-  })(getPrototypeOf);
-  return getPrototypeOf.exports;
+  })(getPrototypeOf$1);
+  return getPrototypeOf$1.exports;
 }
 var isNativeFunction = { exports: {} };
 var hasRequiredIsNativeFunction;
@@ -11035,8 +11039,8 @@ function getPseudoSchemaForVersion(version, primaryKey) {
   });
   return pseudoSchema;
 }
-function getSchemaByObjectPath(rxJsonSchema, path) {
-  var usePath = path;
+function getSchemaByObjectPath(rxJsonSchema, path2) {
+  var usePath = path2;
   usePath = usePath.replace(_utils$v.REGEX_ALL_DOTS, ".properties.");
   usePath = "properties." + usePath;
   usePath = (0, _utils$v.trimDots)(usePath);
@@ -11125,7 +11129,7 @@ function fillWithDefaultSettings(schemaObj) {
   schemaObj.required.push("_attachments");
   var finalFields = getFinalFields(schemaObj);
   (0, _utils$v.appendToArray)(schemaObj.required, finalFields);
-  schemaObj.required = schemaObj.required.filter((field) => !field.includes(".")).filter((elem, pos, arr) => arr.indexOf(elem) === pos);
+  schemaObj.required = schemaObj.required.filter((field) => !field.includes(".")).filter((elem, pos, arr2) => arr2.indexOf(elem) === pos);
   schemaObj.version = schemaObj.version || 0;
   if (schemaObj.indexes) {
     schemaObj.indexes = schemaObj.indexes.map((index) => {
@@ -12463,9 +12467,9 @@ function getArrayOf(arrayLike) {
   return a;
 }
 const isAsyncFunction = typeof Symbol !== "undefined" ? (fn) => fn[Symbol.toStringTag] === "AsyncFunction" : () => false;
-var debug = typeof location !== "undefined" && /^(http|https):\/\/(localhost|127\.0\.0\.1)/.test(location.href);
+var debug$1 = typeof location !== "undefined" && /^(http|https):\/\/(localhost|127\.0\.0\.1)/.test(location.href);
 function setDebug(value, filter2) {
-  debug = value;
+  debug$1 = value;
   libraryFilter = filter2;
 }
 var libraryFilter = () => true;
@@ -12768,7 +12772,7 @@ function DexiePromise(fn) {
   this.onuncatched = nop;
   this._lib = false;
   var psd = this._PSD = PSD;
-  if (debug) {
+  if (debug$1) {
     this._stackHolder = getErrorWithStack();
     this._prev = null;
     this._numPrev = 0;
@@ -12796,7 +12800,7 @@ const thenProp = {
       var rv = new DexiePromise((resolve, reject) => {
         propagateToListener(this, new Listener(nativeAwaitCompatibleWrap(onFulfilled, psd, possibleAwait, cleanup), nativeAwaitCompatibleWrap(onRejected, psd, possibleAwait, cleanup), resolve, reject, psd));
       });
-      debug && linkToPreviousPromise(rv, this);
+      debug$1 && linkToPreviousPromise(rv, this);
       return rv;
     }
     then.prototype = INTERNAL;
@@ -12991,7 +12995,7 @@ function handleRejection(promise, reason) {
   reason = rejectionMapper(reason);
   promise._state = false;
   promise._value = reason;
-  debug && reason !== null && typeof reason === "object" && !reason._promise && tryCatch(() => {
+  debug$1 && reason !== null && typeof reason === "object" && !reason._promise && tryCatch(() => {
     var origProp = getPropertyDescriptor(reason, "stack");
     reason._promise = promise;
     setProp(reason, "stack", {
@@ -13071,7 +13075,7 @@ function getStack(promise, stacks, limit2) {
     }
     stacks.push(errorName + (message ? ": " + message : "") + stack);
   }
-  if (debug) {
+  if (debug$1) {
     stack = prettyStack(promise._stackHolder, 2);
     if (stack && stacks.indexOf(stack) === -1)
       stacks.push(stack);
@@ -13347,7 +13351,7 @@ function globalError(err, promise) {
           } catch (_) {
           }
       }
-      if (debug && event && !event.defaultPrevented) {
+      if (debug$1 && event && !event.defaultPrevented) {
         console.warn(`Unhandled rejection: ${err.stack || err}`);
       }
     } catch (e) {
@@ -13460,7 +13464,7 @@ class Table {
     const compoundIndex = this.schema.indexes.concat(this.schema.primKey).filter((ix) => ix.compound && keyPaths.every((keyPath) => ix.keyPath.indexOf(keyPath) >= 0) && ix.keyPath.every((keyPath) => keyPaths.indexOf(keyPath) >= 0))[0];
     if (compoundIndex && this.db._maxKey !== maxString)
       return this.where(compoundIndex.name).equals(compoundIndex.keyPath.map((kp) => indexOrCrit[kp]));
-    if (!compoundIndex && debug)
+    if (!compoundIndex && debug$1)
       console.warn(`The query ${JSON.stringify(indexOrCrit)} on ${this.name} would benefit of a compound index [${keyPaths.join("+")}]`);
     const { idxByName } = this.schema;
     const idb = this.db._deps.indexedDB;
@@ -15290,13 +15294,13 @@ function runUpgraders(db2, oldVersion, idbUpgradeTrans, reject) {
   });
 }
 function updateTablesAndIndexes({ _novip: db2 }, oldVersion, trans, idbUpgradeTrans) {
-  const queue2 = [];
+  const queue = [];
   const versions = db2._versions;
   let globalSchema = db2._dbSchema = buildGlobalSchema(db2, db2.idbdb, idbUpgradeTrans);
   let anyContentUpgraderHasRun = false;
   const versToRun = versions.filter((v) => v._cfg.version >= oldVersion);
   versToRun.forEach((version) => {
-    queue2.push(() => {
+    queue.push(() => {
       const oldSchema = globalSchema;
       const newSchema = version._cfg.dbschema;
       adjustToExistingIndexNames(db2, oldSchema, idbUpgradeTrans);
@@ -15348,7 +15352,7 @@ function updateTablesAndIndexes({ _novip: db2 }, oldVersion, trans, idbUpgradeTr
         return returnValue && typeof returnValue.then === "function" ? DexiePromise.resolve(returnValue) : promiseFollowed.then(() => returnValue);
       }
     });
-    queue2.push((idbtrans) => {
+    queue.push((idbtrans) => {
       if (!anyContentUpgraderHasRun || !hasIEDeleteObjectStoreBug) {
         const newSchema = version._cfg.dbschema;
         deleteRemovedTables(newSchema, idbtrans);
@@ -15359,7 +15363,7 @@ function updateTablesAndIndexes({ _novip: db2 }, oldVersion, trans, idbUpgradeTr
     });
   });
   function runQueue() {
-    return queue2.length ? DexiePromise.resolve(queue2.shift()(trans.idbtrans)).then(runQueue) : DexiePromise.resolve();
+    return queue.length ? DexiePromise.resolve(queue.shift()(trans.idbtrans)).then(runQueue) : DexiePromise.resolve();
   }
   return runQueue().then(() => {
     createMissingTables(globalSchema, idbUpgradeTrans);
@@ -15596,7 +15600,7 @@ function dexieOpen(db2) {
   const { indexedDB: indexedDB2 } = db2._deps;
   if (state.isBeingOpened || db2.idbdb)
     return state.dbReadyPromise.then(() => state.dbOpenError ? rejection(state.dbOpenError) : db2);
-  debug && (state.openCanceller._stackHolder = getErrorWithStack());
+  debug$1 && (state.openCanceller._stackHolder = getErrorWithStack());
   state.isBeingOpened = true;
   state.dbOpenError = null;
   state.openComplete = false;
@@ -16843,7 +16847,7 @@ props(Dexie, {
   },
   Promise: DexiePromise,
   debug: {
-    get: () => debug,
+    get: () => debug$1,
     set: (value) => {
       setDebug(value, value === "dexie" ? () => true : dexieStackFrameFilter);
     }
@@ -16960,7 +16964,7 @@ function propagateMessageLocally({ data }) {
   }
 }
 DexiePromise.rejectionMapper = mapError;
-setDebug(debug, dexieStackFrameFilter);
+setDebug(debug$1, dexieStackFrameFilter);
 const dexie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   Dexie: Dexie$1,
@@ -17399,7 +17403,7 @@ async function getDocsInDb(internals, docIds) {
 var rxStorageInstanceDexie = {};
 var dexieQuery$1 = {};
 var rxQueryHelper = {};
-var util$3 = {};
+var util$5 = {};
 (function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.normalize = exports.isOperator = exports.removeValue = exports.setValue = exports.walk = exports.filterMissing = exports.resolveGraph = exports.resolve = exports.memoize = exports.into = exports.groupBy = exports.sortBy = exports.hashCode = exports.stringify = exports.unique = exports.isEqual = exports.flatten = exports.intersection = exports.merge = exports.has = exports.ensureArray = exports.isMissing = exports.isEmpty = exports.truthy = exports.notInArray = exports.inArray = exports.isNil = exports.isFunction = exports.isRegExp = exports.isDate = exports.isObjectLike = exports.isObject = exports.isArray = exports.isNotNaN = exports.isNumber = exports.isString = exports.isBoolean = exports.getType = exports.cloneDeep = exports.assert = exports.compare = exports.MIN_LONG = exports.MAX_LONG = exports.MIN_INT = exports.MAX_INT = void 0;
@@ -17412,7 +17416,7 @@ var util$3 = {};
   const OBJECT_TAG = "[object Object]";
   const OBJECT_TYPE_RE = /^\[object ([a-zA-Z0-9]+)\]$/;
   const DEFAULT_HASH_FUNCTION = (value) => {
-    const s = stringify(value);
+    const s = stringify2(value);
     let hash2 = 0;
     let i = s.length;
     while (i)
@@ -17527,9 +17531,9 @@ var util$3 = {};
   exports.isFunction = isFunction2;
   const isNil = (v) => v === null || v === void 0;
   exports.isNil = isNil;
-  const inArray = (arr, item) => arr.includes(item);
+  const inArray = (arr2, item) => arr2.includes(item);
   exports.inArray = inArray;
-  const notInArray = (arr, item) => !(0, exports.inArray)(arr, item);
+  const notInArray = (arr2, item) => !(0, exports.inArray)(arr2, item);
   exports.notInArray = notInArray;
   const truthy = (arg, strict = true) => !!arg || strict && arg === "";
   exports.truthy = truthy;
@@ -17577,12 +17581,12 @@ var util$3 = {};
     return target;
   }
   exports.merge = merge2;
-  function buildHashIndex(arr, hashFunction = DEFAULT_HASH_FUNCTION) {
+  function buildHashIndex(arr2, hashFunction = DEFAULT_HASH_FUNCTION) {
     const map2 = /* @__PURE__ */ new Map();
-    arr.forEach((o, i) => {
+    arr2.forEach((o, i) => {
       const h = hashCode(o, hashFunction);
       if (map2.has(h)) {
-        if (!map2.get(h).some((j) => isEqual2(arr[j], o))) {
+        if (!map2.get(h).some((j) => isEqual2(arr2[j], o))) {
           map2.get(h).push(i);
         }
       } else {
@@ -17592,7 +17596,7 @@ var util$3 = {};
     return map2;
   }
   function intersection(input, hashFunction = DEFAULT_HASH_FUNCTION) {
-    if (input.some((arr) => arr.length == 0))
+    if (input.some((arr2) => arr2.length == 0))
       return [];
     if (input.length === 1)
       return Array.from(input);
@@ -17608,11 +17612,11 @@ var util$3 = {};
       let found = false;
       for (let i = 1; i < input.length; i++) {
         const [currIndex, _] = sortedIndex[i];
-        const arr = input[currIndex];
+        const arr2 = input[currIndex];
         if (!rmap.has(i))
-          rmap.set(i, buildHashIndex(arr));
+          rmap.set(i, buildHashIndex(arr2));
         if (rmap.get(i).has(k)) {
-          const rhs = rmap.get(i).get(k).map((j) => arr[j]);
+          const rhs = rmap.get(i).get(k).map((j) => arr2[j]);
           found = lhs.map((s, n) => rhs.some((t, m) => {
             const p = res[n];
             if (isEqual2(s, t)) {
@@ -17644,18 +17648,18 @@ var util$3 = {};
   }
   exports.intersection = intersection;
   function flatten2(xs, depth = 0) {
-    const arr = new Array();
+    const arr2 = new Array();
     function flatten22(ys, n) {
       for (let i = 0, len = ys.length; i < len; i++) {
         if ((0, exports.isArray)(ys[i]) && (n > 0 || n < 0)) {
           flatten22(ys[i], Math.max(-1, n - 1));
         } else {
-          arr.push(ys[i]);
+          arr2.push(ys[i]);
         }
       }
     }
     flatten22(xs, depth);
-    return arr;
+    return arr2;
   }
   exports.flatten = flatten2;
   function isEqual2(a, b) {
@@ -17692,7 +17696,7 @@ var util$3 = {};
           rhs.push(b[k]);
         }
       } else {
-        if (stringify(a) !== stringify(b))
+        if (stringify2(a) !== stringify2(b))
           return false;
       }
     }
@@ -17707,7 +17711,7 @@ var util$3 = {};
     return result.filter((v) => v !== MISSING);
   }
   exports.unique = unique;
-  function stringify(value) {
+  function stringify2(value) {
     const type2 = (0, exports.getType)(value).toLowerCase();
     switch (type2) {
       case "boolean":
@@ -17722,14 +17726,14 @@ var util$3 = {};
       case "undefined":
         return type2;
       case "array":
-        return "[" + value.map(stringify).join(",") + "]";
+        return "[" + value.map(stringify2).join(",") + "]";
     }
     const prefix = type2 === "object" ? "" : `${(0, exports.getType)(value)}`;
     const objKeys = Object.keys(value);
     objKeys.sort();
-    return `${prefix}{` + objKeys.map((k) => `${stringify(k)}:${stringify(value[k])}`).join(",") + "}";
+    return `${prefix}{` + objKeys.map((k) => `${stringify2(k)}:${stringify2(value[k])}`).join(",") + "}";
   }
-  exports.stringify = stringify;
+  exports.stringify = stringify2;
   function hashCode(value, hashFunction) {
     hashFunction = hashFunction || DEFAULT_HASH_FUNCTION;
     if ((0, exports.isNil)(value))
@@ -17790,11 +17794,11 @@ var util$3 = {};
   const MAX_ARRAY_PUSH = 5e4;
   function into(target, ...rest) {
     if (target instanceof Array) {
-      return rest.reduce((acc, arr) => {
-        let i = Math.ceil(arr.length / MAX_ARRAY_PUSH);
+      return rest.reduce((acc, arr2) => {
+        let i = Math.ceil(arr2.length / MAX_ARRAY_PUSH);
         let begin = 0;
         while (i-- > 0) {
-          Array.prototype.push.apply(acc, arr.slice(begin, begin + MAX_ARRAY_PUSH));
+          Array.prototype.push.apply(acc, arr2.slice(begin, begin + MAX_ARRAY_PUSH));
           begin += MAX_ARRAY_PUSH;
         }
         return acc;
@@ -17824,25 +17828,25 @@ var util$3 = {};
   function getValue(obj, key) {
     return (0, exports.isObjectLike)(obj) ? obj[key] : void 0;
   }
-  function unwrap(arr, depth) {
+  function unwrap(arr2, depth) {
     if (depth < 1)
-      return arr;
-    while (depth-- && arr.length === 1)
-      arr = arr[0];
-    return arr;
+      return arr2;
+    while (depth-- && arr2.length === 1)
+      arr2 = arr2[0];
+    return arr2;
   }
   function resolve(obj, selector, options2) {
     let depth = 0;
-    function resolve2(o, path) {
+    function resolve2(o, path2) {
       let value = o;
-      for (let i = 0; i < path.length; i++) {
-        const field = path[i];
+      for (let i = 0; i < path2.length; i++) {
+        const field = path2[i];
         const isText = /^\d+$/.exec(field) === null;
         if (isText && value instanceof Array) {
           if (i === 0 && depth > 0)
             break;
           depth += 1;
-          const subpath = path.slice(i);
+          const subpath = path2.slice(i);
           value = value.reduce((acc, item) => {
             const v = resolve2(item, subpath);
             if (v !== void 0)
@@ -17995,13 +17999,13 @@ var util$3 = {};
     return expr2;
   }
   exports.normalize = normalize;
-})(util$3);
+})(util$5);
 var rxQueryMingo = {};
 var core = {};
 (function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.redact = exports.computeValue = exports.getOperator = exports.useOperators = exports.Context = exports.OperatorType = exports.initOptions = exports.ComputeOptions = exports.ProcessingMode = void 0;
-  const util_12 = util$3;
+  const util_12 = util$5;
   var ProcessingMode;
   (function(ProcessingMode2) {
     ProcessingMode2["CLONE_ALL"] = "CLONE_ALL";
@@ -18165,9 +18169,9 @@ var core = {};
   }
   exports.useOperators = useOperators;
   function getOperator(type2, operator, options2) {
-    const { context: ctx, useGlobalContext: fallback } = options2 || {};
+    const { context: ctx, useGlobalContext: fallback2 } = options2 || {};
     const fn = ctx ? ctx.getOperator(type2, operator) : null;
-    return !fn && fallback ? CONTEXT.getOperator(type2, operator) : fn;
+    return !fn && fallback2 ? CONTEXT.getOperator(type2, operator) : fn;
   }
   exports.getOperator = getOperator;
   const systemVariables = {
@@ -18250,11 +18254,11 @@ var core = {};
         return expr2;
       }
       let context2 = copts.root;
-      const arr = expr2.split(".");
-      if ((0, util_12.has)(systemVariables, arr[0])) {
-        context2 = systemVariables[arr[0]](obj, null, copts);
-        expr2 = expr2.slice(arr[0].length + 1);
-      } else if (arr[0].slice(0, 2) === "$$") {
+      const arr2 = expr2.split(".");
+      if ((0, util_12.has)(systemVariables, arr2[0])) {
+        context2 = systemVariables[arr2[0]](obj, null, copts);
+        expr2 = expr2.slice(arr2[0].length + 1);
+      } else if (arr2[0].slice(0, 2) === "$$") {
         context2 = Object.assign(
           {},
           copts.variables,
@@ -18264,7 +18268,7 @@ var core = {};
           (_a = copts.local) === null || _a === void 0 ? void 0 : _a.variables
           // local vars
         );
-        const prefix = arr[0].slice(2);
+        const prefix = arr2[0].slice(2);
         (0, util_12.assert)((0, util_12.has)(context2, prefix), `Use of undefined variable: ${prefix}`);
         expr2 = expr2.slice(2);
       } else {
@@ -18545,7 +18549,7 @@ Object.defineProperty(aggregator, "__esModule", { value: true });
 aggregator.Aggregator = void 0;
 const core_1$1M = core;
 const lazy_1$6 = lazy;
-const util_1$1L = util$3;
+const util_1$1L = util$5;
 class Aggregator {
   constructor(pipeline2, options2) {
     this.pipeline = pipeline2;
@@ -18594,7 +18598,7 @@ Object.defineProperty(cursor, "__esModule", { value: true });
 cursor.Cursor = void 0;
 const aggregator_1$6 = aggregator;
 const lazy_1$5 = lazy;
-const util_1$1K = util$3;
+const util_1$1K = util$5;
 class Cursor {
   constructor(source, predicate, projection, options2) {
     this.source = source;
@@ -18723,7 +18727,7 @@ Object.defineProperty(query, "__esModule", { value: true });
 query.Query = void 0;
 const core_1$1L = core;
 const cursor_1 = cursor;
-const util_1$1J = util$3;
+const util_1$1J = util$5;
 class Query {
   constructor(condition, options2) {
     this.condition = condition;
@@ -18802,7 +18806,7 @@ var addFields = {};
 Object.defineProperty(addFields, "__esModule", { value: true });
 addFields.$addFields = void 0;
 const core_1$1K = core;
-const util_1$1I = util$3;
+const util_1$1I = util$5;
 const $addFields = (collection, expr2, options2) => {
   const newFields = Object.keys(expr2);
   if (newFields.length === 0)
@@ -18826,7 +18830,7 @@ Object.defineProperty(bucket, "__esModule", { value: true });
 bucket.$bucket = void 0;
 const core_1$1J = core;
 const lazy_1$4 = lazy;
-const util_1$1H = util$3;
+const util_1$1H = util$5;
 const $bucket = (collection, expr2, options2) => {
   const boundaries = [...expr2.boundaries];
   const defaultKey = expr2.default;
@@ -18892,7 +18896,7 @@ var bucketAuto = {};
 Object.defineProperty(bucketAuto, "__esModule", { value: true });
 bucketAuto.$bucketAuto = void 0;
 const core_1$1I = core;
-const util_1$1G = util$3;
+const util_1$1G = util$5;
 const $bucketAuto = (collection, expr2, options2) => {
   const outputExpr = expr2.output || { count: { $sum: 1 } };
   const groupByExpr = expr2.groupBy;
@@ -18952,7 +18956,7 @@ var count$1 = {};
 Object.defineProperty(count$1, "__esModule", { value: true });
 count$1.$count = void 0;
 const lazy_1$3 = lazy;
-const util_1$1F = util$3;
+const util_1$1F = util$5;
 const $count$1 = (collection, expr2, _) => {
   (0, util_1$1F.assert)((0, util_1$1F.isString)(expr2) && expr2.trim() !== "" && expr2.indexOf(".") === -1 && expr2.trim()[0] !== "$", "Invalid expression value for $count");
   return (0, lazy_1$3.Lazy)([
@@ -18982,7 +18986,7 @@ var ifNull = {};
 Object.defineProperty(ifNull, "__esModule", { value: true });
 ifNull.$ifNull = void 0;
 const core_1$1G = core;
-const util_1$1E = util$3;
+const util_1$1E = util$5;
 const $ifNull = (obj, expr2, options2) => {
   const args2 = (0, core_1$1G.computeValue)(obj, expr2, null, options2);
   return args2.find((arg) => !(0, util_1$1E.isNil)(arg));
@@ -18994,7 +18998,7 @@ var accumulator = {};
 Object.defineProperty(accumulator, "__esModule", { value: true });
 accumulator.$accumulator = void 0;
 const core_1$1F = core;
-const util_1$1D = util$3;
+const util_1$1D = util$5;
 const $accumulator = (collection, expr2, options2) => {
   var _a;
   (0, util_1$1D.assert)(!!options2 && options2.scriptEnabled, "$accumulator operator requires 'scriptEnabled' option to be true");
@@ -19015,7 +19019,7 @@ var push$1 = {};
 Object.defineProperty(push$1, "__esModule", { value: true });
 push$1.$push = void 0;
 const core_1$1E = core;
-const util_1$1C = util$3;
+const util_1$1C = util$5;
 const $push = (collection, expr2, options2) => {
   if ((0, util_1$1C.isNil)(expr2))
     return collection;
@@ -19025,7 +19029,7 @@ const $push = (collection, expr2, options2) => {
 push$1.$push = $push;
 Object.defineProperty(addToSet, "__esModule", { value: true });
 addToSet.$addToSet = void 0;
-const util_1$1B = util$3;
+const util_1$1B = util$5;
 const push_1$f = push$1;
 const $addToSet = (collection, expr2, options2) => {
   return (0, util_1$1B.unique)((0, push_1$f.$push)(collection, expr2, options2), options2 === null || options2 === void 0 ? void 0 : options2.hashFunction);
@@ -19034,7 +19038,7 @@ addToSet.$addToSet = $addToSet;
 var avg = {};
 Object.defineProperty(avg, "__esModule", { value: true });
 avg.$avg = void 0;
-const util_1$1A = util$3;
+const util_1$1A = util$5;
 const push_1$e = push$1;
 const $avg = (collection, expr2, options2) => {
   const data = (0, push_1$e.$push)(collection, expr2, options2).filter(util_1$1A.isNumber);
@@ -19157,7 +19161,7 @@ lastN$1.$lastN = $lastN$1;
 var max = {};
 Object.defineProperty(max, "__esModule", { value: true });
 max.$max = void 0;
-const util_1$1z = util$3;
+const util_1$1z = util$5;
 const push_1$8 = push$1;
 const $max = (collection, expr2, options2) => {
   const nums = (0, push_1$8.$push)(collection, expr2, options2).filter(util_1$1z.isNotNaN);
@@ -19169,16 +19173,16 @@ var maxN$1 = {};
 Object.defineProperty(maxN$1, "__esModule", { value: true });
 maxN$1.$maxN = void 0;
 const core_1$1y = core;
-const util_1$1y = util$3;
+const util_1$1y = util$5;
 const push_1$7 = push$1;
 const $maxN$1 = (collection, expr2, options2) => {
   var _a;
   const copts = core_1$1y.ComputeOptions.init(options2);
   const m = collection.length;
   const n = (0, core_1$1y.computeValue)((_a = copts === null || copts === void 0 ? void 0 : copts.local) === null || _a === void 0 ? void 0 : _a.groupId, expr2.n, null, copts);
-  const arr = (0, push_1$7.$push)(collection, expr2.input, options2).filter((o) => !(0, util_1$1y.isNil)(o));
-  arr.sort((a, b) => -1 * (0, util_1$1y.compare)(a, b));
-  return m <= n ? arr : arr.slice(0, n);
+  const arr2 = (0, push_1$7.$push)(collection, expr2.input, options2).filter((o) => !(0, util_1$1y.isNil)(o));
+  arr2.sort((a, b) => -1 * (0, util_1$1y.compare)(a, b));
+  return m <= n ? arr2 : arr2.slice(0, n);
 };
 maxN$1.$maxN = $maxN$1;
 var mergeObjects$1 = {};
@@ -19186,7 +19190,7 @@ var mergeObjects = {};
 Object.defineProperty(mergeObjects, "__esModule", { value: true });
 mergeObjects.$mergeObjects = void 0;
 const core_1$1x = core;
-const util_1$1x = util$3;
+const util_1$1x = util$5;
 const $mergeObjects$1 = (obj, expr2, options2) => {
   const docs = (0, core_1$1x.computeValue)(obj, expr2, null, options2);
   return docs instanceof Array ? docs.reduce((memo2, o) => (0, util_1$1x.into)(memo2, o), {}) : {};
@@ -19200,7 +19204,7 @@ mergeObjects$1.$mergeObjects = $mergeObjects;
 var min = {};
 Object.defineProperty(min, "__esModule", { value: true });
 min.$min = void 0;
-const util_1$1w = util$3;
+const util_1$1w = util$5;
 const push_1$6 = push$1;
 const $min = (collection, expr2, options2) => {
   const nums = (0, push_1$6.$push)(collection, expr2, options2).filter(util_1$1w.isNotNaN);
@@ -19212,22 +19216,22 @@ var minN$1 = {};
 Object.defineProperty(minN$1, "__esModule", { value: true });
 minN$1.$minN = void 0;
 const core_1$1w = core;
-const util_1$1v = util$3;
+const util_1$1v = util$5;
 const push_1$5 = push$1;
 const $minN$1 = (collection, expr2, options2) => {
   var _a;
   const copts = core_1$1w.ComputeOptions.init(options2);
   const m = collection.length;
   const n = (0, core_1$1w.computeValue)((_a = copts === null || copts === void 0 ? void 0 : copts.local) === null || _a === void 0 ? void 0 : _a.groupId, expr2.n, null, copts);
-  const arr = (0, push_1$5.$push)(collection, expr2.input, options2).filter((o) => !(0, util_1$1v.isNil)(o));
-  arr.sort(util_1$1v.compare);
-  return m <= n ? arr : arr.slice(0, n);
+  const arr2 = (0, push_1$5.$push)(collection, expr2.input, options2).filter((o) => !(0, util_1$1v.isNil)(o));
+  arr2.sort(util_1$1v.compare);
+  return m <= n ? arr2 : arr2.slice(0, n);
 };
 minN$1.$minN = $minN$1;
 var stdDevPop = {};
 Object.defineProperty(stdDevPop, "__esModule", { value: true });
 stdDevPop.$stdDevPop = void 0;
-const util_1$1u = util$3;
+const util_1$1u = util$5;
 const _internal_1$O = _internal$7;
 const push_1$4 = push$1;
 const $stdDevPop = (collection, expr2, options2) => (0, _internal_1$O.stddev)((0, push_1$4.$push)(collection, expr2, options2).filter(util_1$1u.isNumber), false);
@@ -19235,7 +19239,7 @@ stdDevPop.$stdDevPop = $stdDevPop;
 var stdDevSamp = {};
 Object.defineProperty(stdDevSamp, "__esModule", { value: true });
 stdDevSamp.$stdDevSamp = void 0;
-const util_1$1t = util$3;
+const util_1$1t = util$5;
 const _internal_1$N = _internal$7;
 const push_1$3 = push$1;
 const $stdDevSamp = (collection, expr2, options2) => (0, _internal_1$N.stddev)((0, push_1$3.$push)(collection, expr2, options2).filter(util_1$1t.isNumber), true);
@@ -19243,7 +19247,7 @@ stdDevSamp.$stdDevSamp = $stdDevSamp;
 var sum = {};
 Object.defineProperty(sum, "__esModule", { value: true });
 sum.$sum = void 0;
-const util_1$1s = util$3;
+const util_1$1s = util$5;
 const push_1$2 = push$1;
 const $sum = (collection, expr2, options2) => {
   if (!(0, util_1$1s.isArray)(collection))
@@ -19325,7 +19329,7 @@ var _internal$5 = {};
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.regexStrip = exports.regexQuote = exports.padDigits = exports.computeDate = exports.adjustDate = exports.formatTimezone = exports.parseTimezone = exports.DATE_SYM_TABLE = exports.DATE_PART_INTERVAL = exports.DATE_FORMAT = exports.DURATION_IN_MILLIS = exports.MILLIS_PER_DAY = exports.MINUTES_PER_HOUR = exports.isoWeekYear = exports.isoWeek = exports.getDayOfYear = exports.isLeapYear = void 0;
   const core_12 = core;
-  const util_12 = util$3;
+  const util_12 = util$5;
   const COMMON_YEAR_DAYS_OFFSET = [
     0,
     31,
@@ -19474,7 +19478,7 @@ const isUnbounded = (window2) => {
 _internal$4.isUnbounded = isUnbounded;
 Object.defineProperty(_internal$6, "__esModule", { value: true });
 _internal$6.rank = _internal$6.withMemo = _internal$6.MILLIS_PER_UNIT = void 0;
-const util_1$1r = util$3;
+const util_1$1r = util$5;
 const accumulator_1$3 = accumulator$1;
 const _internal_1$M = _internal$5;
 const _internal_2 = _internal$4;
@@ -19539,7 +19543,7 @@ function rank(_, collection, expr2, options2, dense) {
 _internal$6.rank = rank;
 Object.defineProperty(linearFill, "__esModule", { value: true });
 linearFill.$linearFill = void 0;
-const util_1$1q = util$3;
+const util_1$1q = util$5;
 const accumulator_1$2 = accumulator$1;
 const _internal_1$L = _internal$6;
 const interpolate = (x1, y1, x2, y2, x) => y1 + (x - x1) * ((y2 - y1) / (x2 - x1));
@@ -19575,7 +19579,7 @@ linearFill.$linearFill = $linearFill;
 var locf = {};
 Object.defineProperty(locf, "__esModule", { value: true });
 locf.$locf = void 0;
-const util_1$1p = util$3;
+const util_1$1p = util$5;
 const push_1 = push$1;
 const _internal_1$K = _internal$6;
 function $locf(_, collection, expr2, options2) {
@@ -19596,7 +19600,7 @@ var abs = {};
 Object.defineProperty(abs, "__esModule", { value: true });
 abs.$abs = void 0;
 const core_1$1u = core;
-const util_1$1o = util$3;
+const util_1$1o = util$5;
 const $abs = (obj, expr2, options2) => {
   const n = (0, core_1$1u.computeValue)(obj, expr2, null, options2);
   return (0, util_1$1o.isNil)(n) ? null : Math.abs(n);
@@ -19606,7 +19610,7 @@ var add$1 = {};
 Object.defineProperty(add$1, "__esModule", { value: true });
 add$1.$add = void 0;
 const core_1$1t = core;
-const util_1$1n = util$3;
+const util_1$1n = util$5;
 const $add = (obj, expr2, options2) => {
   const args2 = (0, core_1$1t.computeValue)(obj, expr2, null, options2);
   let foundDate = false;
@@ -19626,7 +19630,7 @@ var ceil = {};
 Object.defineProperty(ceil, "__esModule", { value: true });
 ceil.$ceil = void 0;
 const core_1$1s = core;
-const util_1$1m = util$3;
+const util_1$1m = util$5;
 const $ceil = (obj, expr2, options2) => {
   const n = (0, core_1$1s.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$1m.isNil)(n))
@@ -19648,7 +19652,7 @@ var exp = {};
 Object.defineProperty(exp, "__esModule", { value: true });
 exp.$exp = void 0;
 const core_1$1q = core;
-const util_1$1l = util$3;
+const util_1$1l = util$5;
 const $exp = (obj, expr2, options2) => {
   const n = (0, core_1$1q.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$1l.isNil)(n))
@@ -19661,7 +19665,7 @@ var floor = {};
 Object.defineProperty(floor, "__esModule", { value: true });
 floor.$floor = void 0;
 const core_1$1p = core;
-const util_1$1k = util$3;
+const util_1$1k = util$5;
 const $floor = (obj, expr2, options2) => {
   const n = (0, core_1$1p.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$1k.isNil)(n))
@@ -19674,7 +19678,7 @@ var ln = {};
 Object.defineProperty(ln, "__esModule", { value: true });
 ln.$ln = void 0;
 const core_1$1o = core;
-const util_1$1j = util$3;
+const util_1$1j = util$5;
 const $ln = (obj, expr2, options2) => {
   const n = (0, core_1$1o.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$1j.isNil)(n))
@@ -19687,7 +19691,7 @@ var log = {};
 Object.defineProperty(log, "__esModule", { value: true });
 log.$log = void 0;
 const core_1$1n = core;
-const util_1$1i = util$3;
+const util_1$1i = util$5;
 const $log = (obj, expr2, options2) => {
   const args2 = (0, core_1$1n.computeValue)(obj, expr2, null, options2);
   const msg = "$log expression must resolve to array(2) of numbers";
@@ -19702,7 +19706,7 @@ var log10 = {};
 Object.defineProperty(log10, "__esModule", { value: true });
 log10.$log10 = void 0;
 const core_1$1m = core;
-const util_1$1h = util$3;
+const util_1$1h = util$5;
 const $log10 = (obj, expr2, options2) => {
   const n = (0, core_1$1m.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$1h.isNil)(n))
@@ -19733,7 +19737,7 @@ var pow = {};
 Object.defineProperty(pow, "__esModule", { value: true });
 pow.$pow = void 0;
 const core_1$1j = core;
-const util_1$1g = util$3;
+const util_1$1g = util$5;
 const $pow = (obj, expr2, options2) => {
   const args2 = (0, core_1$1j.computeValue)(obj, expr2, null, options2);
   (0, util_1$1g.assert)((0, util_1$1g.isArray)(args2) && args2.length === 2 && args2.every(util_1$1g.isNumber), "$pow expression must resolve to array(2) of numbers");
@@ -19782,7 +19786,7 @@ _internal$3.truncate = truncate;
 Object.defineProperty(round, "__esModule", { value: true });
 round.$round = void 0;
 const core_1$1i = core;
-const util_1$1f = util$3;
+const util_1$1f = util$5;
 const _internal_1$J = _internal$3;
 const $round = (obj, expr2, options2) => {
   const args2 = (0, core_1$1i.computeValue)(obj, expr2, null, options2);
@@ -19798,7 +19802,7 @@ var sqrt = {};
 Object.defineProperty(sqrt, "__esModule", { value: true });
 sqrt.$sqrt = void 0;
 const core_1$1h = core;
-const util_1$1e = util$3;
+const util_1$1e = util$5;
 const $sqrt = (obj, expr2, options2) => {
   const n = (0, core_1$1h.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$1e.isNil)(n))
@@ -19820,12 +19824,12 @@ var trunc = {};
 Object.defineProperty(trunc, "__esModule", { value: true });
 trunc.$trunc = void 0;
 const core_1$1f = core;
-const util_1$1d = util$3;
+const util_1$1d = util$5;
 const _internal_1$I = _internal$3;
 const $trunc = (obj, expr2, options2) => {
-  const arr = (0, core_1$1f.computeValue)(obj, expr2, null, options2);
-  const num = arr[0];
-  const places = arr[1];
+  const arr2 = (0, core_1$1f.computeValue)(obj, expr2, null, options2);
+  const num = arr2[0];
+  const places = arr2[1];
   if ((0, util_1$1d.isNil)(num) || isNaN(num) || Math.abs(num) === Infinity)
     return num;
   (0, util_1$1d.assert)((0, util_1$1d.isNumber)(num), "$trunc expression must resolve to a number.");
@@ -19877,18 +19881,18 @@ var arrayElemAt = {};
 Object.defineProperty(arrayElemAt, "__esModule", { value: true });
 arrayElemAt.$arrayElemAt = void 0;
 const core_1$1e = core;
-const util_1$1c = util$3;
+const util_1$1c = util$5;
 const $arrayElemAt = (obj, expr2, options2) => {
   const args2 = (0, core_1$1e.computeValue)(obj, expr2, null, options2);
   (0, util_1$1c.assert)(args2 instanceof Array && args2.length === 2, "$arrayElemAt expression must resolve to array(2)");
   if (args2.some(util_1$1c.isNil))
     return null;
   const index = args2[1];
-  const arr = args2[0];
-  if (index < 0 && Math.abs(index) <= arr.length) {
-    return arr[(index + arr.length) % arr.length];
-  } else if (index >= 0 && index < arr.length) {
-    return arr[index];
+  const arr2 = args2[0];
+  if (index < 0 && Math.abs(index) <= arr2.length) {
+    return arr2[(index + arr2.length) % arr2.length];
+  } else if (index >= 0 && index < arr2.length) {
+    return arr2[index];
   }
   return void 0;
 };
@@ -19897,11 +19901,11 @@ var arrayToObject = {};
 Object.defineProperty(arrayToObject, "__esModule", { value: true });
 arrayToObject.$arrayToObject = void 0;
 const core_1$1d = core;
-const util_1$1b = util$3;
+const util_1$1b = util$5;
 const $arrayToObject = (obj, expr2, options2) => {
-  const arr = (0, core_1$1d.computeValue)(obj, expr2, null, options2);
-  (0, util_1$1b.assert)((0, util_1$1b.isArray)(arr), "$arrayToObject expression must resolve to an array");
-  return arr.reduce((newObj, val) => {
+  const arr2 = (0, core_1$1d.computeValue)(obj, expr2, null, options2);
+  (0, util_1$1b.assert)((0, util_1$1b.isArray)(arr2), "$arrayToObject expression must resolve to an array");
+  return arr2.reduce((newObj, val) => {
     while ((0, util_1$1b.isArray)(val) && val.length === 1)
       val = val[0];
     if (val instanceof Array && val.length == 2) {
@@ -19919,20 +19923,20 @@ var concatArrays = {};
 Object.defineProperty(concatArrays, "__esModule", { value: true });
 concatArrays.$concatArrays = void 0;
 const core_1$1c = core;
-const util_1$1a = util$3;
+const util_1$1a = util$5;
 const $concatArrays = (obj, expr2, options2) => {
-  const arr = (0, core_1$1c.computeValue)(obj, expr2, null, options2);
-  (0, util_1$1a.assert)((0, util_1$1a.isArray)(arr), "$concatArrays must resolve to an array");
-  if (arr.some(util_1$1a.isNil))
+  const arr2 = (0, core_1$1c.computeValue)(obj, expr2, null, options2);
+  (0, util_1$1a.assert)((0, util_1$1a.isArray)(arr2), "$concatArrays must resolve to an array");
+  if (arr2.some(util_1$1a.isNil))
     return null;
-  return arr.reduce((acc, item) => (0, util_1$1a.into)(acc, item), []);
+  return arr2.reduce((acc, item) => (0, util_1$1a.into)(acc, item), []);
 };
 concatArrays.$concatArrays = $concatArrays;
 var filter = {};
 Object.defineProperty(filter, "__esModule", { value: true });
 filter.$filter = void 0;
 const core_1$1b = core;
-const util_1$19 = util$3;
+const util_1$19 = util$5;
 const $filter = (obj, expr2, options2) => {
   const input = (0, core_1$1b.computeValue)(obj, expr2.input, null, options2);
   (0, util_1$19.assert)((0, util_1$19.isArray)(input), "$filter 'input' expression must resolve to an array");
@@ -19952,24 +19956,24 @@ var first = {};
 Object.defineProperty(first, "__esModule", { value: true });
 first.$first = void 0;
 const core_1$1a = core;
-const util_1$18 = util$3;
+const util_1$18 = util$5;
 const accumulator_1$1 = accumulator$1;
 const $first = (obj, expr2, options2) => {
   const copts = core_1$1a.ComputeOptions.init(options2);
   if (obj instanceof Array)
     return (0, accumulator_1$1.$first)(obj, expr2, copts.update());
-  const arr = (0, core_1$1a.computeValue)(obj, expr2, null, options2);
-  if ((0, util_1$18.isNil)(arr))
+  const arr2 = (0, core_1$1a.computeValue)(obj, expr2, null, options2);
+  if ((0, util_1$18.isNil)(arr2))
     return null;
-  (0, util_1$18.assert)((0, util_1$18.isArray)(arr), "Must resolve to an array/null or missing");
-  return (0, accumulator_1$1.$first)(arr, "$$this", options2);
+  (0, util_1$18.assert)((0, util_1$18.isArray)(arr2), "Must resolve to an array/null or missing");
+  return (0, accumulator_1$1.$first)(arr2, "$$this", options2);
 };
 first.$first = $first;
 var firstN = {};
 Object.defineProperty(firstN, "__esModule", { value: true });
 firstN.$firstN = void 0;
 const core_1$19 = core;
-const util_1$17 = util$3;
+const util_1$17 = util$5;
 const firstN_1 = firstN$1;
 const $firstN = (obj, expr2, options2) => {
   if (obj instanceof Array)
@@ -19985,39 +19989,39 @@ var _in$1 = {};
 Object.defineProperty(_in$1, "__esModule", { value: true });
 _in$1.$in = void 0;
 const core_1$18 = core;
-const util_1$16 = util$3;
+const util_1$16 = util$5;
 const $in$1 = (obj, expr2, options2) => {
-  const [item, arr] = (0, core_1$18.computeValue)(obj, expr2, null, options2);
-  (0, util_1$16.assert)((0, util_1$16.isArray)(arr), "$in second argument must be an array");
-  return arr.some(util_1$16.isEqual.bind(null, item));
+  const [item, arr2] = (0, core_1$18.computeValue)(obj, expr2, null, options2);
+  (0, util_1$16.assert)((0, util_1$16.isArray)(arr2), "$in second argument must be an array");
+  return arr2.some(util_1$16.isEqual.bind(null, item));
 };
 _in$1.$in = $in$1;
 var indexOfArray = {};
 Object.defineProperty(indexOfArray, "__esModule", { value: true });
 indexOfArray.$indexOfArray = void 0;
 const core_1$17 = core;
-const util_1$15 = util$3;
+const util_1$15 = util$5;
 const $indexOfArray = (obj, expr2, options2) => {
   const args2 = (0, core_1$17.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$15.isNil)(args2))
     return null;
-  let arr = args2[0];
+  let arr2 = args2[0];
   const searchValue = args2[1];
-  if ((0, util_1$15.isNil)(arr))
+  if ((0, util_1$15.isNil)(arr2))
     return null;
-  (0, util_1$15.assert)((0, util_1$15.isArray)(arr), "$indexOfArray expression must resolve to an array.");
+  (0, util_1$15.assert)((0, util_1$15.isArray)(arr2), "$indexOfArray expression must resolve to an array.");
   const start = args2[2] || 0;
   let end = args2[3];
   if ((0, util_1$15.isNil)(end))
-    end = arr.length;
+    end = arr2.length;
   if (start > end)
     return -1;
   (0, util_1$15.assert)(start >= 0 && end >= 0, "$indexOfArray expression is invalid");
-  if (start > 0 || end < arr.length) {
-    arr = arr.slice(start, end);
+  if (start > 0 || end < arr2.length) {
+    arr2 = arr2.slice(start, end);
   }
   let index = -1;
-  arr.some((v, i) => {
+  arr2.some((v, i) => {
     const b = (0, util_1$15.isEqual)(v, searchValue);
     if (b)
       index = i;
@@ -20038,24 +20042,24 @@ var last = {};
 Object.defineProperty(last, "__esModule", { value: true });
 last.$last = void 0;
 const core_1$15 = core;
-const util_1$14 = util$3;
+const util_1$14 = util$5;
 const accumulator_1 = accumulator$1;
 const $last = (obj, expr2, options2) => {
   const copts = core_1$15.ComputeOptions.init(options2);
   if (obj instanceof Array)
     return (0, accumulator_1.$last)(obj, expr2, copts.update());
-  const arr = (0, core_1$15.computeValue)(obj, expr2, null, options2);
-  if ((0, util_1$14.isNil)(arr))
+  const arr2 = (0, core_1$15.computeValue)(obj, expr2, null, options2);
+  if ((0, util_1$14.isNil)(arr2))
     return null;
-  (0, util_1$14.assert)((0, util_1$14.isArray)(arr), "Must resolve to an array/null or missing");
-  return (0, accumulator_1.$last)(arr, "$$this", options2);
+  (0, util_1$14.assert)((0, util_1$14.isArray)(arr2), "Must resolve to an array/null or missing");
+  return (0, accumulator_1.$last)(arr2, "$$this", options2);
 };
 last.$last = $last;
 var lastN = {};
 Object.defineProperty(lastN, "__esModule", { value: true });
 lastN.$lastN = void 0;
 const core_1$14 = core;
-const util_1$13 = util$3;
+const util_1$13 = util$5;
 const lastN_1 = lastN$1;
 const $lastN = (obj, expr2, options2) => {
   if (obj instanceof Array)
@@ -20071,7 +20075,7 @@ var map = {};
 Object.defineProperty(map, "__esModule", { value: true });
 map.$map = void 0;
 const core_1$13 = core;
-const util_1$12 = util$3;
+const util_1$12 = util$5;
 const $map = (obj, expr2, options2) => {
   const input = (0, core_1$13.computeValue)(obj, expr2.input, null, options2);
   (0, util_1$12.assert)((0, util_1$12.isArray)(input), `$map 'input' expression must resolve to an array`);
@@ -20088,7 +20092,7 @@ var maxN = {};
 Object.defineProperty(maxN, "__esModule", { value: true });
 maxN.$maxN = void 0;
 const core_1$12 = core;
-const util_1$11 = util$3;
+const util_1$11 = util$5;
 const maxN_1 = maxN$1;
 const $maxN = (obj, expr2, options2) => {
   if (obj instanceof Array)
@@ -20104,7 +20108,7 @@ var minN = {};
 Object.defineProperty(minN, "__esModule", { value: true });
 minN.$minN = void 0;
 const core_1$11 = core;
-const util_1$10 = util$3;
+const util_1$10 = util$5;
 const minN_1 = minN$1;
 const $minN = (obj, expr2, options2) => {
   if (obj instanceof Array)
@@ -20122,7 +20126,7 @@ Object.defineProperty(_predicates, "__esModule", { value: true });
 _predicates.$type = _predicates.$elemMatch = _predicates.$size = _predicates.$all = _predicates.$exists = _predicates.$regex = _predicates.$mod = _predicates.$gte = _predicates.$gt = _predicates.$lte = _predicates.$lt = _predicates.$nin = _predicates.$in = _predicates.$ne = _predicates.$eq = _predicates.createExpressionOperator = _predicates.createQueryOperator = void 0;
 const core_1$10 = core;
 const query_1$4 = query;
-const util_1$$ = util$3;
+const util_1$$ = util$5;
 function createQueryOperator(predicate) {
   const f = (selector, value, options2) => {
     const opts = { unwrapArray: true };
@@ -20301,10 +20305,10 @@ Object.defineProperty(range, "__esModule", { value: true });
 range.$range = void 0;
 const core_1$$ = core;
 const $range = (obj, expr2, options2) => {
-  const arr = (0, core_1$$.computeValue)(obj, expr2, null, options2);
-  const start = arr[0];
-  const end = arr[1];
-  const step = arr[2] || 1;
+  const arr2 = (0, core_1$$.computeValue)(obj, expr2, null, options2);
+  const start = arr2[0];
+  const end = arr2[1];
+  const step = arr2[2] || 1;
   const result = new Array();
   let counter = start;
   while (counter < end && step > 0 || counter > end && step < 0) {
@@ -20318,7 +20322,7 @@ var reduce = {};
 Object.defineProperty(reduce, "__esModule", { value: true });
 reduce.$reduce = void 0;
 const core_1$_ = core;
-const util_1$_ = util$3;
+const util_1$_ = util$5;
 const $reduce = (obj, expr2, options2) => {
   const copts = core_1$_.ComputeOptions.init(options2);
   const input = (0, core_1$_.computeValue)(obj, expr2.input, null, copts);
@@ -20338,13 +20342,13 @@ var reverseArray = {};
 Object.defineProperty(reverseArray, "__esModule", { value: true });
 reverseArray.$reverseArray = void 0;
 const core_1$Z = core;
-const util_1$Z = util$3;
+const util_1$Z = util$5;
 const $reverseArray = (obj, expr2, options2) => {
-  const arr = (0, core_1$Z.computeValue)(obj, expr2, null, options2);
-  if ((0, util_1$Z.isNil)(arr))
+  const arr2 = (0, core_1$Z.computeValue)(obj, expr2, null, options2);
+  if ((0, util_1$Z.isNil)(arr2))
     return null;
-  (0, util_1$Z.assert)((0, util_1$Z.isArray)(arr), "$reverseArray expression must resolve to an array");
-  const result = arr.slice(0);
+  (0, util_1$Z.assert)((0, util_1$Z.isArray)(arr2), "$reverseArray expression must resolve to an array");
+  const result = arr2.slice(0);
   result.reverse();
   return result;
 };
@@ -20353,7 +20357,7 @@ var size$1 = {};
 Object.defineProperty(size$1, "__esModule", { value: true });
 size$1.$size = void 0;
 const core_1$Y = core;
-const util_1$Y = util$3;
+const util_1$Y = util$5;
 const $size = (obj, expr2, options2) => {
   const value = (0, core_1$Y.computeValue)(obj, expr2, null, options2);
   return (0, util_1$Y.isArray)(value) ? value.length : void 0;
@@ -20363,28 +20367,28 @@ var slice = {};
 Object.defineProperty(slice, "__esModule", { value: true });
 slice.$slice = void 0;
 const core_1$X = core;
-const util_1$X = util$3;
+const util_1$X = util$5;
 const $slice = (obj, expr2, options2) => {
   const args2 = (0, core_1$X.computeValue)(obj, expr2, null, options2);
-  const arr = args2[0];
+  const arr2 = args2[0];
   let skip2 = args2[1];
   let limit2 = args2[2];
   if ((0, util_1$X.isNil)(limit2)) {
     if (skip2 < 0) {
-      skip2 = Math.max(0, arr.length + skip2);
-      limit2 = arr.length - skip2 + 1;
+      skip2 = Math.max(0, arr2.length + skip2);
+      limit2 = arr2.length - skip2 + 1;
     } else {
       limit2 = skip2;
       skip2 = 0;
     }
   } else {
     if (skip2 < 0) {
-      skip2 = Math.max(0, arr.length + skip2);
+      skip2 = Math.max(0, arr2.length + skip2);
     }
     (0, util_1$X.assert)(limit2 > 0, `Invalid argument for $slice operator. Limit must be a positive number`);
     limit2 += skip2;
   }
-  return arr.slice(skip2, limit2);
+  return arr2.slice(skip2, limit2);
 };
 slice.$slice = $slice;
 var sortArray = {};
@@ -20392,7 +20396,7 @@ Object.defineProperty(sortArray, "__esModule", { value: true });
 sortArray.$sortArray = void 0;
 const aggregator_1$2 = aggregator;
 const core_1$W = core;
-const util_1$W = util$3;
+const util_1$W = util$5;
 const $sortArray = (obj, expr2, options2) => {
   const { input, sortBy } = (0, core_1$W.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$W.isNil)(input))
@@ -20412,7 +20416,7 @@ var zip = {};
 Object.defineProperty(zip, "__esModule", { value: true });
 zip.$zip = void 0;
 const core_1$V = core;
-const util_1$V = util$3;
+const util_1$V = util$5;
 const $zip = (obj, expr2, options2) => {
   const inputs = (0, core_1$V.computeValue)(obj, expr2.inputs, null, options2);
   const useLongestLength = expr2.useLongestLength || false;
@@ -20423,11 +20427,11 @@ const $zip = (obj, expr2, options2) => {
   }
   let zipCount = 0;
   for (let i = 0, len = inputs.length; i < len; i++) {
-    const arr = inputs[i];
-    if ((0, util_1$V.isNil)(arr))
+    const arr2 = inputs[i];
+    if ((0, util_1$V.isNil)(arr2))
       return null;
-    (0, util_1$V.assert)((0, util_1$V.isArray)(arr), "'inputs' expression values must resolve to an array or null");
-    zipCount = useLongestLength ? Math.max(zipCount, arr.length) : Math.min(zipCount || arr.length, arr.length);
+    (0, util_1$V.assert)((0, util_1$V.isArray)(arr2), "'inputs' expression values must resolve to an array or null");
+    zipCount = useLongestLength ? Math.max(zipCount, arr2.length) : Math.min(zipCount || arr2.length, arr2.length);
   }
   const result = [];
   const defaults2 = expr2.defaults || [];
@@ -20490,7 +20494,7 @@ var and$1 = {};
 Object.defineProperty(and$1, "__esModule", { value: true });
 and$1.$and = void 0;
 const core_1$U = core;
-const util_1$U = util$3;
+const util_1$U = util$5;
 const $and$1 = (obj, expr2, options2) => {
   const value = (0, core_1$U.computeValue)(obj, expr2, null, options2);
   return (0, util_1$U.truthy)(value, options2.useStrictMode) && value.every((v) => (0, util_1$U.truthy)(v, options2.useStrictMode));
@@ -20500,7 +20504,7 @@ var not$1 = {};
 Object.defineProperty(not$1, "__esModule", { value: true });
 not$1.$not = void 0;
 const core_1$T = core;
-const util_1$T = util$3;
+const util_1$T = util$5;
 const $not$1 = (obj, expr2, options2) => {
   const booleanExpr = (0, util_1$T.ensureArray)(expr2);
   if (booleanExpr.length == 0)
@@ -20514,7 +20518,7 @@ var or$1 = {};
 Object.defineProperty(or$1, "__esModule", { value: true });
 or$1.$or = void 0;
 const core_1$S = core;
-const util_1$S = util$3;
+const util_1$S = util$5;
 const $or$1 = (obj, expr2, options2) => {
   const value = (0, core_1$S.computeValue)(obj, expr2, null, options2);
   const strict = options2.useStrictMode;
@@ -20626,7 +20630,7 @@ var cond = {};
 Object.defineProperty(cond, "__esModule", { value: true });
 cond.$cond = void 0;
 const core_1$Q = core;
-const util_1$R = util$3;
+const util_1$R = util$5;
 const $cond = (obj, expr2, options2) => {
   let ifExpr;
   let thenExpr;
@@ -20651,7 +20655,7 @@ var _switch = {};
 Object.defineProperty(_switch, "__esModule", { value: true });
 _switch.$switch = void 0;
 const core_1$P = core;
-const util_1$Q = util$3;
+const util_1$Q = util$5;
 const $switch = (obj, expr2, options2) => {
   let thenExpr = null;
   expr2.branches.some((b) => {
@@ -20694,7 +20698,7 @@ var _function = {};
 Object.defineProperty(_function, "__esModule", { value: true });
 _function.$function = void 0;
 const core_1$O = core;
-const util_1$P = util$3;
+const util_1$P = util$5;
 const $function = (obj, expr2, options2) => {
   (0, util_1$P.assert)(options2.scriptEnabled, "$function operator requires 'scriptEnabled' option to be true");
   const fn = (0, core_1$O.computeValue)(obj, expr2, null, options2);
@@ -20840,7 +20844,7 @@ var dateFromString = {};
 Object.defineProperty(dateFromString, "__esModule", { value: true });
 dateFromString.$dateFromString = void 0;
 const core_1$K = core;
-const util_1$O = util$3;
+const util_1$O = util$5;
 const _internal_1$E = _internal$5;
 const buildMap = (letters, sign) => {
   const h = {};
@@ -21028,7 +21032,7 @@ year.$year = $year;
 Object.defineProperty(dateToString, "__esModule", { value: true });
 dateToString.$dateToString = void 0;
 const core_1$H = core;
-const util_1$N = util$3;
+const util_1$N = util$5;
 const _internal_1$s = _internal$5;
 const dayOfMonth_1 = dayOfMonth;
 const hour_1 = hour;
@@ -21162,7 +21166,7 @@ var getField = {};
 Object.defineProperty(getField, "__esModule", { value: true });
 getField.$getField = void 0;
 const core_1$G = core;
-const util_1$M = util$3;
+const util_1$M = util$5;
 const $getField = (obj, expr2, options2) => {
   const args2 = (0, core_1$G.computeValue)(obj, expr2, null, options2);
   let input = obj;
@@ -21220,7 +21224,7 @@ var objectToArray = {};
 Object.defineProperty(objectToArray, "__esModule", { value: true });
 objectToArray.$objectToArray = void 0;
 const core_1$E = core;
-const util_1$L = util$3;
+const util_1$L = util$5;
 const $objectToArray = (obj, expr2, options2) => {
   const val = (0, core_1$E.computeValue)(obj, expr2, null, options2);
   (0, util_1$L.assert)((0, util_1$L.isObject)(val), "$objectToArray expression must resolve to an object");
@@ -21237,7 +21241,7 @@ var setField = {};
 Object.defineProperty(setField, "__esModule", { value: true });
 setField.$setField = void 0;
 const core_1$D = core;
-const util_1$K = util$3;
+const util_1$K = util$5;
 const $setField = (obj, expr2, options2) => {
   const args2 = (0, core_1$D.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$K.isNil)(args2.input))
@@ -21292,7 +21296,7 @@ var allElementsTrue = {};
 Object.defineProperty(allElementsTrue, "__esModule", { value: true });
 allElementsTrue.$allElementsTrue = void 0;
 const core_1$C = core;
-const util_1$J = util$3;
+const util_1$J = util$5;
 const $allElementsTrue = (obj, expr2, options2) => {
   const args2 = (0, core_1$C.computeValue)(obj, expr2, null, options2)[0];
   return args2.every((v) => (0, util_1$J.truthy)(v, options2.useStrictMode));
@@ -21302,7 +21306,7 @@ var anyElementTrue = {};
 Object.defineProperty(anyElementTrue, "__esModule", { value: true });
 anyElementTrue.$anyElementTrue = void 0;
 const core_1$B = core;
-const util_1$I = util$3;
+const util_1$I = util$5;
 const $anyElementTrue = (obj, expr2, options2) => {
   const args2 = (0, core_1$B.computeValue)(obj, expr2, null, options2)[0];
   return args2.some((v) => (0, util_1$I.truthy)(v, options2.useStrictMode));
@@ -21312,7 +21316,7 @@ var setDifference = {};
 Object.defineProperty(setDifference, "__esModule", { value: true });
 setDifference.$setDifference = void 0;
 const core_1$A = core;
-const util_1$H = util$3;
+const util_1$H = util$5;
 const $setDifference = (obj, expr2, options2) => {
   const args2 = (0, core_1$A.computeValue)(obj, expr2, null, options2);
   return args2[0].filter(util_1$H.notInArray.bind(null, args2[1]));
@@ -21322,7 +21326,7 @@ var setEquals = {};
 Object.defineProperty(setEquals, "__esModule", { value: true });
 setEquals.$setEquals = void 0;
 const core_1$z = core;
-const util_1$G = util$3;
+const util_1$G = util$5;
 const $setEquals = (obj, expr2, options2) => {
   const args2 = (0, core_1$z.computeValue)(obj, expr2, null, options2);
   const xs = (0, util_1$G.unique)(args2[0], options2 === null || options2 === void 0 ? void 0 : options2.hashFunction);
@@ -21334,7 +21338,7 @@ var setIntersection = {};
 Object.defineProperty(setIntersection, "__esModule", { value: true });
 setIntersection.$setIntersection = void 0;
 const core_1$y = core;
-const util_1$F = util$3;
+const util_1$F = util$5;
 const $setIntersection = (obj, expr2, options2) => {
   const args2 = (0, core_1$y.computeValue)(obj, expr2, null, options2);
   (0, util_1$F.assert)((0, util_1$F.isArray)(args2) && args2.every(util_1$F.isArray), "$setIntersection: expresssion must resolve to array of arrays");
@@ -21345,7 +21349,7 @@ var setIsSubset = {};
 Object.defineProperty(setIsSubset, "__esModule", { value: true });
 setIsSubset.$setIsSubset = void 0;
 const core_1$x = core;
-const util_1$E = util$3;
+const util_1$E = util$5;
 const $setIsSubset = (obj, expr2, options2) => {
   const args2 = (0, core_1$x.computeValue)(obj, expr2, null, options2);
   return (0, util_1$E.intersection)(args2, options2 === null || options2 === void 0 ? void 0 : options2.hashFunction).length === args2[0].length;
@@ -21355,7 +21359,7 @@ var setUnion = {};
 Object.defineProperty(setUnion, "__esModule", { value: true });
 setUnion.$setUnion = void 0;
 const core_1$w = core;
-const util_1$D = util$3;
+const util_1$D = util$5;
 const $setUnion = (obj, expr2, options2) => {
   const args2 = (0, core_1$w.computeValue)(obj, expr2, null, options2);
   (0, util_1$D.assert)((0, util_1$D.isArray)(args2) && args2.length == 2 && args2.every(util_1$D.isArray), "$setUnion: arguments must be arrays");
@@ -21397,7 +21401,7 @@ var concat = {};
 Object.defineProperty(concat, "__esModule", { value: true });
 concat.$concat = void 0;
 const core_1$v = core;
-const util_1$C = util$3;
+const util_1$C = util$5;
 const $concat = (obj, expr2, options2) => {
   const args2 = (0, core_1$v.computeValue)(obj, expr2, null, options2);
   if ([null, void 0].some(util_1$C.inArray.bind(null, args2)))
@@ -21409,17 +21413,17 @@ var indexOfBytes = {};
 Object.defineProperty(indexOfBytes, "__esModule", { value: true });
 indexOfBytes.$indexOfBytes = void 0;
 const core_1$u = core;
-const util_1$B = util$3;
+const util_1$B = util$5;
 const $indexOfBytes = (obj, expr2, options2) => {
-  const arr = (0, core_1$u.computeValue)(obj, expr2, null, options2);
+  const arr2 = (0, core_1$u.computeValue)(obj, expr2, null, options2);
   const errorMsg = "$indexOfBytes expression resolves to invalid an argument";
-  if ((0, util_1$B.isNil)(arr[0]))
+  if ((0, util_1$B.isNil)(arr2[0]))
     return null;
-  (0, util_1$B.assert)((0, util_1$B.isString)(arr[0]) && (0, util_1$B.isString)(arr[1]), errorMsg);
-  const str = arr[0];
-  const searchStr = arr[1];
-  let start = arr[2];
-  let end = arr[3];
+  (0, util_1$B.assert)((0, util_1$B.isString)(arr2[0]) && (0, util_1$B.isString)(arr2[1]), errorMsg);
+  const str = arr2[0];
+  const searchStr = arr2[1];
+  let start = arr2[2];
+  let end = arr2[3];
   let valid = (0, util_1$B.isNil)(start) || (0, util_1$B.isNumber)(start) && start >= 0 && Math.round(start) === start;
   valid = valid && ((0, util_1$B.isNil)(end) || (0, util_1$B.isNumber)(end) && end >= 0 && Math.round(end) === end);
   (0, util_1$B.assert)(valid, errorMsg);
@@ -21436,7 +21440,7 @@ var _internal$2 = {};
 Object.defineProperty(_internal$2, "__esModule", { value: true });
 _internal$2.regexSearch = _internal$2.trimString = void 0;
 const core_1$t = core;
-const util_1$A = util$3;
+const util_1$A = util$5;
 const WHITESPACE_CHARS = [
   0,
   32,
@@ -21542,13 +21546,13 @@ var replaceAll = {};
 Object.defineProperty(replaceAll, "__esModule", { value: true });
 replaceAll.$replaceAll = void 0;
 const core_1$s = core;
-const util_1$z = util$3;
+const util_1$z = util$5;
 const $replaceAll = (obj, expr2, options2) => {
   const args2 = (0, core_1$s.computeValue)(obj, expr2, null, options2);
-  const arr = [args2.input, args2.find, args2.replacement];
-  if (arr.some(util_1$z.isNil))
+  const arr2 = [args2.input, args2.find, args2.replacement];
+  if (arr2.some(util_1$z.isNil))
     return null;
-  (0, util_1$z.assert)(arr.every(util_1$z.isString), "$replaceAll expression fields must evaluate to string");
+  (0, util_1$z.assert)(arr2.every(util_1$z.isString), "$replaceAll expression fields must evaluate to string");
   return args2.input.replace(new RegExp(args2.find, "g"), args2.replacement);
 };
 replaceAll.$replaceAll = $replaceAll;
@@ -21556,13 +21560,13 @@ var replaceOne = {};
 Object.defineProperty(replaceOne, "__esModule", { value: true });
 replaceOne.$replaceOne = void 0;
 const core_1$r = core;
-const util_1$y = util$3;
+const util_1$y = util$5;
 const $replaceOne = (obj, expr2, options2) => {
   const args2 = (0, core_1$r.computeValue)(obj, expr2, null, options2);
-  const arr = [args2.input, args2.find, args2.replacement];
-  if (arr.some(util_1$y.isNil))
+  const arr2 = [args2.input, args2.find, args2.replacement];
+  if (arr2.some(util_1$y.isNil))
     return null;
-  (0, util_1$y.assert)(arr.every(util_1$y.isString), "$replaceOne expression fields must evaluate to string");
+  (0, util_1$y.assert)(arr2.every(util_1$y.isString), "$replaceOne expression fields must evaluate to string");
   return args2.input.replace(args2.find, args2.replacement);
 };
 replaceOne.$replaceOne = $replaceOne;
@@ -21578,7 +21582,7 @@ var split = {};
 Object.defineProperty(split, "__esModule", { value: true });
 split.$split = void 0;
 const core_1$q = core;
-const util_1$x = util$3;
+const util_1$x = util$5;
 const $split = (obj, expr2, options2) => {
   const args2 = (0, core_1$q.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$x.isNil)(args2[0]))
@@ -21591,7 +21595,7 @@ var strcasecmp = {};
 Object.defineProperty(strcasecmp, "__esModule", { value: true });
 strcasecmp.$strcasecmp = void 0;
 const core_1$p = core;
-const util_1$w = util$3;
+const util_1$w = util$5;
 const $strcasecmp = (obj, expr2, options2) => {
   const args2 = (0, core_1$p.computeValue)(obj, expr2, null, options2);
   let a = args2[0];
@@ -21624,7 +21628,7 @@ var substr = {};
 Object.defineProperty(substr, "__esModule", { value: true });
 substr.$substr = void 0;
 const core_1$m = core;
-const util_1$v = util$3;
+const util_1$v = util$5;
 const $substr = (obj, expr2, options2) => {
   const args2 = (0, core_1$m.computeValue)(obj, expr2, null, options2);
   const s = args2[0];
@@ -21646,7 +21650,7 @@ var substrBytes = {};
 Object.defineProperty(substrBytes, "__esModule", { value: true });
 substrBytes.$substrBytes = void 0;
 const core_1$l = core;
-const util_1$u = util$3;
+const util_1$u = util$5;
 const UTF8_MASK = [192, 224, 240];
 function toUtf8(n) {
   if (n < 128)
@@ -21696,7 +21700,7 @@ var toLower = {};
 Object.defineProperty(toLower, "__esModule", { value: true });
 toLower.$toLower = void 0;
 const core_1$k = core;
-const util_1$t = util$3;
+const util_1$t = util$5;
 const $toLower = (obj, expr2, options2) => {
   const value = (0, core_1$k.computeValue)(obj, expr2, null, options2);
   return (0, util_1$t.isEmpty)(value) ? "" : value.toLowerCase();
@@ -21706,7 +21710,7 @@ var toUpper = {};
 Object.defineProperty(toUpper, "__esModule", { value: true });
 toUpper.$toUpper = void 0;
 const core_1$j = core;
-const util_1$s = util$3;
+const util_1$s = util$5;
 const $toUpper = (obj, expr2, options2) => {
   const value = (0, core_1$j.computeValue)(obj, expr2, null, options2);
   return (0, util_1$s.isEmpty)(value) ? "" : value.toUpperCase();
@@ -21828,7 +21832,7 @@ var atan2 = {};
 Object.defineProperty(atan2, "__esModule", { value: true });
 atan2.$atan2 = void 0;
 const core_1$h = core;
-const util_1$r = util$3;
+const util_1$r = util$5;
 const $atan2 = (obj, expr2, options2) => {
   const [y, x] = (0, core_1$h.computeValue)(obj, expr2, null, options2);
   if (isNaN(y) || (0, util_1$r.isNil)(y))
@@ -21939,7 +21943,7 @@ var _internal = {};
 Object.defineProperty(_internal, "__esModule", { value: true });
 _internal.toInteger = _internal.TypeConvertError = void 0;
 const core_1$g = core;
-const util_1$q = util$3;
+const util_1$q = util$5;
 class TypeConvertError extends Error {
   constructor(message) {
     super(message);
@@ -21969,7 +21973,7 @@ var toBool = {};
 Object.defineProperty(toBool, "__esModule", { value: true });
 toBool.$toBool = void 0;
 const core_1$f = core;
-const util_1$p = util$3;
+const util_1$p = util$5;
 const $toBool = (obj, expr2, options2) => {
   const val = (0, core_1$f.computeValue)(obj, expr2, null, options2);
   if ((0, util_1$p.isNil)(val))
@@ -21983,7 +21987,7 @@ var toDate = {};
 Object.defineProperty(toDate, "__esModule", { value: true });
 toDate.$toDate = void 0;
 const core_1$e = core;
-const util_1$o = util$3;
+const util_1$o = util$5;
 const _internal_1$5 = _internal;
 const $toDate = (obj, expr2, options2) => {
   const val = (0, core_1$e.computeValue)(obj, expr2, null, options2);
@@ -22002,7 +22006,7 @@ var toDouble = {};
 Object.defineProperty(toDouble, "__esModule", { value: true });
 toDouble.$toDouble = void 0;
 const core_1$d = core;
-const util_1$n = util$3;
+const util_1$n = util$5;
 const _internal_1$4 = _internal;
 const $toDouble = (obj, expr2, options2) => {
   const val = (0, core_1$d.computeValue)(obj, expr2, null, options2);
@@ -22023,7 +22027,7 @@ toDouble.$toDouble = $toDouble;
 var toInt = {};
 Object.defineProperty(toInt, "__esModule", { value: true });
 toInt.$toInt = void 0;
-const util_1$m = util$3;
+const util_1$m = util$5;
 const _internal_1$3 = _internal;
 const $toInt = (obj, expr2, options2) => {
   return (0, _internal_1$3.toInteger)(obj, expr2, options2, util_1$m.MAX_INT, util_1$m.MIN_INT, "int");
@@ -22032,7 +22036,7 @@ toInt.$toInt = $toInt;
 var toLong = {};
 Object.defineProperty(toLong, "__esModule", { value: true });
 toLong.$toLong = void 0;
-const util_1$l = util$3;
+const util_1$l = util$5;
 const _internal_1$2 = _internal;
 const $toLong = (obj, expr2, options2) => {
   return (0, _internal_1$2.toInteger)(obj, expr2, options2, util_1$l.MAX_LONG, util_1$l.MIN_LONG, "long");
@@ -22042,7 +22046,7 @@ var toString = {};
 Object.defineProperty(toString, "__esModule", { value: true });
 toString.$toString = void 0;
 const core_1$c = core;
-const util_1$k = util$3;
+const util_1$k = util$5;
 const dateToString_1 = dateToString;
 const $toString = (obj, expr2, options2) => {
   const val = (0, core_1$c.computeValue)(obj, expr2, null, options2);
@@ -22062,7 +22066,7 @@ toString.$toString = $toString;
 Object.defineProperty(convert, "__esModule", { value: true });
 convert.$convert = void 0;
 const core_1$b = core;
-const util_1$j = util$3;
+const util_1$j = util$5;
 const _internal_1$1 = _internal;
 const toBool_1 = toBool;
 const toDate_1 = toDate;
@@ -22111,7 +22115,7 @@ var isNumber = {};
 Object.defineProperty(isNumber, "__esModule", { value: true });
 isNumber.$isNumber = void 0;
 const core_1$a = core;
-const util_1$i = util$3;
+const util_1$i = util$5;
 const $isNumber = (obj, expr2, options2) => {
   const n = (0, core_1$a.computeValue)(obj, expr2, null, options2);
   return (0, util_1$i.isNumber)(n);
@@ -22126,7 +22130,7 @@ var type$6 = {};
 Object.defineProperty(type$6, "__esModule", { value: true });
 type$6.$type = void 0;
 const core_1$9 = core;
-const util_1$h = util$3;
+const util_1$h = util$5;
 const $type = (obj, expr2, options2) => {
   const val = (0, core_1$9.computeValue)(obj, expr2, null, options2);
   const typename = (0, util_1$h.getType)(val);
@@ -22257,7 +22261,7 @@ var group = {};
 Object.defineProperty(group, "__esModule", { value: true });
 group.$group = void 0;
 const core_1$7 = core;
-const util_1$g = util$3;
+const util_1$g = util$5;
 const ID_KEY = "_id";
 const $group = (collection, expr2, options2) => {
   (0, util_1$g.assert)((0, util_1$g.has)(expr2, ID_KEY), "a group specification must include an _id");
@@ -22289,7 +22293,7 @@ group.$group = $group;
 var sort = {};
 Object.defineProperty(sort, "__esModule", { value: true });
 sort.$sort = void 0;
-const util_1$f = util$3;
+const util_1$f = util$5;
 const $sort = (collection, sortKeys, options2) => {
   if ((0, util_1$f.isEmpty)(sortKeys) || !(0, util_1$f.isObject)(sortKeys))
     return collection;
@@ -22352,7 +22356,7 @@ Object.defineProperty(setWindowFields, "__esModule", { value: true });
 setWindowFields.$setWindowFields = void 0;
 const core_1$6 = core;
 const lazy_1$2 = lazy;
-const util_1$e = util$3;
+const util_1$e = util$5;
 const expression_1$1 = expression;
 const dateAdd_1 = dateAdd;
 const _internal_1 = _internal$4;
@@ -22519,7 +22523,7 @@ setWindowFields.$setWindowFields = $setWindowFields;
 Object.defineProperty(fill, "__esModule", { value: true });
 fill.$fill = void 0;
 const core_1$5 = core;
-const util_1$d = util$3;
+const util_1$d = util$5;
 const ifNull_1 = ifNull;
 const linearFill_1 = linearFill;
 const locf_1 = locf;
@@ -22573,7 +22577,7 @@ limit.$limit = $limit;
 var lookup = {};
 Object.defineProperty(lookup, "__esModule", { value: true });
 lookup.$lookup = void 0;
-const util_1$c = util$3;
+const util_1$c = util$5;
 const $lookup = (collection, expr2, options2) => {
   const joinColl = (0, util_1$c.isString)(expr2.from) ? options2 === null || options2 === void 0 ? void 0 : options2.collectionResolver(expr2.from) : expr2.from;
   (0, util_1$c.assert)(joinColl instanceof Array, `'from' field must resolve to an array`);
@@ -22605,7 +22609,7 @@ Object.defineProperty(merge$1, "__esModule", { value: true });
 merge$1.$merge = void 0;
 const aggregator_1$1 = aggregator;
 const core_1$4 = core;
-const util_1$b = util$3;
+const util_1$b = util$5;
 const expression_1 = expression;
 const $merge = (collection, expr2, options2) => {
   const output = (0, util_1$b.isString)(expr2.into) ? options2 === null || options2 === void 0 ? void 0 : options2.collectionResolver(expr2.into) : expr2.into;
@@ -22676,7 +22680,7 @@ merge$1.$merge = $merge;
 var out = {};
 Object.defineProperty(out, "__esModule", { value: true });
 out.$out = void 0;
-const util_1$a = util$3;
+const util_1$a = util$5;
 const $out = (collection, expr2, options2) => {
   const outputColl = (0, util_1$a.isString)(expr2) ? options2 === null || options2 === void 0 ? void 0 : options2.collectionResolver(expr2) : expr2;
   (0, util_1$a.assert)(outputColl instanceof Array, `expression must resolve to an array`);
@@ -22690,7 +22694,7 @@ var project = {};
 Object.defineProperty(project, "__esModule", { value: true });
 project.$project = void 0;
 const core_1$3 = core;
-const util_1$9 = util$3;
+const util_1$9 = util$5;
 const $project = (collection, expr2, options2) => {
   if ((0, util_1$9.isEmpty)(expr2))
     return collection;
@@ -22825,7 +22829,7 @@ var replaceRoot = {};
 Object.defineProperty(replaceRoot, "__esModule", { value: true });
 replaceRoot.$replaceRoot = void 0;
 const core_1$1 = core;
-const util_1$8 = util$3;
+const util_1$8 = util$5;
 const $replaceRoot = (collection, expr2, options2) => {
   return collection.map((obj) => {
     obj = (0, core_1$1.computeValue)(obj, expr2.newRoot, null, options2);
@@ -22883,7 +22887,7 @@ Object.defineProperty(unionWith, "__esModule", { value: true });
 unionWith.$unionWith = void 0;
 const aggregator_1 = aggregator;
 const lazy_1$1 = lazy;
-const util_1$7 = util$3;
+const util_1$7 = util$5;
 const $unionWith = (collection, expr2, options2) => {
   const array2 = (0, util_1$7.isString)(expr2.coll) ? options2.collectionResolver(expr2.coll) : expr2.coll;
   const iterators = [collection];
@@ -22894,7 +22898,7 @@ unionWith.$unionWith = $unionWith;
 var unset = {};
 Object.defineProperty(unset, "__esModule", { value: true });
 unset.$unset = void 0;
-const util_1$6 = util$3;
+const util_1$6 = util$5;
 const project_1 = project;
 const $unset = (collection, expr2, options2) => {
   expr2 = (0, util_1$6.ensureArray)(expr2);
@@ -22908,12 +22912,12 @@ var unwind = {};
 Object.defineProperty(unwind, "__esModule", { value: true });
 unwind.$unwind = void 0;
 const lazy_1 = lazy;
-const util_1$5 = util$3;
+const util_1$5 = util$5;
 const $unwind = (collection, expr2, _options2) => {
   if ((0, util_1$5.isString)(expr2))
     expr2 = { path: expr2 };
-  const path = expr2.path;
-  const field = path.substring(1);
+  const path2 = expr2.path;
+  const field = path2.substring(1);
   const includeArrayIndex = (expr2 === null || expr2 === void 0 ? void 0 : expr2.includeArrayIndex) || false;
   const preserveNullAndEmptyArrays = expr2.preserveNullAndEmptyArrays || false;
   const format = (o, i) => {
@@ -23008,7 +23012,7 @@ var and = {};
 Object.defineProperty(and, "__esModule", { value: true });
 and.$and = void 0;
 const query_1$2 = query;
-const util_1$4 = util$3;
+const util_1$4 = util$5;
 const $and = (_, rhs, options2) => {
   (0, util_1$4.assert)((0, util_1$4.isArray)(rhs), "Invalid expression: $and expects value to be an Array.");
   const queries = rhs.map((expr2) => new query_1$2.Query(expr2, options2));
@@ -23020,7 +23024,7 @@ var or = {};
 Object.defineProperty(or, "__esModule", { value: true });
 or.$or = void 0;
 const query_1$1 = query;
-const util_1$3 = util$3;
+const util_1$3 = util$5;
 const $or = (_, rhs, options2) => {
   (0, util_1$3.assert)((0, util_1$3.isArray)(rhs), "Invalid expression. $or expects value to be an Array");
   const queries = rhs.map((expr2) => new query_1$1.Query(expr2, options2));
@@ -23029,7 +23033,7 @@ const $or = (_, rhs, options2) => {
 or.$or = $or;
 Object.defineProperty(nor, "__esModule", { value: true });
 nor.$nor = void 0;
-const util_1$2 = util$3;
+const util_1$2 = util$5;
 const or_1 = or;
 const $nor = (_, rhs, options2) => {
   (0, util_1$2.assert)((0, util_1$2.isArray)(rhs), "Invalid expression. $nor expects value to be an array.");
@@ -23041,7 +23045,7 @@ var not = {};
 Object.defineProperty(not, "__esModule", { value: true });
 not.$not = void 0;
 const query_1 = query;
-const util_1$1 = util$3;
+const util_1$1 = util$5;
 const $not = (selector, rhs, options2) => {
   const criteria = {};
   criteria[selector] = (0, util_1$1.normalize)(rhs);
@@ -23186,7 +23190,7 @@ regex.$regex = (0, _predicates_1$5.createQueryOperator)(_predicates_1$5.$regex);
 var where = {};
 Object.defineProperty(where, "__esModule", { value: true });
 where.$where = void 0;
-const util_1 = util$3;
+const util_1 = util$5;
 function $where(_, rhs, options2) {
   (0, util_1.assert)(options2.scriptEnabled, "$where operator requires 'scriptEnabled' option to be true");
   const f = rhs;
@@ -23353,7 +23357,7 @@ rxQueryHelper.normalizeQueryRegex = normalizeQueryRegex;
 var _queryPlanner$2 = queryPlanner;
 var _rxSchemaHelper$a = rxSchemaHelper;
 var _utils$n = utils;
-var _util$8 = util$3;
+var _util$8 = util$5;
 var _rxError$h = rxError;
 var _rxQueryMingo = rxQueryMingo;
 function normalizeMangoQuery(schema, mangoQuery) {
@@ -23977,7 +23981,7 @@ race$1.race = race;
   Object.defineProperty(exports, "repeatWhen", { enumerable: true, get: function() {
     return repeatWhen_1.repeatWhen;
   } });
-  var retry_1 = retry$1;
+  var retry_1 = retry$2;
   Object.defineProperty(exports, "retry", { enumerable: true, get: function() {
     return retry_1.retry;
   } });
@@ -24148,26 +24152,26 @@ race$1.race = race;
 })(operators);
 var es5node = {};
 var broadcastChannel = {};
-var util$2 = {};
-Object.defineProperty(util$2, "__esModule", {
+var util$4 = {};
+Object.defineProperty(util$4, "__esModule", {
   value: true
 });
-util$2.PROMISE_RESOLVED_VOID = util$2.PROMISE_RESOLVED_TRUE = util$2.PROMISE_RESOLVED_FALSE = void 0;
-util$2.isPromise = isPromise;
-util$2.microSeconds = microSeconds$5;
-util$2.randomInt = randomInt;
-util$2.randomToken = randomToken;
-util$2.sleep = sleep;
-util$2.supportsWebLockAPI = supportsWebLockAPI;
+util$4.PROMISE_RESOLVED_VOID = util$4.PROMISE_RESOLVED_TRUE = util$4.PROMISE_RESOLVED_FALSE = void 0;
+util$4.isPromise = isPromise;
+util$4.microSeconds = microSeconds$5;
+util$4.randomInt = randomInt;
+util$4.randomToken = randomToken;
+util$4.sleep = sleep;
+util$4.supportsWebLockAPI = supportsWebLockAPI;
 function isPromise(obj) {
   return obj && typeof obj.then === "function";
 }
 var PROMISE_RESOLVED_FALSE = Promise.resolve(false);
-util$2.PROMISE_RESOLVED_FALSE = PROMISE_RESOLVED_FALSE;
+util$4.PROMISE_RESOLVED_FALSE = PROMISE_RESOLVED_FALSE;
 var PROMISE_RESOLVED_TRUE = Promise.resolve(true);
-util$2.PROMISE_RESOLVED_TRUE = PROMISE_RESOLVED_TRUE;
+util$4.PROMISE_RESOLVED_TRUE = PROMISE_RESOLVED_TRUE;
 var PROMISE_RESOLVED_VOID = Promise.resolve();
-util$2.PROMISE_RESOLVED_VOID = PROMISE_RESOLVED_VOID;
+util$4.PROMISE_RESOLVED_VOID = PROMISE_RESOLVED_VOID;
 function sleep(time, resolveWith) {
   if (!time)
     time = 0;
@@ -24230,7 +24234,7 @@ native.microSeconds = void 0;
 native.onMessage = onMessage$4;
 native.postMessage = postMessage$4;
 native.type = void 0;
-var _util$7 = util$2;
+var _util$7 = util$4;
 var microSeconds$4 = _util$7.microSeconds;
 native.microSeconds = microSeconds$4;
 var type$4 = "native";
@@ -24399,7 +24403,7 @@ indexedDb.postMessage = postMessage$3;
 indexedDb.removeMessagesById = removeMessagesById;
 indexedDb.type = void 0;
 indexedDb.writeMessage = writeMessage$1;
-var _util$6 = util$2;
+var _util$6 = util$4;
 var _obliviousSet$3 = require$$11;
 var _options$3 = options;
 var microSeconds$3 = _util$6.microSeconds;
@@ -24707,7 +24711,7 @@ localstorage.storageKey = storageKey;
 localstorage.type = void 0;
 var _obliviousSet$2 = require$$11;
 var _options$2 = options;
-var _util$5 = util$2;
+var _util$5 = util$4;
 var microSeconds$2 = _util$5.microSeconds;
 localstorage.microSeconds = microSeconds$2;
 var KEY_PREFIX = "pubkey.broadcastChannel-";
@@ -24840,7 +24844,7 @@ simulate.microSeconds = void 0;
 simulate.onMessage = onMessage$1;
 simulate.postMessage = postMessage$1;
 simulate.type = void 0;
-var _util$4 = util$2;
+var _util$4 = util$4;
 var microSeconds$1 = _util$4.microSeconds;
 simulate.microSeconds = microSeconds$1;
 var type$1 = "simulate";
@@ -25507,7 +25511,7 @@ function requirePTimeout() {
       this.name = "TimeoutError";
     }
   }
-  const pTimeout$1 = (promise, milliseconds, fallback) => new Promise((resolve, reject) => {
+  const pTimeout$1 = (promise, milliseconds, fallback2) => new Promise((resolve, reject) => {
     if (typeof milliseconds !== "number" || milliseconds < 0) {
       throw new TypeError("Expected `milliseconds` to be a positive number");
     }
@@ -25516,16 +25520,16 @@ function requirePTimeout() {
       return;
     }
     const timer2 = setTimeout(() => {
-      if (typeof fallback === "function") {
+      if (typeof fallback2 === "function") {
         try {
-          resolve(fallback());
+          resolve(fallback2());
         } catch (error) {
           reject(error);
         }
         return;
       }
-      const message = typeof fallback === "string" ? fallback : `Promise timed out after ${milliseconds} milliseconds`;
-      const timeoutError = fallback instanceof Error ? fallback : new TimeoutError(message);
+      const message = typeof fallback2 === "string" ? fallback2 : `Promise timed out after ${milliseconds} milliseconds`;
+      const timeoutError = fallback2 instanceof Error ? fallback2 : new TimeoutError(message);
       if (typeof promise.cancel === "function") {
         promise.cancel();
       }
@@ -26006,16 +26010,16 @@ node.writeMessage = writeMessage;
 var _regenerator = _interopRequireDefault$5(requireRegenerator());
 var _asyncToGenerator2 = _interopRequireDefault$5(requireAsyncToGenerator());
 var _util$3 = _interopRequireDefault$5(require$$3);
-var _fs = _interopRequireDefault$5(require$$4);
+var _fs = _interopRequireDefault$5(fs$3);
 var _crypto = _interopRequireDefault$5(require$$5);
 var _os = _interopRequireDefault$5(require$$6);
 var _events = _interopRequireDefault$5(require$$7);
 var _net = _interopRequireDefault$5(require$$8);
-var _path = _interopRequireDefault$5(require$$9);
+var _path = _interopRequireDefault$5(require$$0$3);
 var _pQueue = _interopRequireDefault$5(requireDist());
 var _unload$1 = require$$0$1;
 var _options$1 = options;
-var _util2 = util$2;
+var _util2 = util$4;
 var _obliviousSet$1 = require$$11;
 function cleanPipeName(str) {
   if (process.platform === "win32" && !str.startsWith("\\\\.\\pipe\\")) {
@@ -26967,7 +26971,7 @@ Object.defineProperty(broadcastChannel, "__esModule", {
 broadcastChannel.OPEN_BROADCAST_CHANNELS = broadcastChannel.BroadcastChannel = void 0;
 broadcastChannel.clearNodeFolder = clearNodeFolder;
 broadcastChannel.enforceOptions = enforceOptions;
-var _util$2 = util$2;
+var _util$2 = util$4;
 var _methodChooser = methodChooser;
 var _options = options;
 var OPEN_BROADCAST_CHANNELS = /* @__PURE__ */ new Set();
@@ -27197,7 +27201,7 @@ Object.defineProperty(leaderElectionWebLock, "__esModule", {
   value: true
 });
 leaderElectionWebLock.LeaderElectionWebLock = void 0;
-var _util$1 = util$2;
+var _util$1 = util$4;
 var _leaderElectionUtil$1 = leaderElectionUtil;
 var LeaderElectionWebLock = function LeaderElectionWebLock2(broadcastChannel2, options2) {
   var _this = this;
@@ -27283,7 +27287,7 @@ Object.defineProperty(leaderElection, "__esModule", {
   value: true
 });
 leaderElection.createLeaderElection = createLeaderElection;
-var _util = util$2;
+var _util = util$4;
 var _leaderElectionUtil = leaderElectionUtil;
 var _leaderElectionWebLock = leaderElectionWebLock;
 var LeaderElection = function LeaderElection2(broadcastChannel2, options2) {
@@ -28226,8 +28230,8 @@ const extractKey = (keyPath, value) => {
   }
   return object2;
 };
-function commonjsRequire(path) {
-  throw new Error('Could not dynamically require "' + path + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
+function commonjsRequire(path2) {
+  throw new Error('Could not dynamically require "' + path2 + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
 }
 var dist = { exports: {} };
 (function(module, exports) {
@@ -28277,13 +28281,13 @@ var dist = { exports: {} };
       module2.exports = realisticStructuredClone2;
     }, { "domexception": 5, "typeson": 8, "typeson-registry/dist/presets/structured-cloning-throwing": 7 }], 2: [function(_dereq_, module2, exports2) {
       var _slicedToArray = function() {
-        function sliceIterator(arr, i) {
+        function sliceIterator(arr2, i) {
           var _arr = [];
           var _n = true;
           var _d = false;
           var _e = void 0;
           try {
-            for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+            for (var _i = arr2[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
               _arr.push(_s.value);
               if (i && _arr.length === i)
                 break;
@@ -28302,11 +28306,11 @@ var dist = { exports: {} };
           }
           return _arr;
         }
-        return function(arr, i) {
-          if (Array.isArray(arr)) {
-            return arr;
-          } else if (Symbol.iterator in Object(arr)) {
-            return sliceIterator(arr, i);
+        return function(arr2, i) {
+          if (Array.isArray(arr2)) {
+            return arr2;
+          } else if (Symbol.iterator in Object(arr2)) {
+            return sliceIterator(arr2, i);
           } else {
             throw new TypeError("Invalid attempt to destructure non-iterable instance");
           }
@@ -29054,7 +29058,7 @@ var dist = { exports: {} };
           }
           return function _createClass(e2, t2, r2) {
             return t2 && _defineProperties(e2.prototype, t2), r2 && _defineProperties(e2, r2), e2;
-          }(Typeson, [{ key: "stringify", value: function stringify(e2, t2, r2, n2) {
+          }(Typeson, [{ key: "stringify", value: function stringify2(e2, t2, r2, n2) {
             n2 = _objectSpread2(_objectSpread2(_objectSpread2({}, this.options), n2), {}, { stringification: true });
             var i2 = this.encapsulate(e2, null, n2);
             return a(i2) ? JSON.stringify(i2[0], t2, r2) : i2.then(function(e3) {
@@ -29837,7 +29841,7 @@ var dist = { exports: {} };
         }
         return function _createClass(e2, t2, r2) {
           return t2 && _defineProperties(e2.prototype, t2), r2 && _defineProperties(e2, r2), e2;
-        }(Typeson, [{ key: "stringify", value: function stringify(e2, t2, r2, n2) {
+        }(Typeson, [{ key: "stringify", value: function stringify2(e2, t2, r2, n2) {
           n2 = _objectSpread2(_objectSpread2(_objectSpread2({}, this.options), n2), {}, { stringification: true });
           var o2 = this.encapsulate(e2, null, n2);
           return i(o2) ? JSON.stringify(o2[0], t2, r2) : o2.then(function(e3) {
@@ -33051,47 +33055,47 @@ var basePrototype = {
   /**
    * returns observable of the value of the given path
    */
-  get$(path) {
+  get$(path2) {
     if (_overwritable$6.overwritable.isDevMode()) {
-      if (path.includes(".item.")) {
+      if (path2.includes(".item.")) {
         throw (0, _rxError$e.newRxError)("DOC1", {
-          path
+          path: path2
         });
       }
-      if (path === this.primaryPath) {
+      if (path2 === this.primaryPath) {
         throw (0, _rxError$e.newRxError)("DOC2");
       }
-      if (this.collection.schema.finalFields.includes(path)) {
+      if (this.collection.schema.finalFields.includes(path2)) {
         throw (0, _rxError$e.newRxError)("DOC3", {
-          path
+          path: path2
         });
       }
-      var schemaObj = (0, _rxSchemaHelper$8.getSchemaByObjectPath)(this.collection.schema.jsonSchema, path);
+      var schemaObj = (0, _rxSchemaHelper$8.getSchemaByObjectPath)(this.collection.schema.jsonSchema, path2);
       if (!schemaObj) {
         throw (0, _rxError$e.newRxError)("DOC4", {
-          path
+          path: path2
         });
       }
     }
-    return this.$.pipe((0, _operators$4.map)((data) => (0, _utils$j.getProperty)(data, path)), (0, _operators$4.distinctUntilChanged)());
+    return this.$.pipe((0, _operators$4.map)((data) => (0, _utils$j.getProperty)(data, path2)), (0, _operators$4.distinctUntilChanged)());
   },
   /**
    * populate the given path
    */
-  populate(path) {
-    var schemaObj = (0, _rxSchemaHelper$8.getSchemaByObjectPath)(this.collection.schema.jsonSchema, path);
-    var value = this.get(path);
+  populate(path2) {
+    var schemaObj = (0, _rxSchemaHelper$8.getSchemaByObjectPath)(this.collection.schema.jsonSchema, path2);
+    var value = this.get(path2);
     if (!value) {
       return _utils$j.PROMISE_RESOLVE_NULL;
     }
     if (!schemaObj) {
       throw (0, _rxError$e.newRxError)("DOC5", {
-        path
+        path: path2
       });
     }
     if (!schemaObj.ref) {
       throw (0, _rxError$e.newRxError)("DOC6", {
-        path,
+        path: path2,
         schemaObj
       });
     }
@@ -33099,7 +33103,7 @@ var basePrototype = {
     if (!refCollection) {
       throw (0, _rxError$e.newRxError)("DOC7", {
         ref: schemaObj.ref,
-        path,
+        path: path2,
         schemaObj
       });
     }
@@ -33185,10 +33189,10 @@ var basePrototype = {
   incrementalModify(mutationFunction, _context) {
     return this.collection.incrementalWriteQueue.addWrite(this._data, (0, _incrementalWrite$1.modifierFromPublicToInternal)(mutationFunction)).then((result) => this.collection._docCache.getCachedRxDocument(result));
   },
-  patch(patch) {
+  patch(patch2) {
     var oldData = this._data;
     var newData = (0, _utils$j.clone)(oldData);
-    Object.entries(patch).forEach(([k, v]) => {
+    Object.entries(patch2).forEach(([k, v]) => {
       newData[k] = v;
     });
     return this._saveData(newData, oldData);
@@ -33196,9 +33200,9 @@ var basePrototype = {
   /**
    * patches the given properties
    */
-  incrementalPatch(patch) {
+  incrementalPatch(patch2) {
     return this.incrementalModify((docData) => {
-      Object.entries(patch).forEach(([k, v]) => {
+      Object.entries(patch2).forEach(([k, v]) => {
         docData[k] = v;
       });
       return docData;
@@ -33442,11 +33446,11 @@ var eventReduce = {};
 var lib$1 = {};
 var states = {};
 var stateResolver = {};
-var util$1 = {};
+var util$3 = {};
 var hasRequiredUtil$1;
 function requireUtil$1() {
   if (hasRequiredUtil$1)
-    return util$1;
+    return util$3;
   hasRequiredUtil$1 = 1;
   (function(exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -33460,8 +33464,8 @@ function requireUtil$1() {
       return items[Math.floor(Math.random() * items.length)];
     }
     exports.randomOfArray = randomOfArray;
-    function shuffleArray2(arr) {
-      return arr.slice().sort(() => Math.random() - 0.5);
+    function shuffleArray2(arr2) {
+      return arr2.slice().sort(() => Math.random() - 0.5);
     }
     exports.shuffleArray = shuffleArray2;
     function tryToFillPreviousDoc(input) {
@@ -33560,14 +33564,14 @@ function requireUtil$1() {
       return value !== null && (type2 === "object" || type2 === "function");
     }
     exports.isObject = isObject2;
-    function getProperty2(object2, path, value) {
-      if (Array.isArray(path)) {
-        path = path.join(".");
+    function getProperty2(object2, path2, value) {
+      if (Array.isArray(path2)) {
+        path2 = path2.join(".");
       }
-      if (!isObject2(object2) || typeof path !== "string") {
+      if (!isObject2(object2) || typeof path2 !== "string") {
         return value === void 0 ? object2 : value;
       }
-      const pathArray = path.split(".");
+      const pathArray = path2.split(".");
       if (pathArray.length === 0) {
         return value;
       }
@@ -33595,8 +33599,8 @@ function requireUtil$1() {
       }
       return false;
     }
-  })(util$1);
-  return util$1;
+  })(util$3);
+  return util$3;
 }
 var hasRequiredStateResolver;
 function requireStateResolver() {
@@ -33911,7 +33915,7 @@ function requireStates() {
 }
 var actions = {};
 var actionFunctions = {};
-function pushAtSortPosition(array2, item, compareFunction, low) {
+function pushAtSortPosition(array2, item, compareFunction2, low) {
   var length = array2.length;
   var high = length - 1;
   var mid = 0;
@@ -33923,13 +33927,13 @@ function pushAtSortPosition(array2, item, compareFunction, low) {
   while (low <= high) {
     mid = low + (high - low >> 1);
     lastMidDoc = array2[mid];
-    if (compareFunction(lastMidDoc, item) <= 0) {
+    if (compareFunction2(lastMidDoc, item) <= 0) {
       low = mid + 1;
     } else {
       high = mid - 1;
     }
   }
-  if (compareFunction(lastMidDoc, item) <= 0) {
+  if (compareFunction2(lastMidDoc, item) <= 0) {
     mid++;
   }
   array2.splice(mid, 0, item);
@@ -34231,14 +34235,14 @@ function requireBddToMinimalString() {
   return bddToMinimalString;
 }
 var minimalStringToSimpleBdd = {};
-var util = {};
+var util$2 = {};
 var hasRequiredUtil;
 function requireUtil() {
   if (hasRequiredUtil)
-    return util;
+    return util$2;
   hasRequiredUtil = 1;
-  Object.defineProperty(util, "__esModule", { value: true });
-  util.splitStringToChunks = util.lastOfArray = util.shuffleArray = util.firstKeyOfMap = util.getNextStateSet = util.maxBinaryWithLength = util.minBinaryWithLength = util.binaryToDecimal = util.oppositeBinary = util.decimalToPaddedBinary = util.nextNodeId = util.lastChar = util.oppositeBoolean = util.booleanToBooleanString = util.booleanStringToBoolean = void 0;
+  Object.defineProperty(util$2, "__esModule", { value: true });
+  util$2.splitStringToChunks = util$2.lastOfArray = util$2.shuffleArray = util$2.firstKeyOfMap = util$2.getNextStateSet = util$2.maxBinaryWithLength = util$2.minBinaryWithLength = util$2.binaryToDecimal = util$2.oppositeBinary = util$2.decimalToPaddedBinary = util$2.nextNodeId = util$2.lastChar = util$2.oppositeBoolean = util$2.booleanToBooleanString = util$2.booleanStringToBoolean = void 0;
   function booleanStringToBoolean(str) {
     if (str === "1") {
       return true;
@@ -34246,7 +34250,7 @@ function requireUtil() {
       return false;
     }
   }
-  util.booleanStringToBoolean = booleanStringToBoolean;
+  util$2.booleanStringToBoolean = booleanStringToBoolean;
   function booleanToBooleanString(b) {
     if (b) {
       return "1";
@@ -34254,7 +34258,7 @@ function requireUtil() {
       return "0";
     }
   }
-  util.booleanToBooleanString = booleanToBooleanString;
+  util$2.booleanToBooleanString = booleanToBooleanString;
   function oppositeBoolean(input) {
     if (input === "1") {
       return "0";
@@ -34262,11 +34266,11 @@ function requireUtil() {
       return "1";
     }
   }
-  util.oppositeBoolean = oppositeBoolean;
+  util$2.oppositeBoolean = oppositeBoolean;
   function lastChar(str) {
     return str.slice(-1);
   }
-  util.lastChar = lastChar;
+  util$2.lastChar = lastChar;
   function makeid(length = 6) {
     let result = "";
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -34283,13 +34287,13 @@ function requireUtil() {
     lastIdGen++;
     return ret;
   }
-  util.nextNodeId = nextNodeId;
+  util$2.nextNodeId = nextNodeId;
   function decimalToPaddedBinary(decimal, padding) {
     const binary = (decimal >>> 0).toString(2);
     const padded = binary.padStart(padding, "0");
     return padded;
   }
-  util.decimalToPaddedBinary = decimalToPaddedBinary;
+  util$2.decimalToPaddedBinary = decimalToPaddedBinary;
   function oppositeBinary(i) {
     if (i === "1") {
       return "0";
@@ -34299,31 +34303,31 @@ function requireUtil() {
       throw new Error("non-binary given");
     }
   }
-  util.oppositeBinary = oppositeBinary;
+  util$2.oppositeBinary = oppositeBinary;
   function binaryToDecimal(binary) {
     return parseInt(binary, 2);
   }
-  util.binaryToDecimal = binaryToDecimal;
+  util$2.binaryToDecimal = binaryToDecimal;
   function minBinaryWithLength(length) {
     return new Array(length).fill(0).map(() => "0").join("");
   }
-  util.minBinaryWithLength = minBinaryWithLength;
+  util$2.minBinaryWithLength = minBinaryWithLength;
   function maxBinaryWithLength(length) {
     return new Array(length).fill(0).map(() => "1").join("");
   }
-  util.maxBinaryWithLength = maxBinaryWithLength;
+  util$2.maxBinaryWithLength = maxBinaryWithLength;
   function getNextStateSet(stateSet) {
     const decimal = binaryToDecimal(stateSet);
     const increase = decimal + 1;
     const binary = decimalToPaddedBinary(increase, stateSet.length);
     return binary;
   }
-  util.getNextStateSet = getNextStateSet;
+  util$2.getNextStateSet = getNextStateSet;
   function firstKeyOfMap(map2) {
     const iterator1 = map2.keys();
     return iterator1.next().value;
   }
-  util.firstKeyOfMap = firstKeyOfMap;
+  util$2.firstKeyOfMap = firstKeyOfMap;
   function shuffleArray2(a) {
     for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -34331,11 +34335,11 @@ function requireUtil() {
     }
     return a;
   }
-  util.shuffleArray = shuffleArray2;
+  util$2.shuffleArray = shuffleArray2;
   function lastOfArray2(ar) {
     return ar[ar.length - 1];
   }
-  util.lastOfArray = lastOfArray2;
+  util$2.lastOfArray = lastOfArray2;
   function splitStringToChunks(str, chunkSize) {
     const chunks = [];
     for (let i = 0, charsLength = str.length; i < charsLength; i += chunkSize) {
@@ -34343,8 +34347,8 @@ function requireUtil() {
     }
     return chunks;
   }
-  util.splitStringToChunks = splitStringToChunks;
-  return util;
+  util$2.splitStringToChunks = splitStringToChunks;
+  return util$2;
 }
 var hasRequiredMinimalStringToSimpleBdd;
 function requireMinimalStringToSimpleBdd() {
@@ -36631,12 +36635,12 @@ function getCheckpointKey(input) {
   return "rx-storage-replication-" + hash2;
 }
 var downstream = {};
-var helper = {};
-Object.defineProperty(helper, "__esModule", {
+var helper$2 = {};
+Object.defineProperty(helper$2, "__esModule", {
   value: true
 });
-helper.docStateToWriteDoc = docStateToWriteDoc;
-helper.writeDocToDocState = writeDocToDocState;
+helper$2.docStateToWriteDoc = docStateToWriteDoc;
+helper$2.writeDocToDocState = writeDocToDocState;
 var _utils$b = utils;
 function docStateToWriteDoc(databaseInstanceToken, docState, previous) {
   var docData = Object.assign({}, docState, {
@@ -36761,7 +36765,7 @@ var _rxError$a = rxError;
 var _rxStorageHelper$3 = rxStorageHelper;
 var _utils$9 = utils;
 var _checkpoint$1 = checkpoint;
-var _helper$1 = helper;
+var _helper$1 = helper$2;
 var _metaInstance$1 = metaInstance;
 async function startReplicationDownstream(state) {
   if (state.input.initialCheckpoint && state.input.initialCheckpoint.downstream) {
@@ -37018,7 +37022,7 @@ var _rxStorageHelper$2 = rxStorageHelper;
 var _utils$7 = utils;
 var _checkpoint = checkpoint;
 var _conflicts = conflicts;
-var _helper = helper;
+var _helper = helper$2;
 var _metaInstance = metaInstance;
 async function startReplicationUpstream(state) {
   if (state.input.initialCheckpoint && state.input.initialCheckpoint.upstream) {
@@ -37280,7 +37284,7 @@ async function startReplicationUpstream(state) {
       }
     });
   });
-  var _helper2 = helper;
+  var _helper2 = helper$2;
   Object.keys(_helper2).forEach(function(key) {
     if (key === "default" || key === "__esModule")
       return;
@@ -37717,19 +37721,19 @@ var RxCollectionBase = /* @__PURE__ */ function() {
         data: json
       });
     }
-    var queue2 = this._incrementalUpsertQueues.get(primary);
-    if (!queue2) {
-      queue2 = _utils$6.PROMISE_RESOLVE_VOID;
+    var queue = this._incrementalUpsertQueues.get(primary);
+    if (!queue) {
+      queue = _utils$6.PROMISE_RESOLVE_VOID;
     }
-    queue2 = queue2.then(() => _incrementalUpsertEnsureRxDocumentExists(this, primary, useJson)).then((wasInserted) => {
+    queue = queue.then(() => _incrementalUpsertEnsureRxDocumentExists(this, primary, useJson)).then((wasInserted) => {
       if (!wasInserted.inserted) {
         return _incrementalUpsertUpdate(wasInserted.doc, useJson);
       } else {
         return wasInserted.doc;
       }
     });
-    this._incrementalUpsertQueues.set(primary, queue2);
-    return queue2;
+    this._incrementalUpsertQueues.set(primary, queue);
+    return queue;
   };
   _proto.find = function find2(queryObj) {
     if (typeof queryObj === "string") {
@@ -39740,7 +39744,7 @@ function checkFieldNameRegex(fieldName) {
 }
 function validateFieldsDeep(rxJsonSchema) {
   var primaryPath = (0, _rxSchemaHelper.getPrimaryFieldOfPrimaryKey)(rxJsonSchema.primaryKey);
-  function checkField(fieldName, schemaObj, path) {
+  function checkField(fieldName, schemaObj, path2) {
     if (typeof fieldName === "string" && typeof schemaObj === "object" && !Array.isArray(schemaObj))
       checkFieldNameRegex(fieldName);
     if (schemaObj.hasOwnProperty("item") && schemaObj.type !== "array") {
@@ -39778,17 +39782,17 @@ function validateFieldsDeep(rxJsonSchema) {
         }
       }
     }
-    var isNested = path.split(".").length >= 2;
+    var isNested = path2.split(".").length >= 2;
     if (isNested) {
       if (schemaObj.primary) {
         throw (0, _rxError$6.newRxError)("SC6", {
-          path,
+          path: path2,
           primary: schemaObj.primary
         });
       }
       if (schemaObj.default) {
         throw (0, _rxError$6.newRxError)("SC7", {
-          path
+          path: path2
         });
       }
     }
@@ -40035,7 +40039,7 @@ function checkSchema(jsonSchema2) {
     var split2 = key.split(".");
     split2.pop();
     return split2.join(".");
-  }).filter((key) => key !== "").filter((elem, pos, arr) => arr.indexOf(elem) === pos).filter((key) => {
+  }).filter((key) => key !== "").filter((elem, pos, arr2) => arr2.indexOf(elem) === pos).filter((key) => {
     var value = (0, _utils$2.getProperty)(jsonSchema2, key);
     return value && !!value.index;
   }).forEach((key) => {
@@ -40053,7 +40057,7 @@ function checkSchema(jsonSchema2) {
       indexPaths.push(currentIndex);
     }
     return indexPaths;
-  }, []).filter((elem, pos, arr) => arr.indexOf(elem) === pos).map((indexPath) => {
+  }, []).filter((elem, pos, arr2) => arr2.indexOf(elem) === pos).map((indexPath) => {
     var realPath = getSchemaPropertyRealPath(indexPath);
     var schemaObj = (0, _utils$2.getProperty)(jsonSchema2, realPath);
     if (!schemaObj || typeof schemaObj !== "object") {
@@ -40077,7 +40081,7 @@ function checkSchema(jsonSchema2) {
     var split2 = key.split(".");
     split2.pop();
     return split2.join(".");
-  }).filter((key) => key !== "" && key !== "attachments").filter((elem, pos, arr) => arr.indexOf(elem) === pos).filter((key) => {
+  }).filter((key) => key !== "" && key !== "attachments").filter((elem, pos, arr2) => arr2.indexOf(elem) === pos).filter((key) => {
     var value = (0, _utils$2.getProperty)(jsonSchema2, key);
     return value && !!value.encrypted;
   }).forEach((key) => {
@@ -40580,14 +40584,14 @@ var NoSqlQueryBuilderClass = /* @__PURE__ */ function() {
   };
   _proto.equals = function equals(val) {
     this._ensurePath("equals");
-    var path = this._path;
-    this._conditions[path] = val;
+    var path2 = this._path;
+    this._conditions[path2] = val;
     return this;
   };
   _proto.eq = function eq2(val) {
     this._ensurePath("eq");
-    var path = this._path;
-    this._conditions[path] = val;
+    var path2 = this._path;
+    this._conditions[path2] = val;
     return this;
   };
   _proto.or = function or2(array2) {
@@ -40613,47 +40617,47 @@ var NoSqlQueryBuilderClass = /* @__PURE__ */ function() {
   };
   _proto.mod = function mod2(_path2, _val) {
     var val;
-    var path;
+    var path2;
     if (1 === arguments.length) {
       this._ensurePath("mod");
       val = arguments[0];
-      path = this._path;
+      path2 = this._path;
     } else if (2 === arguments.length && !Array.isArray(arguments[1])) {
       this._ensurePath("mod");
       val = arguments.slice();
-      path = this._path;
+      path2 = this._path;
     } else if (3 === arguments.length) {
       val = arguments.slice(1);
-      path = arguments[0];
+      path2 = arguments[0];
     } else {
       val = arguments[1];
-      path = arguments[0];
+      path2 = arguments[0];
     }
-    var conds = this._conditions[path] || (this._conditions[path] = {});
+    var conds = this._conditions[path2] || (this._conditions[path2] = {});
     conds.$mod = val;
     return this;
   };
   _proto.exists = function exists2(_path2, _val) {
-    var path;
+    var path2;
     var val;
     if (0 === arguments.length) {
       this._ensurePath("exists");
-      path = this._path;
+      path2 = this._path;
       val = true;
     } else if (1 === arguments.length) {
       if ("boolean" === typeof arguments[0]) {
         this._ensurePath("exists");
-        path = this._path;
+        path2 = this._path;
         val = arguments[0];
       } else {
-        path = arguments[0];
+        path2 = arguments[0];
         val = true;
       }
     } else if (2 === arguments.length) {
-      path = arguments[0];
+      path2 = arguments[0];
       val = arguments[1];
     }
-    var conds = this._conditions[path] || (this._conditions[path] = {});
+    var conds = this._conditions[path2] || (this._conditions[path2] = {});
     conds.$exists = val;
     return this;
   };
@@ -40661,21 +40665,21 @@ var NoSqlQueryBuilderClass = /* @__PURE__ */ function() {
     if (null === arguments[0])
       throw (0, _rxError.newRxTypeError)("MQ2");
     var fn;
-    var path;
+    var path2;
     var criteria;
     if ("function" === typeof arguments[0]) {
       this._ensurePath("elemMatch");
-      path = this._path;
+      path2 = this._path;
       fn = arguments[0];
     } else if ((0, _mqueryUtils.isObject)(arguments[0])) {
       this._ensurePath("elemMatch");
-      path = this._path;
+      path2 = this._path;
       criteria = arguments[0];
     } else if ("function" === typeof arguments[1]) {
-      path = arguments[0];
+      path2 = arguments[0];
       fn = arguments[1];
     } else if (arguments[1] && (0, _mqueryUtils.isObject)(arguments[1])) {
-      path = arguments[0];
+      path2 = arguments[0];
       criteria = arguments[1];
     } else
       throw (0, _rxError.newRxTypeError)("MQ2");
@@ -40684,7 +40688,7 @@ var NoSqlQueryBuilderClass = /* @__PURE__ */ function() {
       fn(criteria);
       criteria = criteria._conditions;
     }
-    var conds = this._conditions[path] || (this._conditions[path] = {});
+    var conds = this._conditions[path2] || (this._conditions[path2] = {});
     conds.$elemMatch = criteria;
     return this;
   };
@@ -40807,17 +40811,17 @@ var OTHER_MANGO_OPERATORS = ["gt", "gte", "lt", "lte", "ne", "in", "nin", "all",
 nosqlQueryBuilder.OTHER_MANGO_OPERATORS = OTHER_MANGO_OPERATORS;
 OTHER_MANGO_OPERATORS.forEach(function($conditional) {
   NoSqlQueryBuilderClass.prototype[$conditional] = function() {
-    var path;
+    var path2;
     var val;
     if (1 === arguments.length) {
       this._ensurePath($conditional);
       val = arguments[0];
-      path = this._path;
+      path2 = this._path;
     } else {
       val = arguments[1];
-      path = arguments[0];
+      path2 = arguments[0];
     }
-    var conds = this._conditions[path] === null || typeof this._conditions[path] === "object" ? this._conditions[path] : this._conditions[path] = {};
+    var conds = this._conditions[path2] === null || typeof this._conditions[path2] === "object" ? this._conditions[path2] : this._conditions[path2] = {};
     conds["$" + $conditional] = val;
     return this;
   };
@@ -40864,8 +40868,8 @@ function _pushArr(opts, field, value) {
 function canMerge(conds) {
   return conds instanceof NoSqlQueryBuilderClass || (0, _mqueryUtils.isObject)(conds);
 }
-function createQueryBuilder(query2, path) {
-  return new NoSqlQueryBuilderClass(query2, path);
+function createQueryBuilder(query2, path2) {
+  return new NoSqlQueryBuilderClass(query2, path2);
 }
 (function(exports) {
   Object.defineProperty(exports, "__esModule", {
@@ -40931,11 +40935,11 @@ function createQueryBuilder(query2, path) {
   exports.RxDBQueryBuilderPlugin = RxDBQueryBuilderPlugin;
 })(queryBuilder);
 var update$1 = {};
-var clone = { exports: {} };
+var clone$2 = { exports: {} };
 var hasRequiredClone;
 function requireClone() {
   if (hasRequiredClone)
-    return clone.exports;
+    return clone$2.exports;
   hasRequiredClone = 1;
   (function(module) {
     var clone2 = function() {
@@ -41131,8 +41135,8 @@ function requireClone() {
     if (module.exports) {
       module.exports = clone2;
     }
-  })(clone);
-  return clone.exports;
+  })(clone$2);
+  return clone$2.exports;
 }
 var isArguments$1;
 var hasRequiredIsArguments$1;
@@ -43043,7 +43047,7 @@ const draftSchema = {
   required: ["id", "items", "customer", "amount", "timestamp"]
 };
 const categorySchema = {
-  title: "category schema",
+  title: "category",
   description: "describes categories",
   version: 0,
   primaryKey: "id",
@@ -43053,67 +43057,56 @@ const categorySchema = {
       type: "string",
       maxLength: 1e3
     },
-    data: [
-      {
-        business_id: {
-          type: "string"
-        },
-        category_type: {
-          type: "string"
-        },
-        created_at: {
-          type: "string"
-        },
-        created_by: {
-          type: "string"
-        },
-        deleted_at: {
-          type: ["string", "null"],
-          // This property can be a string or null
-          nullable: true
-        },
-        description: {
-          type: ["string", "null"],
-          // This property can be a string or null
-          nullable: true
-        },
-        id: {
-          type: "number"
-        },
-        name: {
-          type: "string"
-        },
-        parent_id: {
-          type: "string"
-        },
-        short_code: {
-          type: ["string", "null"],
-          // This property can be a string or null
-          nullable: true
-        },
-        slug: {
-          type: ["string", "null"],
-          // This property can be a string or null
-          nullable: true
-        },
-        sub_categories: {
-          type: "array"
-        },
-        updated_at: {
-          type: "string"
-        },
-        woocommerce_cat_id: {
-          type: ["string", "null"],
-          // This property can be a string or null
-          nullable: true
-        }
-      }
-    ],
-    timestamp: {
-      type: "date-time"
+    business_id: {
+      type: "string"
+    },
+    category_type: {
+      type: "string"
+    },
+    created_at: {
+      type: "string"
+    },
+    created_by: {
+      type: "string"
+    },
+    deleted_at: {
+      type: ["string", "null"],
+      // This property can be a string or null
+      nullable: true
+    },
+    description: {
+      type: ["string", "null"],
+      // This property can be a string or null
+      nullable: true
+    },
+    name: {
+      type: "string"
+    },
+    parent_id: {
+      type: "string"
+    },
+    short_code: {
+      type: ["string", "null"],
+      // This property can be a string or null
+      nullable: true
+    },
+    slug: {
+      type: ["string", "null"],
+      // This property can be a string or null
+      nullable: true
+    },
+    sub_categories: {
+      type: "array"
+    },
+    updated_at: {
+      type: "string"
+    },
+    woocommerce_cat_id: {
+      type: ["string", "null"],
+      // This property can be a string or null
+      nullable: true
     }
-  },
-  required: ["id", "data", "timestamp"]
+  }
 };
 const authSchema = {
   title: "authentication schema",
@@ -43201,6 +43194,380 @@ const paymentMethodSchema = {
     "timestamp"
   ]
 };
+const businessLocationSchema = {
+  title: "businesslocation",
+  description: "describes business locations",
+  version: 0,
+  primaryKey: "id",
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      maxLength: 1e3
+    },
+    business_id: {
+      type: "string"
+    },
+    city: {
+      type: "string"
+    },
+    country: {
+      type: "string"
+    },
+    created_at: {
+      type: "string"
+    },
+    email: {
+      type: "string"
+    },
+    landmark: {
+      type: "string"
+    },
+    location_id: {
+      type: "string"
+    },
+    mobile: {
+      type: "string"
+    },
+    name: {
+      type: "string"
+    },
+    state: {
+      type: "string"
+    },
+    updated_at: {
+      type: "string"
+    },
+    is_active: {
+      type: "string"
+    },
+    print_receipt_on_invoice: {
+      type: "string"
+    },
+    zip_code: {
+      type: "string"
+    },
+    payment_methods: {
+      type: "array"
+    },
+    timestamp: {
+      type: "date-time"
+    }
+  }
+};
+const cashRegisterSchema = {
+  title: "cash register schema",
+  description: "describes cash register",
+  version: 0,
+  primaryKey: "id",
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      maxLength: 1e3
+    },
+    location_id: {
+      type: "number"
+    },
+    initial_amount: {
+      type: "number"
+    },
+    created_at: {
+      type: "string"
+    },
+    closed_at: {
+      type: "string"
+    },
+    status: {
+      type: "string"
+    },
+    closing_amount: {
+      type: "number"
+    },
+    total_card_slips: {
+      type: "number"
+    },
+    total_cheques: {
+      type: "number"
+    },
+    closing_note: {
+      type: "string"
+    },
+    transaction_ids: {
+      type: "string"
+    }
+  },
+  required: ["id", "location_id", "initial_amount", "created_at", "status"]
+};
+const stockSchema = {
+  title: "stock schema",
+  description: "describes product stock report",
+  version: 0,
+  primaryKey: "id",
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      maxLength: 1e3
+    },
+    alert_quantity: {
+      type: "string"
+    },
+    category_name: {
+      type: "string"
+    },
+    enable_stock: {
+      type: "string"
+    },
+    location_id: {
+      type: "string"
+    },
+    location_name: {
+      type: "string"
+    },
+    product: {
+      type: "string"
+    },
+    product_id: {
+      type: "string"
+    },
+    product_variation: {
+      type: "string"
+    },
+    sku: {
+      type: "string"
+    },
+    stock: {
+      type: "string"
+    },
+    stock_price: {
+      type: "string"
+    },
+    total_adjusted: {
+      type: ["string", "null", "number"],
+      // This property can be a string or null
+      nullable: true
+    },
+    total_sold: {
+      type: "string"
+    },
+    total_transfered: {
+      type: ["string", "null", "number"],
+      // This property can be a string or null
+      nullable: true
+    },
+    type: {
+      type: "string"
+    },
+    unit: {
+      type: "string"
+    },
+    unit_price: {
+      type: "string"
+    },
+    variation_id: {
+      type: "string"
+    },
+    variation_name: {
+      type: "string"
+    }
+  }
+};
+const productSchema = {
+  title: "product",
+  description: "describes product",
+  version: 0,
+  primaryKey: "id",
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      maxLength: 1e3
+    },
+    alert_quantity: {
+      type: "string"
+    },
+    barcode_type: {
+      type: "string"
+    },
+    brand: {
+      type: ["string", "null"],
+      nullable: true
+    },
+    business_id: {
+      type: "string"
+    },
+    category: {
+      type: "object",
+      properties: {
+        type: "ref",
+        ref: "category"
+      }
+    },
+    created_by: {
+      type: "string"
+    },
+    enable_sr_no: {
+      type: "string"
+    },
+    enable_stock: {
+      type: "string"
+    },
+    expiry_period: {
+      type: ["string", "null"],
+      nullable: true
+    },
+    image: {
+      type: "string"
+    },
+    image_url: {
+      type: "string"
+    },
+    is_inactive: {
+      type: "string"
+    },
+    name: {
+      type: "string"
+    },
+    not_for_selling: {
+      type: "string"
+    },
+    product_description: {
+      type: ["string", "null"],
+      nullable: true
+    },
+    product_locations: {
+      type: "array",
+      items: {
+        type: "string",
+        ref: "businesslocation"
+      }
+    },
+    product_tax: {
+      type: ["string", "null"],
+      nullable: true
+    },
+    product_variations: {
+      type: "array",
+      items: {
+        type: "string",
+        ref: "product_variation"
+      }
+    },
+    sku: {
+      type: "string"
+    },
+    sub_category: {
+      type: "string"
+    },
+    type: {
+      type: "string"
+    },
+    warranty_id: {
+      type: ["string", "null"],
+      nullable: true
+    },
+    unit: {
+      type: "array"
+    },
+    weight: {
+      type: ["string", "null"],
+      nullable: true
+    }
+  }
+};
+const userSchema = {
+  title: "user_schema",
+  description: "describes user",
+  version: 0,
+  primaryKey: "id",
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      maxLength: 1e3
+    },
+    username: {
+      type: "string"
+    },
+    first_name: {
+      type: "string"
+    },
+    surname: {
+      type: "string"
+    },
+    last_name: {
+      type: "string"
+    },
+    email: {
+      type: "string"
+    },
+    user_type: {
+      type: "string"
+    },
+    crm_contact_id: {
+      type: "string"
+    },
+    allow_login: {
+      type: "number"
+    },
+    cmmsn_percent: {
+      type: "string"
+    },
+    max_sales_discount_percent: {
+      type: "string"
+    },
+    dob: {
+      type: "string"
+    },
+    gender: {
+      type: "string"
+    },
+    marital_status: {
+      type: "string"
+    },
+    blood_group: {
+      type: "string"
+    },
+    alt_number: {
+      type: "string"
+    },
+    contact_number: {
+      type: "string"
+    },
+    family_number: {
+      type: "string"
+    },
+    fb_link: {
+      type: "string"
+    },
+    twitter_link: {
+      type: "string"
+    },
+    id_proof_number: {
+      type: "string"
+    },
+    permanent_address: {
+      type: "string"
+    },
+    current_address: {
+      type: "string"
+    },
+    status: {
+      type: "string"
+    }
+  },
+  required: [
+    "id",
+    "gender",
+    "dob",
+    "email",
+    "first_name",
+    "last_name",
+    "contact_number",
+    "permanent_address"
+  ]
+};
 lib$2.addRxPlugin(queryBuilder.RxDBQueryBuilderPlugin);
 lib$2.addRxPlugin(devMode.RxDBDevModePlugin);
 lib$2.addRxPlugin(RxDBUpdatePlugin_1);
@@ -43213,6 +43580,26 @@ async function getDatabase(name) {
         IDBKeyRange: FDBKeyRange
       }),
       ignoreDuplicate: true
+    });
+    await db2.addCollections({
+      business_locations: {
+        schema: businessLocationSchema
+      }
+    });
+    await db2.addCollections({
+      cash_registers: {
+        schema: cashRegisterSchema
+      }
+    });
+    await db2.addCollections({
+      product_stock_reports: {
+        schema: stockSchema
+      }
+    });
+    await db2.addCollections({
+      products: {
+        schema: productSchema
+      }
     });
     await db2.addCollections({
       carts: {
@@ -43239,13 +43626,1791 @@ async function getDatabase(name) {
         schema: paymentMethodSchema
       }
     });
+    await db2.addCollections({
+      users: {
+        schema: userSchema
+      }
+    });
     return db2;
   } catch (error) {
     console.log("CAUGHT ERROR", error);
   }
 }
+var jsonc$2 = { exports: {} };
+var jsonc$1 = {};
+var fastSafeStringify = stringify;
+stringify.default = stringify;
+stringify.stable = deterministicStringify;
+stringify.stableStringify = deterministicStringify;
+var LIMIT_REPLACE_NODE = "[...]";
+var CIRCULAR_REPLACE_NODE = "[Circular]";
+var arr = [];
+var replacerStack = [];
+function defaultOptions() {
+  return {
+    depthLimit: Number.MAX_SAFE_INTEGER,
+    edgesLimit: Number.MAX_SAFE_INTEGER
+  };
+}
+function stringify(obj, replacer, spacer, options2) {
+  if (typeof options2 === "undefined") {
+    options2 = defaultOptions();
+  }
+  decirc(obj, "", 0, [], void 0, 0, options2);
+  var res;
+  try {
+    if (replacerStack.length === 0) {
+      res = JSON.stringify(obj, replacer, spacer);
+    } else {
+      res = JSON.stringify(obj, replaceGetterValues(replacer), spacer);
+    }
+  } catch (_) {
+    return JSON.stringify("[unable to serialize, circular reference is too complex to analyze]");
+  } finally {
+    while (arr.length !== 0) {
+      var part = arr.pop();
+      if (part.length === 4) {
+        Object.defineProperty(part[0], part[1], part[3]);
+      } else {
+        part[0][part[1]] = part[2];
+      }
+    }
+  }
+  return res;
+}
+function setReplace(replace, val, k, parent) {
+  var propertyDescriptor = Object.getOwnPropertyDescriptor(parent, k);
+  if (propertyDescriptor.get !== void 0) {
+    if (propertyDescriptor.configurable) {
+      Object.defineProperty(parent, k, { value: replace });
+      arr.push([parent, k, val, propertyDescriptor]);
+    } else {
+      replacerStack.push([val, k, replace]);
+    }
+  } else {
+    parent[k] = replace;
+    arr.push([parent, k, val]);
+  }
+}
+function decirc(val, k, edgeIndex, stack, parent, depth, options2) {
+  depth += 1;
+  var i;
+  if (typeof val === "object" && val !== null) {
+    for (i = 0; i < stack.length; i++) {
+      if (stack[i] === val) {
+        setReplace(CIRCULAR_REPLACE_NODE, val, k, parent);
+        return;
+      }
+    }
+    if (typeof options2.depthLimit !== "undefined" && depth > options2.depthLimit) {
+      setReplace(LIMIT_REPLACE_NODE, val, k, parent);
+      return;
+    }
+    if (typeof options2.edgesLimit !== "undefined" && edgeIndex + 1 > options2.edgesLimit) {
+      setReplace(LIMIT_REPLACE_NODE, val, k, parent);
+      return;
+    }
+    stack.push(val);
+    if (Array.isArray(val)) {
+      for (i = 0; i < val.length; i++) {
+        decirc(val[i], i, i, stack, val, depth, options2);
+      }
+    } else {
+      var keys2 = Object.keys(val);
+      for (i = 0; i < keys2.length; i++) {
+        var key = keys2[i];
+        decirc(val[key], key, i, stack, val, depth, options2);
+      }
+    }
+    stack.pop();
+  }
+}
+function compareFunction(a, b) {
+  if (a < b) {
+    return -1;
+  }
+  if (a > b) {
+    return 1;
+  }
+  return 0;
+}
+function deterministicStringify(obj, replacer, spacer, options2) {
+  if (typeof options2 === "undefined") {
+    options2 = defaultOptions();
+  }
+  var tmp = deterministicDecirc(obj, "", 0, [], void 0, 0, options2) || obj;
+  var res;
+  try {
+    if (replacerStack.length === 0) {
+      res = JSON.stringify(tmp, replacer, spacer);
+    } else {
+      res = JSON.stringify(tmp, replaceGetterValues(replacer), spacer);
+    }
+  } catch (_) {
+    return JSON.stringify("[unable to serialize, circular reference is too complex to analyze]");
+  } finally {
+    while (arr.length !== 0) {
+      var part = arr.pop();
+      if (part.length === 4) {
+        Object.defineProperty(part[0], part[1], part[3]);
+      } else {
+        part[0][part[1]] = part[2];
+      }
+    }
+  }
+  return res;
+}
+function deterministicDecirc(val, k, edgeIndex, stack, parent, depth, options2) {
+  depth += 1;
+  var i;
+  if (typeof val === "object" && val !== null) {
+    for (i = 0; i < stack.length; i++) {
+      if (stack[i] === val) {
+        setReplace(CIRCULAR_REPLACE_NODE, val, k, parent);
+        return;
+      }
+    }
+    try {
+      if (typeof val.toJSON === "function") {
+        return;
+      }
+    } catch (_) {
+      return;
+    }
+    if (typeof options2.depthLimit !== "undefined" && depth > options2.depthLimit) {
+      setReplace(LIMIT_REPLACE_NODE, val, k, parent);
+      return;
+    }
+    if (typeof options2.edgesLimit !== "undefined" && edgeIndex + 1 > options2.edgesLimit) {
+      setReplace(LIMIT_REPLACE_NODE, val, k, parent);
+      return;
+    }
+    stack.push(val);
+    if (Array.isArray(val)) {
+      for (i = 0; i < val.length; i++) {
+        deterministicDecirc(val[i], i, i, stack, val, depth, options2);
+      }
+    } else {
+      var tmp = {};
+      var keys2 = Object.keys(val).sort(compareFunction);
+      for (i = 0; i < keys2.length; i++) {
+        var key = keys2[i];
+        deterministicDecirc(val[key], key, i, stack, val, depth, options2);
+        tmp[key] = val[key];
+      }
+      if (typeof parent !== "undefined") {
+        arr.push([parent, k, val]);
+        parent[k] = tmp;
+      } else {
+        return tmp;
+      }
+    }
+    stack.pop();
+  }
+}
+function replaceGetterValues(replacer) {
+  replacer = typeof replacer !== "undefined" ? replacer : function(k, v) {
+    return v;
+  };
+  return function(key, val) {
+    if (replacerStack.length > 0) {
+      for (var i = 0; i < replacerStack.length; i++) {
+        var part = replacerStack[i];
+        if (part[1] === key && part[0] === val) {
+          val = part[2];
+          replacerStack.splice(i, 1);
+          break;
+        }
+      }
+    }
+    return replacer.call(this, key, val);
+  };
+}
+var isArrayish$1 = function isArrayish(obj) {
+  if (!obj) {
+    return false;
+  }
+  return obj instanceof Array || Array.isArray(obj) || obj.length >= 0 && obj.splice instanceof Function;
+};
+var util$1 = require$$3;
+var isArrayish2 = isArrayish$1;
+var errorEx$1 = function errorEx(name, properties) {
+  if (!name || name.constructor !== String) {
+    properties = name || {};
+    name = Error.name;
+  }
+  var errorExError = function ErrorEXError(message) {
+    if (!this) {
+      return new ErrorEXError(message);
+    }
+    message = message instanceof Error ? message.message : message || this.message;
+    Error.call(this, message);
+    Error.captureStackTrace(this, errorExError);
+    this.name = name;
+    Object.defineProperty(this, "message", {
+      configurable: true,
+      enumerable: false,
+      get: function() {
+        var newMessage = message.split(/\r?\n/g);
+        for (var key in properties) {
+          if (!properties.hasOwnProperty(key)) {
+            continue;
+          }
+          var modifier = properties[key];
+          if ("message" in modifier) {
+            newMessage = modifier.message(this[key], newMessage) || newMessage;
+            if (!isArrayish2(newMessage)) {
+              newMessage = [newMessage];
+            }
+          }
+        }
+        return newMessage.join("\n");
+      },
+      set: function(v) {
+        message = v;
+      }
+    });
+    var overwrittenStack = null;
+    var stackDescriptor = Object.getOwnPropertyDescriptor(this, "stack");
+    var stackGetter = stackDescriptor.get;
+    var stackValue = stackDescriptor.value;
+    delete stackDescriptor.value;
+    delete stackDescriptor.writable;
+    stackDescriptor.set = function(newstack) {
+      overwrittenStack = newstack;
+    };
+    stackDescriptor.get = function() {
+      var stack = (overwrittenStack || (stackGetter ? stackGetter.call(this) : stackValue)).split(/\r?\n+/g);
+      if (!overwrittenStack) {
+        stack[0] = this.name + ": " + this.message;
+      }
+      var lineCount = 1;
+      for (var key in properties) {
+        if (!properties.hasOwnProperty(key)) {
+          continue;
+        }
+        var modifier = properties[key];
+        if ("line" in modifier) {
+          var line = modifier.line(this[key]);
+          if (line) {
+            stack.splice(lineCount++, 0, "    " + line);
+          }
+        }
+        if ("stack" in modifier) {
+          modifier.stack(this[key], stack);
+        }
+      }
+      return stack.join("\n");
+    };
+    Object.defineProperty(this, "stack", stackDescriptor);
+  };
+  if (Object.setPrototypeOf) {
+    Object.setPrototypeOf(errorExError.prototype, Error.prototype);
+    Object.setPrototypeOf(errorExError, Error);
+  } else {
+    util$1.inherits(errorExError, Error);
+  }
+  return errorExError;
+};
+errorEx$1.append = function(str, def) {
+  return {
+    message: function(v, message) {
+      v = v || def;
+      if (v) {
+        message[0] += " " + str.replace("%s", v.toString());
+      }
+      return message;
+    }
+  };
+};
+errorEx$1.line = function(str, def) {
+  return {
+    line: function(v) {
+      v = v || def;
+      if (v) {
+        return str.replace("%s", v.toString());
+      }
+      return null;
+    }
+  };
+};
+var errorEx_1 = errorEx$1;
+var jsonParseBetterErrors = parseJson$1;
+function parseJson$1(txt, reviver, context2) {
+  context2 = context2 || 20;
+  try {
+    return JSON.parse(txt, reviver);
+  } catch (e) {
+    if (typeof txt !== "string") {
+      const isEmptyArray = Array.isArray(txt) && txt.length === 0;
+      const errorMessage = "Cannot parse " + (isEmptyArray ? "an empty array" : String(txt));
+      throw new TypeError(errorMessage);
+    }
+    const syntaxErr = e.message.match(/^Unexpected token.*position\s+(\d+)/i);
+    const errIdx = syntaxErr ? +syntaxErr[1] : e.message.match(/^Unexpected end of JSON.*/i) ? txt.length - 1 : null;
+    if (errIdx != null) {
+      const start = errIdx <= context2 ? 0 : errIdx - context2;
+      const end = errIdx + context2 >= txt.length ? txt.length : errIdx + context2;
+      e.message += ` while parsing near '${start === 0 ? "" : "..."}${txt.slice(start, end)}${end === txt.length ? "" : "..."}'`;
+    } else {
+      e.message += ` while parsing '${txt.slice(0, context2 * 2)}'`;
+    }
+    throw e;
+  }
+}
+const errorEx2 = errorEx_1;
+const fallback = jsonParseBetterErrors;
+const JSONError = errorEx2("JSONError", {
+  fileName: errorEx2.append("in %s")
+});
+var parseJson = (input, reviver, filename) => {
+  if (typeof reviver === "string") {
+    filename = reviver;
+    reviver = null;
+  }
+  try {
+    try {
+      return JSON.parse(input, reviver);
+    } catch (err) {
+      fallback(input, reviver);
+      throw err;
+    }
+  } catch (err) {
+    err.message = err.message.replace(/\n/g, "");
+    const jsonErr = new JSONError(err);
+    if (filename) {
+      jsonErr.fileName = filename;
+    }
+    throw jsonErr;
+  }
+};
+var stripBom = (string2) => {
+  if (typeof string2 !== "string") {
+    throw new TypeError(`Expected a string, got ${typeof string2}`);
+  }
+  if (string2.charCodeAt(0) === 65279) {
+    return string2.slice(1);
+  }
+  return string2;
+};
+const singleComment = Symbol("singleComment");
+const multiComment = Symbol("multiComment");
+const stripWithoutWhitespace = () => "";
+const stripWithWhitespace = (string2, start, end) => string2.slice(start, end).replace(/\S/g, " ");
+const isEscaped = (jsonString, quotePosition) => {
+  let index = quotePosition - 1;
+  let backslashCount = 0;
+  while (jsonString[index] === "\\") {
+    index -= 1;
+    backslashCount += 1;
+  }
+  return Boolean(backslashCount % 2);
+};
+var stripJsonComments = (jsonString, options2 = {}) => {
+  if (typeof jsonString !== "string") {
+    throw new TypeError(`Expected argument \`jsonString\` to be a \`string\`, got \`${typeof jsonString}\``);
+  }
+  const strip = options2.whitespace === false ? stripWithoutWhitespace : stripWithWhitespace;
+  let insideString = false;
+  let insideComment = false;
+  let offset = 0;
+  let result = "";
+  for (let i = 0; i < jsonString.length; i++) {
+    const currentCharacter = jsonString[i];
+    const nextCharacter = jsonString[i + 1];
+    if (!insideComment && currentCharacter === '"') {
+      const escaped = isEscaped(jsonString, i);
+      if (!escaped) {
+        insideString = !insideString;
+      }
+    }
+    if (insideString) {
+      continue;
+    }
+    if (!insideComment && currentCharacter + nextCharacter === "//") {
+      result += jsonString.slice(offset, i);
+      offset = i;
+      insideComment = singleComment;
+      i++;
+    } else if (insideComment === singleComment && currentCharacter + nextCharacter === "\r\n") {
+      i++;
+      insideComment = false;
+      result += strip(jsonString, offset, i);
+      offset = i;
+      continue;
+    } else if (insideComment === singleComment && currentCharacter === "\n") {
+      insideComment = false;
+      result += strip(jsonString, offset, i);
+      offset = i;
+    } else if (!insideComment && currentCharacter + nextCharacter === "/*") {
+      result += jsonString.slice(offset, i);
+      offset = i;
+      insideComment = multiComment;
+      i++;
+      continue;
+    } else if (insideComment === multiComment && currentCharacter + nextCharacter === "*/") {
+      i++;
+      insideComment = false;
+      result += strip(jsonString, offset, i + 1);
+      offset = i + 1;
+      continue;
+    }
+  }
+  return result + (insideComment ? strip(jsonString.slice(offset)) : jsonString.slice(offset));
+};
+var helper$1 = {};
+var constants = require$$0$4;
+var origCwd = process.cwd;
+var cwd = null;
+var platform = process.env.GRACEFUL_FS_PLATFORM || process.platform;
+process.cwd = function() {
+  if (!cwd)
+    cwd = origCwd.call(process);
+  return cwd;
+};
+try {
+  process.cwd();
+} catch (er) {
+}
+if (typeof process.chdir === "function") {
+  var chdir = process.chdir;
+  process.chdir = function(d) {
+    cwd = null;
+    chdir.call(process, d);
+  };
+  if (Object.setPrototypeOf)
+    Object.setPrototypeOf(process.chdir, chdir);
+}
+var polyfills$1 = patch$1;
+function patch$1(fs2) {
+  if (constants.hasOwnProperty("O_SYMLINK") && process.version.match(/^v0\.6\.[0-2]|^v0\.5\./)) {
+    patchLchmod(fs2);
+  }
+  if (!fs2.lutimes) {
+    patchLutimes(fs2);
+  }
+  fs2.chown = chownFix(fs2.chown);
+  fs2.fchown = chownFix(fs2.fchown);
+  fs2.lchown = chownFix(fs2.lchown);
+  fs2.chmod = chmodFix(fs2.chmod);
+  fs2.fchmod = chmodFix(fs2.fchmod);
+  fs2.lchmod = chmodFix(fs2.lchmod);
+  fs2.chownSync = chownFixSync(fs2.chownSync);
+  fs2.fchownSync = chownFixSync(fs2.fchownSync);
+  fs2.lchownSync = chownFixSync(fs2.lchownSync);
+  fs2.chmodSync = chmodFixSync(fs2.chmodSync);
+  fs2.fchmodSync = chmodFixSync(fs2.fchmodSync);
+  fs2.lchmodSync = chmodFixSync(fs2.lchmodSync);
+  fs2.stat = statFix(fs2.stat);
+  fs2.fstat = statFix(fs2.fstat);
+  fs2.lstat = statFix(fs2.lstat);
+  fs2.statSync = statFixSync(fs2.statSync);
+  fs2.fstatSync = statFixSync(fs2.fstatSync);
+  fs2.lstatSync = statFixSync(fs2.lstatSync);
+  if (fs2.chmod && !fs2.lchmod) {
+    fs2.lchmod = function(path2, mode, cb) {
+      if (cb)
+        process.nextTick(cb);
+    };
+    fs2.lchmodSync = function() {
+    };
+  }
+  if (fs2.chown && !fs2.lchown) {
+    fs2.lchown = function(path2, uid, gid, cb) {
+      if (cb)
+        process.nextTick(cb);
+    };
+    fs2.lchownSync = function() {
+    };
+  }
+  if (platform === "win32") {
+    fs2.rename = typeof fs2.rename !== "function" ? fs2.rename : function(fs$rename) {
+      function rename(from2, to, cb) {
+        var start = Date.now();
+        var backoff = 0;
+        fs$rename(from2, to, function CB(er) {
+          if (er && (er.code === "EACCES" || er.code === "EPERM" || er.code === "EBUSY") && Date.now() - start < 6e4) {
+            setTimeout(function() {
+              fs2.stat(to, function(stater, st) {
+                if (stater && stater.code === "ENOENT")
+                  fs$rename(from2, to, CB);
+                else
+                  cb(er);
+              });
+            }, backoff);
+            if (backoff < 100)
+              backoff += 10;
+            return;
+          }
+          if (cb)
+            cb(er);
+        });
+      }
+      if (Object.setPrototypeOf)
+        Object.setPrototypeOf(rename, fs$rename);
+      return rename;
+    }(fs2.rename);
+  }
+  fs2.read = typeof fs2.read !== "function" ? fs2.read : function(fs$read) {
+    function read(fd, buffer2, offset, length, position, callback_) {
+      var callback;
+      if (callback_ && typeof callback_ === "function") {
+        var eagCounter = 0;
+        callback = function(er, _, __) {
+          if (er && er.code === "EAGAIN" && eagCounter < 10) {
+            eagCounter++;
+            return fs$read.call(fs2, fd, buffer2, offset, length, position, callback);
+          }
+          callback_.apply(this, arguments);
+        };
+      }
+      return fs$read.call(fs2, fd, buffer2, offset, length, position, callback);
+    }
+    if (Object.setPrototypeOf)
+      Object.setPrototypeOf(read, fs$read);
+    return read;
+  }(fs2.read);
+  fs2.readSync = typeof fs2.readSync !== "function" ? fs2.readSync : function(fs$readSync) {
+    return function(fd, buffer2, offset, length, position) {
+      var eagCounter = 0;
+      while (true) {
+        try {
+          return fs$readSync.call(fs2, fd, buffer2, offset, length, position);
+        } catch (er) {
+          if (er.code === "EAGAIN" && eagCounter < 10) {
+            eagCounter++;
+            continue;
+          }
+          throw er;
+        }
+      }
+    };
+  }(fs2.readSync);
+  function patchLchmod(fs3) {
+    fs3.lchmod = function(path2, mode, callback) {
+      fs3.open(
+        path2,
+        constants.O_WRONLY | constants.O_SYMLINK,
+        mode,
+        function(err, fd) {
+          if (err) {
+            if (callback)
+              callback(err);
+            return;
+          }
+          fs3.fchmod(fd, mode, function(err2) {
+            fs3.close(fd, function(err22) {
+              if (callback)
+                callback(err2 || err22);
+            });
+          });
+        }
+      );
+    };
+    fs3.lchmodSync = function(path2, mode) {
+      var fd = fs3.openSync(path2, constants.O_WRONLY | constants.O_SYMLINK, mode);
+      var threw = true;
+      var ret;
+      try {
+        ret = fs3.fchmodSync(fd, mode);
+        threw = false;
+      } finally {
+        if (threw) {
+          try {
+            fs3.closeSync(fd);
+          } catch (er) {
+          }
+        } else {
+          fs3.closeSync(fd);
+        }
+      }
+      return ret;
+    };
+  }
+  function patchLutimes(fs3) {
+    if (constants.hasOwnProperty("O_SYMLINK") && fs3.futimes) {
+      fs3.lutimes = function(path2, at, mt, cb) {
+        fs3.open(path2, constants.O_SYMLINK, function(er, fd) {
+          if (er) {
+            if (cb)
+              cb(er);
+            return;
+          }
+          fs3.futimes(fd, at, mt, function(er2) {
+            fs3.close(fd, function(er22) {
+              if (cb)
+                cb(er2 || er22);
+            });
+          });
+        });
+      };
+      fs3.lutimesSync = function(path2, at, mt) {
+        var fd = fs3.openSync(path2, constants.O_SYMLINK);
+        var ret;
+        var threw = true;
+        try {
+          ret = fs3.futimesSync(fd, at, mt);
+          threw = false;
+        } finally {
+          if (threw) {
+            try {
+              fs3.closeSync(fd);
+            } catch (er) {
+            }
+          } else {
+            fs3.closeSync(fd);
+          }
+        }
+        return ret;
+      };
+    } else if (fs3.futimes) {
+      fs3.lutimes = function(_a, _b, _c, cb) {
+        if (cb)
+          process.nextTick(cb);
+      };
+      fs3.lutimesSync = function() {
+      };
+    }
+  }
+  function chmodFix(orig) {
+    if (!orig)
+      return orig;
+    return function(target, mode, cb) {
+      return orig.call(fs2, target, mode, function(er) {
+        if (chownErOk(er))
+          er = null;
+        if (cb)
+          cb.apply(this, arguments);
+      });
+    };
+  }
+  function chmodFixSync(orig) {
+    if (!orig)
+      return orig;
+    return function(target, mode) {
+      try {
+        return orig.call(fs2, target, mode);
+      } catch (er) {
+        if (!chownErOk(er))
+          throw er;
+      }
+    };
+  }
+  function chownFix(orig) {
+    if (!orig)
+      return orig;
+    return function(target, uid, gid, cb) {
+      return orig.call(fs2, target, uid, gid, function(er) {
+        if (chownErOk(er))
+          er = null;
+        if (cb)
+          cb.apply(this, arguments);
+      });
+    };
+  }
+  function chownFixSync(orig) {
+    if (!orig)
+      return orig;
+    return function(target, uid, gid) {
+      try {
+        return orig.call(fs2, target, uid, gid);
+      } catch (er) {
+        if (!chownErOk(er))
+          throw er;
+      }
+    };
+  }
+  function statFix(orig) {
+    if (!orig)
+      return orig;
+    return function(target, options2, cb) {
+      if (typeof options2 === "function") {
+        cb = options2;
+        options2 = null;
+      }
+      function callback(er, stats) {
+        if (stats) {
+          if (stats.uid < 0)
+            stats.uid += 4294967296;
+          if (stats.gid < 0)
+            stats.gid += 4294967296;
+        }
+        if (cb)
+          cb.apply(this, arguments);
+      }
+      return options2 ? orig.call(fs2, target, options2, callback) : orig.call(fs2, target, callback);
+    };
+  }
+  function statFixSync(orig) {
+    if (!orig)
+      return orig;
+    return function(target, options2) {
+      var stats = options2 ? orig.call(fs2, target, options2) : orig.call(fs2, target);
+      if (stats) {
+        if (stats.uid < 0)
+          stats.uid += 4294967296;
+        if (stats.gid < 0)
+          stats.gid += 4294967296;
+      }
+      return stats;
+    };
+  }
+  function chownErOk(er) {
+    if (!er)
+      return true;
+    if (er.code === "ENOSYS")
+      return true;
+    var nonroot = !process.getuid || process.getuid() !== 0;
+    if (nonroot) {
+      if (er.code === "EINVAL" || er.code === "EPERM")
+        return true;
+    }
+    return false;
+  }
+}
+var Stream = require$$0$5.Stream;
+var legacyStreams = legacy$1;
+function legacy$1(fs2) {
+  return {
+    ReadStream,
+    WriteStream
+  };
+  function ReadStream(path2, options2) {
+    if (!(this instanceof ReadStream))
+      return new ReadStream(path2, options2);
+    Stream.call(this);
+    var self2 = this;
+    this.path = path2;
+    this.fd = null;
+    this.readable = true;
+    this.paused = false;
+    this.flags = "r";
+    this.mode = 438;
+    this.bufferSize = 64 * 1024;
+    options2 = options2 || {};
+    var keys2 = Object.keys(options2);
+    for (var index = 0, length = keys2.length; index < length; index++) {
+      var key = keys2[index];
+      this[key] = options2[key];
+    }
+    if (this.encoding)
+      this.setEncoding(this.encoding);
+    if (this.start !== void 0) {
+      if ("number" !== typeof this.start) {
+        throw TypeError("start must be a Number");
+      }
+      if (this.end === void 0) {
+        this.end = Infinity;
+      } else if ("number" !== typeof this.end) {
+        throw TypeError("end must be a Number");
+      }
+      if (this.start > this.end) {
+        throw new Error("start must be <= end");
+      }
+      this.pos = this.start;
+    }
+    if (this.fd !== null) {
+      process.nextTick(function() {
+        self2._read();
+      });
+      return;
+    }
+    fs2.open(this.path, this.flags, this.mode, function(err, fd) {
+      if (err) {
+        self2.emit("error", err);
+        self2.readable = false;
+        return;
+      }
+      self2.fd = fd;
+      self2.emit("open", fd);
+      self2._read();
+    });
+  }
+  function WriteStream(path2, options2) {
+    if (!(this instanceof WriteStream))
+      return new WriteStream(path2, options2);
+    Stream.call(this);
+    this.path = path2;
+    this.fd = null;
+    this.writable = true;
+    this.flags = "w";
+    this.encoding = "binary";
+    this.mode = 438;
+    this.bytesWritten = 0;
+    options2 = options2 || {};
+    var keys2 = Object.keys(options2);
+    for (var index = 0, length = keys2.length; index < length; index++) {
+      var key = keys2[index];
+      this[key] = options2[key];
+    }
+    if (this.start !== void 0) {
+      if ("number" !== typeof this.start) {
+        throw TypeError("start must be a Number");
+      }
+      if (this.start < 0) {
+        throw new Error("start must be >= zero");
+      }
+      this.pos = this.start;
+    }
+    this.busy = false;
+    this._queue = [];
+    if (this.fd === null) {
+      this._open = fs2.open;
+      this._queue.push([this._open, this.path, this.flags, this.mode, void 0]);
+      this.flush();
+    }
+  }
+}
+var clone_1 = clone$1;
+var getPrototypeOf = Object.getPrototypeOf || function(obj) {
+  return obj.__proto__;
+};
+function clone$1(obj) {
+  if (obj === null || typeof obj !== "object")
+    return obj;
+  if (obj instanceof Object)
+    var copy = { __proto__: getPrototypeOf(obj) };
+  else
+    var copy = /* @__PURE__ */ Object.create(null);
+  Object.getOwnPropertyNames(obj).forEach(function(key) {
+    Object.defineProperty(copy, key, Object.getOwnPropertyDescriptor(obj, key));
+  });
+  return copy;
+}
+var fs$2 = fs$3;
+var polyfills = polyfills$1;
+var legacy = legacyStreams;
+var clone = clone_1;
+var util = require$$3;
+var gracefulQueue;
+var previousSymbol;
+if (typeof Symbol === "function" && typeof Symbol.for === "function") {
+  gracefulQueue = Symbol.for("graceful-fs.queue");
+  previousSymbol = Symbol.for("graceful-fs.previous");
+} else {
+  gracefulQueue = "___graceful-fs.queue";
+  previousSymbol = "___graceful-fs.previous";
+}
+function noop() {
+}
+function publishQueue(context2, queue) {
+  Object.defineProperty(context2, gracefulQueue, {
+    get: function() {
+      return queue;
+    }
+  });
+}
+var debug = noop;
+if (util.debuglog)
+  debug = util.debuglog("gfs4");
+else if (/\bgfs4\b/i.test(process.env.NODE_DEBUG || ""))
+  debug = function() {
+    var m = util.format.apply(util, arguments);
+    m = "GFS4: " + m.split(/\n/).join("\nGFS4: ");
+    console.error(m);
+  };
+if (!fs$2[gracefulQueue]) {
+  var queue = commonjsGlobal[gracefulQueue] || [];
+  publishQueue(fs$2, queue);
+  fs$2.close = function(fs$close) {
+    function close3(fd, cb) {
+      return fs$close.call(fs$2, fd, function(err) {
+        if (!err) {
+          resetQueue();
+        }
+        if (typeof cb === "function")
+          cb.apply(this, arguments);
+      });
+    }
+    Object.defineProperty(close3, previousSymbol, {
+      value: fs$close
+    });
+    return close3;
+  }(fs$2.close);
+  fs$2.closeSync = function(fs$closeSync) {
+    function closeSync(fd) {
+      fs$closeSync.apply(fs$2, arguments);
+      resetQueue();
+    }
+    Object.defineProperty(closeSync, previousSymbol, {
+      value: fs$closeSync
+    });
+    return closeSync;
+  }(fs$2.closeSync);
+  if (/\bgfs4\b/i.test(process.env.NODE_DEBUG || "")) {
+    process.on("exit", function() {
+      debug(fs$2[gracefulQueue]);
+      require$$5$1.equal(fs$2[gracefulQueue].length, 0);
+    });
+  }
+}
+if (!commonjsGlobal[gracefulQueue]) {
+  publishQueue(commonjsGlobal, fs$2[gracefulQueue]);
+}
+var gracefulFs = patch(clone(fs$2));
+if (process.env.TEST_GRACEFUL_FS_GLOBAL_PATCH && !fs$2.__patched) {
+  gracefulFs = patch(fs$2);
+  fs$2.__patched = true;
+}
+function patch(fs2) {
+  polyfills(fs2);
+  fs2.gracefulify = patch;
+  fs2.createReadStream = createReadStream;
+  fs2.createWriteStream = createWriteStream;
+  var fs$readFile = fs2.readFile;
+  fs2.readFile = readFile2;
+  function readFile2(path2, options2, cb) {
+    if (typeof options2 === "function")
+      cb = options2, options2 = null;
+    return go$readFile(path2, options2, cb);
+    function go$readFile(path3, options3, cb2, startTime) {
+      return fs$readFile(path3, options3, function(err) {
+        if (err && (err.code === "EMFILE" || err.code === "ENFILE"))
+          enqueue([go$readFile, [path3, options3, cb2], err, startTime || Date.now(), Date.now()]);
+        else {
+          if (typeof cb2 === "function")
+            cb2.apply(this, arguments);
+        }
+      });
+    }
+  }
+  var fs$writeFile = fs2.writeFile;
+  fs2.writeFile = writeFile2;
+  function writeFile2(path2, data, options2, cb) {
+    if (typeof options2 === "function")
+      cb = options2, options2 = null;
+    return go$writeFile(path2, data, options2, cb);
+    function go$writeFile(path3, data2, options3, cb2, startTime) {
+      return fs$writeFile(path3, data2, options3, function(err) {
+        if (err && (err.code === "EMFILE" || err.code === "ENFILE"))
+          enqueue([go$writeFile, [path3, data2, options3, cb2], err, startTime || Date.now(), Date.now()]);
+        else {
+          if (typeof cb2 === "function")
+            cb2.apply(this, arguments);
+        }
+      });
+    }
+  }
+  var fs$appendFile = fs2.appendFile;
+  if (fs$appendFile)
+    fs2.appendFile = appendFile;
+  function appendFile(path2, data, options2, cb) {
+    if (typeof options2 === "function")
+      cb = options2, options2 = null;
+    return go$appendFile(path2, data, options2, cb);
+    function go$appendFile(path3, data2, options3, cb2, startTime) {
+      return fs$appendFile(path3, data2, options3, function(err) {
+        if (err && (err.code === "EMFILE" || err.code === "ENFILE"))
+          enqueue([go$appendFile, [path3, data2, options3, cb2], err, startTime || Date.now(), Date.now()]);
+        else {
+          if (typeof cb2 === "function")
+            cb2.apply(this, arguments);
+        }
+      });
+    }
+  }
+  var fs$copyFile = fs2.copyFile;
+  if (fs$copyFile)
+    fs2.copyFile = copyFile;
+  function copyFile(src2, dest, flags, cb) {
+    if (typeof flags === "function") {
+      cb = flags;
+      flags = 0;
+    }
+    return go$copyFile(src2, dest, flags, cb);
+    function go$copyFile(src3, dest2, flags2, cb2, startTime) {
+      return fs$copyFile(src3, dest2, flags2, function(err) {
+        if (err && (err.code === "EMFILE" || err.code === "ENFILE"))
+          enqueue([go$copyFile, [src3, dest2, flags2, cb2], err, startTime || Date.now(), Date.now()]);
+        else {
+          if (typeof cb2 === "function")
+            cb2.apply(this, arguments);
+        }
+      });
+    }
+  }
+  var fs$readdir = fs2.readdir;
+  fs2.readdir = readdir2;
+  var noReaddirOptionVersions = /^v[0-5]\./;
+  function readdir2(path2, options2, cb) {
+    if (typeof options2 === "function")
+      cb = options2, options2 = null;
+    var go$readdir = noReaddirOptionVersions.test(process.version) ? function go$readdir2(path3, options3, cb2, startTime) {
+      return fs$readdir(path3, fs$readdirCallback(
+        path3,
+        options3,
+        cb2,
+        startTime
+      ));
+    } : function go$readdir2(path3, options3, cb2, startTime) {
+      return fs$readdir(path3, options3, fs$readdirCallback(
+        path3,
+        options3,
+        cb2,
+        startTime
+      ));
+    };
+    return go$readdir(path2, options2, cb);
+    function fs$readdirCallback(path3, options3, cb2, startTime) {
+      return function(err, files) {
+        if (err && (err.code === "EMFILE" || err.code === "ENFILE"))
+          enqueue([
+            go$readdir,
+            [path3, options3, cb2],
+            err,
+            startTime || Date.now(),
+            Date.now()
+          ]);
+        else {
+          if (files && files.sort)
+            files.sort();
+          if (typeof cb2 === "function")
+            cb2.call(this, err, files);
+        }
+      };
+    }
+  }
+  if (process.version.substr(0, 4) === "v0.8") {
+    var legStreams = legacy(fs2);
+    ReadStream = legStreams.ReadStream;
+    WriteStream = legStreams.WriteStream;
+  }
+  var fs$ReadStream = fs2.ReadStream;
+  if (fs$ReadStream) {
+    ReadStream.prototype = Object.create(fs$ReadStream.prototype);
+    ReadStream.prototype.open = ReadStream$open;
+  }
+  var fs$WriteStream = fs2.WriteStream;
+  if (fs$WriteStream) {
+    WriteStream.prototype = Object.create(fs$WriteStream.prototype);
+    WriteStream.prototype.open = WriteStream$open;
+  }
+  Object.defineProperty(fs2, "ReadStream", {
+    get: function() {
+      return ReadStream;
+    },
+    set: function(val) {
+      ReadStream = val;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(fs2, "WriteStream", {
+    get: function() {
+      return WriteStream;
+    },
+    set: function(val) {
+      WriteStream = val;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  var FileReadStream = ReadStream;
+  Object.defineProperty(fs2, "FileReadStream", {
+    get: function() {
+      return FileReadStream;
+    },
+    set: function(val) {
+      FileReadStream = val;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  var FileWriteStream = WriteStream;
+  Object.defineProperty(fs2, "FileWriteStream", {
+    get: function() {
+      return FileWriteStream;
+    },
+    set: function(val) {
+      FileWriteStream = val;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  function ReadStream(path2, options2) {
+    if (this instanceof ReadStream)
+      return fs$ReadStream.apply(this, arguments), this;
+    else
+      return ReadStream.apply(Object.create(ReadStream.prototype), arguments);
+  }
+  function ReadStream$open() {
+    var that = this;
+    open(that.path, that.flags, that.mode, function(err, fd) {
+      if (err) {
+        if (that.autoClose)
+          that.destroy();
+        that.emit("error", err);
+      } else {
+        that.fd = fd;
+        that.emit("open", fd);
+        that.read();
+      }
+    });
+  }
+  function WriteStream(path2, options2) {
+    if (this instanceof WriteStream)
+      return fs$WriteStream.apply(this, arguments), this;
+    else
+      return WriteStream.apply(Object.create(WriteStream.prototype), arguments);
+  }
+  function WriteStream$open() {
+    var that = this;
+    open(that.path, that.flags, that.mode, function(err, fd) {
+      if (err) {
+        that.destroy();
+        that.emit("error", err);
+      } else {
+        that.fd = fd;
+        that.emit("open", fd);
+      }
+    });
+  }
+  function createReadStream(path2, options2) {
+    return new fs2.ReadStream(path2, options2);
+  }
+  function createWriteStream(path2, options2) {
+    return new fs2.WriteStream(path2, options2);
+  }
+  var fs$open = fs2.open;
+  fs2.open = open;
+  function open(path2, flags, mode, cb) {
+    if (typeof mode === "function")
+      cb = mode, mode = null;
+    return go$open(path2, flags, mode, cb);
+    function go$open(path3, flags2, mode2, cb2, startTime) {
+      return fs$open(path3, flags2, mode2, function(err, fd) {
+        if (err && (err.code === "EMFILE" || err.code === "ENFILE"))
+          enqueue([go$open, [path3, flags2, mode2, cb2], err, startTime || Date.now(), Date.now()]);
+        else {
+          if (typeof cb2 === "function")
+            cb2.apply(this, arguments);
+        }
+      });
+    }
+  }
+  return fs2;
+}
+function enqueue(elem) {
+  debug("ENQUEUE", elem[0].name, elem[1]);
+  fs$2[gracefulQueue].push(elem);
+  retry();
+}
+var retryTimer;
+function resetQueue() {
+  var now2 = Date.now();
+  for (var i = 0; i < fs$2[gracefulQueue].length; ++i) {
+    if (fs$2[gracefulQueue][i].length > 2) {
+      fs$2[gracefulQueue][i][3] = now2;
+      fs$2[gracefulQueue][i][4] = now2;
+    }
+  }
+  retry();
+}
+function retry() {
+  clearTimeout(retryTimer);
+  retryTimer = void 0;
+  if (fs$2[gracefulQueue].length === 0)
+    return;
+  var elem = fs$2[gracefulQueue].shift();
+  var fn = elem[0];
+  var args2 = elem[1];
+  var err = elem[2];
+  var startTime = elem[3];
+  var lastTime = elem[4];
+  if (startTime === void 0) {
+    debug("RETRY", fn.name, args2);
+    fn.apply(null, args2);
+  } else if (Date.now() - startTime >= 6e4) {
+    debug("TIMEOUT", fn.name, args2);
+    var cb = args2.pop();
+    if (typeof cb === "function")
+      cb.call(null, err);
+  } else {
+    var sinceAttempt = Date.now() - lastTime;
+    var sinceStart = Math.max(lastTime - startTime, 1);
+    var desiredDelay = Math.min(sinceStart * 1.2, 100);
+    if (sinceAttempt >= desiredDelay) {
+      debug("RETRY", fn.name, args2);
+      fn.apply(null, args2.concat([startTime]));
+    } else {
+      fs$2[gracefulQueue].push(elem);
+    }
+  }
+  if (retryTimer === void 0) {
+    retryTimer = setTimeout(retry, 0);
+  }
+}
+var path = require$$0$3;
+var fs$1 = fs$3;
+var _0777 = parseInt("0777", 8);
+var mkdirp$1 = mkdirP.mkdirp = mkdirP.mkdirP = mkdirP;
+function mkdirP(p, opts, f, made) {
+  if (typeof opts === "function") {
+    f = opts;
+    opts = {};
+  } else if (!opts || typeof opts !== "object") {
+    opts = { mode: opts };
+  }
+  var mode = opts.mode;
+  var xfs = opts.fs || fs$1;
+  if (mode === void 0) {
+    mode = _0777;
+  }
+  if (!made)
+    made = null;
+  var cb = f || /* istanbul ignore next */
+  function() {
+  };
+  p = path.resolve(p);
+  xfs.mkdir(p, mode, function(er) {
+    if (!er) {
+      made = made || p;
+      return cb(null, made);
+    }
+    switch (er.code) {
+      case "ENOENT":
+        if (path.dirname(p) === p)
+          return cb(er);
+        mkdirP(path.dirname(p), opts, function(er2, made2) {
+          if (er2)
+            cb(er2, made2);
+          else
+            mkdirP(p, opts, cb, made2);
+        });
+        break;
+      default:
+        xfs.stat(p, function(er2, stat) {
+          if (er2 || !stat.isDirectory())
+            cb(er, made);
+          else
+            cb(null, made);
+        });
+        break;
+    }
+  });
+}
+mkdirP.sync = function sync(p, opts, made) {
+  if (!opts || typeof opts !== "object") {
+    opts = { mode: opts };
+  }
+  var mode = opts.mode;
+  var xfs = opts.fs || fs$1;
+  if (mode === void 0) {
+    mode = _0777;
+  }
+  if (!made)
+    made = null;
+  p = path.resolve(p);
+  try {
+    xfs.mkdirSync(p, mode);
+    made = made || p;
+  } catch (err0) {
+    switch (err0.code) {
+      case "ENOENT":
+        made = sync(path.dirname(p), opts, made);
+        sync(p, opts, made);
+        break;
+      default:
+        var stat;
+        try {
+          stat = xfs.statSync(p);
+        } catch (err1) {
+          throw err0;
+        }
+        if (!stat.isDirectory())
+          throw err0;
+        break;
+    }
+  }
+  return made;
+};
+var __assign = commonjsGlobal && commonjsGlobal.__assign || function() {
+  __assign = Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s)
+        if (Object.prototype.hasOwnProperty.call(s, p))
+          t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign.apply(this, arguments);
+};
+Object.defineProperty(helper$1, "__esModule", { value: true });
+var fast_safe_stringify_1 = fastSafeStringify;
+var fs = gracefulFs;
+var mkdirp = mkdirp$1;
+var oproto = Object.prototype;
+function promisify(fn) {
+  return function() {
+    var args2 = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+      args2[_i] = arguments[_i];
+    }
+    return new Promise(function(resolve, reject) {
+      fn.apply(void 0, args2.concat([function(err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      }]));
+    });
+  };
+}
+var defaultStringifyOpts = {
+  replacer: null,
+  space: 0,
+  handleCircular: true
+};
+var helper = {
+  isObject: function(o) {
+    return oproto.toString.call(o) === "[object Object]";
+  },
+  isPrimitive: function(value) {
+    var t = typeof value;
+    return value === null || value === void 0 || t !== "function" && t !== "object";
+  },
+  strLog: function(value, pretty) {
+    if (helper.isPrimitive(value))
+      return value;
+    var s = pretty ? "  " : null;
+    return fast_safe_stringify_1.default(value, null, s);
+  },
+  getLogger: function(config2, pretty) {
+    return function() {
+      var args2 = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args2[_i] = arguments[_i];
+      }
+      var stream = config2.stream;
+      var msg = args2.map(function(arg) {
+        if (arg instanceof Error) {
+          stream = config2.streamErr;
+          return arg.stack || arg.message || String(arg);
+        }
+        return helper.strLog(arg, pretty);
+      }).join(" ");
+      stream.write(msg + "\n");
+    };
+  },
+  getStringifyOptions: function(options2, space) {
+    if (helper.isObject(options2)) {
+      return __assign({}, defaultStringifyOpts, options2);
+    }
+    if (typeof options2 === "function" || Array.isArray(options2)) {
+      return __assign({}, defaultStringifyOpts, { replacer: options2, space });
+    }
+    return __assign({}, defaultStringifyOpts, { space });
+  },
+  fs,
+  mkdirp,
+  promise: {
+    readFile: promisify(fs.readFile),
+    writeFile: promisify(fs.writeFile),
+    mkdirp: promisify(mkdirp)
+  },
+  safeSync: function(fn) {
+    return function() {
+      var args2 = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args2[_i] = arguments[_i];
+      }
+      try {
+        return [null, fn.apply(void 0, args2)];
+      } catch (err) {
+        return [err, void 0];
+      }
+    };
+  },
+  safeAsync: function(promise) {
+    return promise.then(function(data) {
+      return [null, data];
+    }).catch(function(err) {
+      return [err, void 0];
+    });
+  }
+};
+helper$1.helper = helper;
+var jsonc_safe = {};
+var hasRequiredJsonc_safe;
+function requireJsonc_safe() {
+  if (hasRequiredJsonc_safe)
+    return jsonc_safe;
+  hasRequiredJsonc_safe = 1;
+  Object.defineProperty(jsonc_safe, "__esModule", { value: true });
+  var fast_safe_stringify_12 = fastSafeStringify;
+  var stripJsonComments$1 = stripJsonComments;
+  var helper_1 = helper$1;
+  var jsonc_1 = requireJsonc();
+  var safeSync = helper_1.helper.safeSync, safeAsync = helper_1.helper.safeAsync;
+  var jsoncSafe = (
+    /** @class */
+    function() {
+      function jsoncSafe2() {
+      }
+      jsoncSafe2.config = function(cfg) {
+        jsonc_1.jsonc.config(cfg);
+      };
+      jsoncSafe2.log = function() {
+        var args2 = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+          args2[_i] = arguments[_i];
+        }
+        jsonc_1.jsonc.log.apply(jsonc_1.jsonc, args2);
+      };
+      jsoncSafe2.logp = function() {
+        var args2 = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+          args2[_i] = arguments[_i];
+        }
+        jsonc_1.jsonc.logp.apply(jsonc_1.jsonc, args2);
+      };
+      jsoncSafe2.parse = function(str, options2) {
+        return safeSync(jsonc_1.jsonc.parse)(str, options2);
+      };
+      jsoncSafe2.stringify = function(value, optionsOrReplacer, space) {
+        var opts = helper_1.helper.getStringifyOptions(optionsOrReplacer, space);
+        try {
+          return [null, fast_safe_stringify_12.default(value, opts.replacer, opts.space)];
+        } catch (err) {
+          return [err, void 0];
+        }
+      };
+      jsoncSafe2.isJSON = function(str, allowComments) {
+        if (allowComments === void 0) {
+          allowComments = false;
+        }
+        return jsonc_1.jsonc.isJSON(str, allowComments);
+      };
+      jsoncSafe2.stripComments = function(str, whitespace) {
+        if (whitespace === void 0) {
+          whitespace = false;
+        }
+        return safeSync(stripJsonComments$1)(str, { whitespace });
+      };
+      jsoncSafe2.uglify = function(str) {
+        return safeSync(jsonc_1.jsonc.uglify)(str);
+      };
+      jsoncSafe2.beautify = function(str, space) {
+        if (space === void 0) {
+          space = 2;
+        }
+        return safeSync(jsonc_1.jsonc.beautify)(str, space);
+      };
+      jsoncSafe2.normalize = function(value, replacer) {
+        return safeSync(jsonc_1.jsonc.normalize)(value, replacer);
+      };
+      jsoncSafe2.read = function(filePath, options2) {
+        return safeAsync(jsonc_1.jsonc.read(filePath, options2));
+      };
+      jsoncSafe2.readSync = function(filePath, options2) {
+        return safeSync(jsonc_1.jsonc.readSync)(filePath, options2);
+      };
+      jsoncSafe2.write = function(filePath, data, options2) {
+        return safeAsync(jsonc_1.jsonc.write(filePath, data, options2));
+      };
+      jsoncSafe2.writeSync = function(filePath, data, options2) {
+        return safeSync(jsonc_1.jsonc.writeSync)(filePath, data, options2);
+      };
+      return jsoncSafe2;
+    }()
+  );
+  jsonc_safe.jsoncSafe = jsoncSafe;
+  return jsonc_safe;
+}
+var hasRequiredJsonc;
+function requireJsonc() {
+  if (hasRequiredJsonc)
+    return jsonc$1;
+  hasRequiredJsonc = 1;
+  var __assign2 = commonjsGlobal && commonjsGlobal.__assign || function() {
+    __assign2 = Object.assign || function(t) {
+      for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s)
+          if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+      }
+      return t;
+    };
+    return __assign2.apply(this, arguments);
+  };
+  var __awaiter2 = commonjsGlobal && commonjsGlobal.__awaiter || function(thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function(resolve, reject) {
+      function fulfilled(value) {
+        try {
+          step(generator.next(value));
+        } catch (e) {
+          reject(e);
+        }
+      }
+      function rejected(value) {
+        try {
+          step(generator["throw"](value));
+        } catch (e) {
+          reject(e);
+        }
+      }
+      function step(result) {
+        result.done ? resolve(result.value) : new P(function(resolve2) {
+          resolve2(result.value);
+        }).then(fulfilled, rejected);
+      }
+      step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+  };
+  var __generator2 = commonjsGlobal && commonjsGlobal.__generator || function(thisArg, body) {
+    var _ = { label: 0, sent: function() {
+      if (t[0] & 1)
+        throw t[1];
+      return t[1];
+    }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+      return this;
+    }), g;
+    function verb(n) {
+      return function(v) {
+        return step([n, v]);
+      };
+    }
+    function step(op) {
+      if (f)
+        throw new TypeError("Generator is already executing.");
+      while (_)
+        try {
+          if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
+            return t;
+          if (y = 0, t)
+            op = [op[0] & 2, t.value];
+          switch (op[0]) {
+            case 0:
+            case 1:
+              t = op;
+              break;
+            case 4:
+              _.label++;
+              return { value: op[1], done: false };
+            case 5:
+              _.label++;
+              y = op[1];
+              op = [0];
+              continue;
+            case 7:
+              op = _.ops.pop();
+              _.trys.pop();
+              continue;
+            default:
+              if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                _ = 0;
+                continue;
+              }
+              if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                _.label = op[1];
+                break;
+              }
+              if (op[0] === 6 && _.label < t[1]) {
+                _.label = t[1];
+                t = op;
+                break;
+              }
+              if (t && _.label < t[2]) {
+                _.label = t[2];
+                _.ops.push(op);
+                break;
+              }
+              if (t[2])
+                _.ops.pop();
+              _.trys.pop();
+              continue;
+          }
+          op = body.call(thisArg, _);
+        } catch (e) {
+          op = [6, e];
+          y = 0;
+        } finally {
+          f = t = 0;
+        }
+      if (op[0] & 5)
+        throw op[1];
+      return { value: op[0] ? op[1] : void 0, done: true };
+    }
+  };
+  Object.defineProperty(jsonc$1, "__esModule", { value: true });
+  var path2 = require$$0$3;
+  var fast_safe_stringify_12 = fastSafeStringify;
+  var parseJson$12 = parseJson;
+  var stripBOM = stripBom;
+  var stripJsonComments$1 = stripJsonComments;
+  var helper_1 = helper$1;
+  var jsonc_safe_1 = requireJsonc_safe();
+  var fs2 = helper_1.helper.fs, mkdirp2 = helper_1.helper.mkdirp, promise = helper_1.helper.promise;
+  /**
+   *  JSON utility class that can handle comments and circular references; and
+   *  other extra functionality.
+   *  @class
+   *  @author Onur Yıldırım <onur@cutepilot.com>
+   *  @license MIT
+   *  @see {@link https://github.com/onury/jsonc|GitHub Repo}
+   *  @see {@link https://github.com/onury/jsonc#related-modules|Related Modules}
+   *
+   *  @example
+   *  const jsonc = require('jsonc');
+   *  // or
+   *  import { jsonc } from 'jsonc';
+   *
+   *  const result = jsonc.parse('// comments\n{ "key": "value" }');
+   *  console.log(result); // { key: "value" }
+   */
+  var jsonc2 = (
+    /** @class */
+    function() {
+      function jsonc3() {
+      }
+      jsonc3.config = function(cfg) {
+        var conf = __assign2({ stream: process.stdout, streamErr: process.stderr }, cfg || {});
+        jsonc3._ = {
+          logger: helper_1.helper.getLogger(conf, false),
+          prettyLogger: helper_1.helper.getLogger(conf, true)
+        };
+      };
+      jsonc3.log = function() {
+        var _a;
+        var args2 = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+          args2[_i] = arguments[_i];
+        }
+        (_a = jsonc3._).logger.apply(_a, args2);
+      };
+      jsonc3.logp = function() {
+        var _a;
+        var args2 = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+          args2[_i] = arguments[_i];
+        }
+        (_a = jsonc3._).prettyLogger.apply(_a, args2);
+      };
+      jsonc3.parse = function(str, options2) {
+        var opts = typeof options2 === "function" ? { reviver: options2 } : options2 || {};
+        if (opts.stripComments !== false)
+          str = stripJsonComments$1(str, { whitespace: false });
+        return parseJson$12(str, opts.reviver);
+      };
+      jsonc3.stringify = function(value, optionsOrReplacer, space) {
+        var opts = helper_1.helper.getStringifyOptions(optionsOrReplacer, space);
+        return opts.handleCircular ? fast_safe_stringify_12.default(value, opts.replacer, opts.space) : JSON.stringify(value, opts.replacer, opts.space);
+      };
+      jsonc3.isJSON = function(str, allowComments) {
+        if (allowComments === void 0) {
+          allowComments = false;
+        }
+        if (typeof str !== "string")
+          return false;
+        var _a = jsonc3.safe.parse(str, { stripComments: allowComments }), err = _a[0], result = _a[1];
+        return !err && (helper_1.helper.isObject(result) || Array.isArray(result));
+      };
+      jsonc3.stripComments = function(str, whitespace) {
+        if (whitespace === void 0) {
+          whitespace = false;
+        }
+        return stripJsonComments$1(str, { whitespace });
+      };
+      jsonc3.uglify = function(str) {
+        return jsonc3.stringify(jsonc3.parse(str, { stripComments: true }));
+      };
+      jsonc3.beautify = function(str, space) {
+        if (space === void 0) {
+          space = 2;
+        }
+        if (!space)
+          space = 2;
+        return jsonc3.stringify(jsonc3.parse(str), { space });
+      };
+      jsonc3.normalize = function(value, replacer) {
+        return jsonc3.parse(jsonc3.stringify(value, { replacer }));
+      };
+      jsonc3.read = function(filePath, options2) {
+        return __awaiter2(this, void 0, void 0, function() {
+          var opts, data;
+          return __generator2(this, function(_a) {
+            switch (_a.label) {
+              case 0:
+                opts = __assign2({ reviver: null, stripComments: true }, options2 || {});
+                return [4, promise.readFile(filePath, "utf8")];
+              case 1:
+                data = _a.sent();
+                if (opts.stripComments !== false)
+                  data = stripJsonComments$1(data);
+                return [2, parseJson$12(stripBOM(data), opts.reviver, filePath)];
+            }
+          });
+        });
+      };
+      jsonc3.readSync = function(filePath, options2) {
+        var opts = __assign2({ reviver: null, stripComments: true }, options2 || {});
+        var data = fs2.readFileSync(filePath, "utf8");
+        if (opts.stripComments !== false)
+          data = stripJsonComments$1(data);
+        return parseJson$12(stripBOM(data), opts.reviver, filePath);
+      };
+      jsonc3.write = function(filePath, data, options2) {
+        return __awaiter2(this, void 0, void 0, function() {
+          var opts, content;
+          return __generator2(this, function(_a) {
+            switch (_a.label) {
+              case 0:
+                opts = __assign2({ replacer: null, space: 0, mode: 438, autoPath: true }, options2 || {});
+                if (!opts.autoPath)
+                  return [3, 2];
+                return [4, promise.mkdirp(path2.dirname(filePath), { fs: fs2 })];
+              case 1:
+                _a.sent();
+                _a.label = 2;
+              case 2:
+                content = JSON.stringify(data, opts.replacer, opts.space);
+                return [4, promise.writeFile(filePath, content + "\n", {
+                  mode: opts.mode,
+                  encoding: "utf8"
+                })];
+              case 3:
+                _a.sent();
+                return [2, true];
+            }
+          });
+        });
+      };
+      jsonc3.writeSync = function(filePath, data, options2) {
+        var opts = __assign2({ replacer: null, space: 0, mode: 438, autoPath: true }, options2 || {});
+        if (opts.autoPath)
+          mkdirp2.sync(path2.dirname(filePath), { fs: fs2 });
+        var content = JSON.stringify(data, opts.replacer, opts.space);
+        fs2.writeFileSync(filePath, content + "\n", {
+          mode: opts.mode,
+          encoding: "utf8"
+        });
+        return true;
+      };
+      return jsonc3;
+    }()
+  );
+  jsonc$1.jsonc = jsonc2;
+  jsonc2.config(null);
+  (function(jsonc3) {
+    jsonc3.safe = jsonc_safe_1.jsoncSafe;
+  })(jsonc2 || (jsonc2 = {}));
+  jsonc$1.jsonc = jsonc2;
+  return jsonc$1;
+}
+var jsonc = requireJsonc().jsonc;
+jsonc$2.exports = jsonc;
+var jsonc_2 = jsonc$2.exports.jsonc = jsonc;
+jsonc$2.exports.safe = jsonc.safe;
 let mainWindow;
-const databasePath = require$$9__namespace.join(electron$1.app.getPath("userData"), "mydb");
+const databasePath = path__namespace.join(electron$1.app.getPath("userData"), "mydb");
+const storagePath = path__namespace.join(
+  electron$1.app.getPath("userData"),
+  "virtualrx_drugstore.json"
+);
 let db;
 function getDeviceDimensions() {
   const mainScreen = electron$1.screen.getPrimaryDisplay();
@@ -43253,7 +45418,7 @@ function getDeviceDimensions() {
   const height = mainScreen.bounds.height;
   return { width, height };
 }
-function createWindow() {
+async function createWindow() {
   const { height, width } = getDeviceDimensions();
   mainWindow = new electron$1.BrowserWindow({
     minWidth: width * 0.75,
@@ -43261,34 +45426,40 @@ function createWindow() {
     width: 1400,
     height: 850,
     webPreferences: {
-      // preload: path.join(__dirname, '../preload/preload.js'), 
+      preload: path__namespace.join(__dirname, "../../out/preload/preload.js"),
       webSecurity: false,
       nodeIntegration: true,
       nodeIntegrationInWorker: true
     }
   });
   mainWindow.webContents.openDevTools();
+  if (fs$3.existsSync(storagePath)) {
+    const dbSource = fs$3.readFileSync(storagePath, "utf8");
+    electron$1.ipcMain.handle("dbContent", () => jsonc_2.parse(dbSource));
+    electron$1.ipcMain.handle("ping", () => databasePath);
+  } else {
+    db = await getDatabase(databasePath);
+    const storage = storageDexie.getRxStorageDexie();
+    electron.exposeIpcMainRxStorage({
+      key: "main-storage",
+      storage,
+      ipcMain: electron$1.ipcMain
+    });
+    electron$1.ipcMain.handle("ping", () => databasePath);
+  }
   mainWindow.loadURL("http://localhost:5173");
-  mainWindow.on("closed", () => mainWindow = null);
 }
 electron$1.app.on("ready", async function() {
-  db = await getDatabase(databasePath);
-  electron$1.ipcMain.handle("getDBSuffix", () => "drugstore_suffix1");
-  const storage = storageDexie.getRxStorageDexie();
-  electron.exposeIpcMainRxStorage({
-    key: "main-storage",
-    storage,
-    ipcMain: electron$1.ipcMain
-  });
+  createWindow();
 });
 electron$1.app.on("before-quit", () => {
   saveAndCloseDatabase();
 });
-function saveAndCloseDatabase() {
+async function saveAndCloseDatabase() {
   if (db) {
-    db.destroy().then(() => {
-      electron$1.app.quit();
-    });
+    const jsonData = await db.exportJSON();
+    fs$3.writeFileSync(storagePath, jsonc_2.stringify(jsonData, void 0, 2));
+    electron$1.app.quit();
   } else {
     electron$1.app.quit();
   }
@@ -43296,10 +45467,5 @@ function saveAndCloseDatabase() {
 electron$1.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     electron$1.app.quit();
-  }
-});
-electron$1.app.on("activate", () => {
-  if (mainWindow == null) {
-    createWindow();
   }
 });

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, List, Toolbar, Typography } from "@mui/material";
 import OrderCard from "../../../components/cards/order_card";
-import { getDatabase } from "../../../database";
+import { getDatabase } from "../../../../../main/database";
 // import electron from "electron";
 // import { getRxStorageIpcRenderer } from "rxdb/plugins/electron";
 // import { getRxStorageDexie } from "rxdb/plugins/storage-dexie";
@@ -13,7 +13,7 @@ export default function Orders() {
 
   async function getCarts() {
     try {
-      const db = await getDatabase("drugstore");
+      const db = await getDatabase(`${localStorage.getItem('dbPath')}`);
 
       db.carts.find().$.subscribe(function (heroes) {
         if (!heroes) {

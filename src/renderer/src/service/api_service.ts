@@ -9,7 +9,7 @@ class APIService {
   static getProducts = () =>
     axiosInstance.get("/connector/api/product").then((res) => res.data);
 
-    static getCategories = () =>
+  static getCategories = () =>
     axiosInstance.get("/connector/api/taxonomy").then((res) => res.data);
 
   static getProductsStockReport = () =>
@@ -19,6 +19,24 @@ class APIService {
 
   static getPaymentMethods = () =>
     axiosInstance.get("/connector/api/payment-methods").then((res) => res.data);
+
+  static getBusinessLocations = () =>
+    axiosInstance
+      .get("/connector/api/business-location")
+      .then((res) => res.data);
+
+  static createCashRegister = (payload: any) =>
+    axiosInstance
+      .post("/connector/api/cash-register", payload)
+      .then((res) => res.data);
+
+  static addNewCustomer = (payload: any) =>
+    axiosInstance
+      .post("/connector/api/user-registration", payload)
+      .then((res) => res.data);
+
+  static getUsers = () =>
+    axiosInstance.get("/connector/api/user").then((res) => res.data);
 
   //   static post = (url, body, config = {}) => axiosInstance.post(url, body, config).then((res) => res);
 

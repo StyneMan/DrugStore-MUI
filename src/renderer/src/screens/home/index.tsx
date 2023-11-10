@@ -9,9 +9,7 @@ import {
   // SelectChangeEvent,
   Tab,
   Tabs,
-  TextField,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/material/styles";
@@ -22,10 +20,13 @@ import ProductTab, { ProductListViewTab } from "./tabs/products";
 // import ProductsTable from "../../components/tables/product_table";
 import Orders from "./tabs/orders";
 import OrderSummary from "./components/order_summary";
-import { ArrowDropDown, Search } from "@mui/icons-material";
+import { ArrowDropDown } from "@mui/icons-material";
 import CustomerDropdown from "./components/customer_dropdown";
 import Drafts from "./tabs/drafts";
 import { useSelector } from "react-redux";
+import { getDatabase } from "../../../../main/database";
+// import { getDatabase } from "../../../../main/database";
+// import { setFilteredProducts } from "../../redux/slices/search";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -104,6 +105,7 @@ const StyledTab = styled((props: StyledTabProps) => (
 }));
 
 const HomeScreen = () => {
+  // const dispatch = useDispatch();
   const [value, setValue] = React.useState(0);
   const [value2, setValue2] = React.useState(0);
   const [productViewType, setProductViewType] = React.useState("gridview");
@@ -111,7 +113,10 @@ const HomeScreen = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isItemClicked = useSelector((state) => state.category.isItemClicked);
-  const selectedCategoryItems = useSelector((state) => state.category.selectedCategoryItems);
+
+  const selectedCategoryItems = useSelector(
+    (state) => state.category.selectedCategoryItems
+  );
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -127,6 +132,20 @@ const HomeScreen = () => {
   const handleChange2 = (event: React.SyntheticEvent, newValue: number) => {
     setValue2(newValue);
   };
+
+  const getCarts = async () => {
+    try {
+      const db = await getDatabase(`${localStorage.getItem("dbPath")}`);
+      const existingData = await db?.carts.find().exec();
+      console.log("CARTS RESP :: ", existingData);
+    } catch (error) {
+      console.log("err", error);
+    }
+  };
+
+  React.useEffect(() => {
+    getCarts();
+  });
 
   return (
     <Box py={1}>
@@ -206,10 +225,11 @@ const HomeScreen = () => {
               <Toolbar />
               <Toolbar />
               <CustomTabPanel value={value} index={0}>
-                {
-                  isItemClicked ? <CategoryProducts data={selectedCategoryItems} /> : <CategoriesTab />
-                }
-                
+                {isItemClicked ? (
+                  <CategoryProducts data={selectedCategoryItems} />
+                ) : (
+                  <CategoriesTab />
+                )}
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 {productViewType === "gridview" ? (

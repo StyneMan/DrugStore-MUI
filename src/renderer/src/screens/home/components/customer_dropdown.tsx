@@ -1,19 +1,22 @@
 import { CallOutlined, Search } from "@mui/icons-material";
-import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentCustomer } from "../../../redux/slices/purchase";
+import { getDatabase } from "../../../../../main/database";
+import Close from "@mui/icons-material/Close";
 
 interface CustomerDropdownProps {
   setAnchorEl: any;
 }
 
-const tempCustomers: object[] = [
-  { id: "C00101", name: "Stanley Nyekpeye", phone: "08093869330" },
-  { id: "C00102", name: "OluwaSeyi Vibez", phone: "08093869331" },
-  { id: "C00103", name: "Yemi Olutoye", phone: "08055481907" },
-  { id: "C00104", name: "Sarah Adebayo", phone: "08093869332" },
-];
 
 export default function CustomerDropdown({
   setAnchorEl,
@@ -23,23 +26,58 @@ export default function CustomerDropdown({
   const currentCustomer = useSelector(
     (state) => state.purchase.currentCustomer
   );
-  //   const filteredProducts = useSelector(
-  //     (state) => state.search.filteredProducts
-  //   );
   const [current, setCurrent] = React.useState();
+  const [customers, setCustomers] = React.useState<any[]>([]);
+
+  const dbasePath = useSelector((state) => state.database.dbasePath);
+
+  async function getCustomers() {
+    try {
+      const db = await getDatabase(dbasePath);
+
+      db.users.find().$.subscribe(async function (elems) {
+        if (!elems) {
+          // heroesList.innerHTML = 'Loading..';
+          console.log("EMPTY DATABASE ::: ");
+          return;
+        }
+
+        console.log("p hj ::: ", elems);
+
+        setCustomers(elems);
+      });
+    } catch (error) {
+      console.log("CATCH ERROR ::: ", error);
+    }
+  }
+
+  React.useEffect(() => {
+    getCustomers();
+  }, []);
 
   React.useEffect(() => {
     if (currentCustomer) {
       console.log("CURRENT CUSTOMER :: ", currentCustomer);
-      setCurrent(currentCustomer.name.toLowerCase());
+      setCurrent(currentCustomer?.email);
     }
   }, [currentCustomer]);
 
   return (
     <Box pb={2}>
-      <Typography gutterBottom fontSize={20} fontWeight={700}>
-        Customers
-      </Typography>
+      <Box
+        display="flex"
+        flexDirection="row"
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        pb={2}
+      >
+        <Typography fontSize={20} fontWeight={700}>
+          Customers
+        </Typography>
+        <IconButton onClick={() => setAnchorEl(null)}>
+          <Close />
+        </IconButton>
+      </Box>
       <TextField
         onChange={(e) => {}}
         fullWidth
@@ -66,6 +104,7 @@ export default function CustomerDropdown({
             setCurrentCustomer({
               id: `Walk-in-${new Date().getTime()}`,
               name: "Walk-in customer",
+              email: "walk-in customer",
               phone: "",
             })
           );
@@ -74,7 +113,7 @@ export default function CustomerDropdown({
       >
         Walk-in customer
       </Typography>
-      {tempCustomers.map((item: object, index: number) => (
+      {customers.map((item: any, index: number) => (
         <Box
           key={index}
           mt={2}
@@ -84,13 +123,13 @@ export default function CustomerDropdown({
           alignItems={"center"}
           fullWidth
           bgcolor={
-            current === item.name.toLowerCase()
+            current === item?._data?.email
               ? theme.palette.primary.light
               : "transparent"
           }
           component={Button}
           onClick={() => {
-            dispatch(setCurrentCustomer(item));
+            dispatch(setCurrentCustomer(item?._data));
             setAnchorEl(null);
           }}
         >
@@ -106,7 +145,7 @@ export default function CustomerDropdown({
               justifyContent={"start"}
               color={"#000000"}
             >
-              {item.name}
+              {`${item?._data?.first_name} ${item?._data?.last_name}` }
             </Typography>
             <Box
               display={"flex"}
@@ -122,7 +161,7 @@ export default function CustomerDropdown({
                 justifyContent={"start"}
                 color={"#000000"}
               >
-                {item.phone}
+                {item?._data?.contact_number}
               </Typography>
             </Box>
           </Box>
@@ -132,7 +171,7 @@ export default function CustomerDropdown({
             justifyContent={"start"}
             color={"#000000"}
           >
-            {item.id}
+            {item?._data?.id}
           </Typography>
         </Box>
       ))}

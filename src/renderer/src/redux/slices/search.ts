@@ -1,20 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-// import tempProducts from "../../data/products";
-// import type { RootState } from "../store";
+// import { selectProducts } from "./product";
 
 // Define a type for the slice state
 interface SearchState {
   searchKey: string;
   sorting: object | null;
-  filteredProducts: unknown;
+  filteredProducts: any[] | undefined;
 }
 
 // Define the initial state using that type
 const initialState: SearchState = {
   searchKey: "",
   sorting: null,
-  filteredProducts: [],
+  filteredProducts:  [],
 };
 
 export const searchSlice = createSlice({
@@ -24,7 +23,7 @@ export const searchSlice = createSlice({
     setSearchKey: (state, action: PayloadAction<string>) => {
       state.searchKey = action.payload;
     },
-    setFilteredProducts: (state, action: PayloadAction<unknown>) => {
+    setFilteredProducts: (state, action: PayloadAction<any[] | undefined>) => {
       state.filteredProducts = action.payload;
     },
     setSorting: (state, action: PayloadAction<object | null>) => {

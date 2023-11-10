@@ -16,10 +16,13 @@ interface OrderProps {
 export default function OrderCard({ order, rxDoc, index }: OrderProps) {
   // const [count, setCount] = React.useState(3);
 
-  React.useEffect(() => {
-    console.log("RXDOC", rxDoc);
-    console.log("ORDER", order);
-  }, []);
+  // React.useEffect(() => {
+  //   console.log("RXDOC", rxDoc);
+  //   console.log("ORDER", order);
+  // }, );
+
+  console.log("RXDOC", rxDoc);
+  console.log("ORDER", order);
 
   return (
     <Box
@@ -107,7 +110,7 @@ export default function OrderCard({ order, rxDoc, index }: OrderProps) {
       >
         <NumericFormat
           style={{ fontSize: 15, fontFamily: "sans-serif" }}
-          value={rxDoc.items[index].unitPrice.toFixed(2)}
+          value={parseInt(order?.unitPrice).toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₦"}
@@ -126,7 +129,9 @@ export default function OrderCard({ order, rxDoc, index }: OrderProps) {
             px={1}
             sx={{ cursor: "pointer" }}
             onClick={async () => {
-              const re = rxDoc?._data.items.filter((item: any) => item.name !== rxDoc.items[index]?.name);
+              const re = rxDoc?._data?.items?.filter(
+                (item: any) => item.name !== rxDoc.items[index]?.name
+              );
               console.log("FILTERED :: ", re);
 
               await rxDoc?.update({
@@ -134,8 +139,7 @@ export default function OrderCard({ order, rxDoc, index }: OrderProps) {
                   [`items`]: re,
                 },
               });
-              
-        
+
               // await rxDoc?.remove;
             }}
           >

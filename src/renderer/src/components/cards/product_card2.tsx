@@ -16,14 +16,14 @@ import {
 import { getDatabase } from "../../../../main/database";
 import { NumericFormat } from "react-number-format";
 import { ToastBar, Toaster, toast } from "react-hot-toast";
-import { Info } from "@mui/icons-material";
+// import { Info } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 
 export interface ProductProps {
   product: any;
 }
 
-export default function ProductCard({ product }: ProductProps) {
+export default function ProductCard2({ product }: ProductProps) {
   const theme = useTheme();
   const [isAdded, setAdded] = React.useState(false);
   const [data, setData] = React.useState<any>([]);
@@ -51,7 +51,8 @@ export default function ProductCard({ product }: ProductProps) {
     }
   }
 
-  // console.log("PRODUCTS : ", product);
+  console.log("PRODUCTS2 :21 : ", product?._data);
+  console.log("PRODUCTS2 :22 : ", product);
 
   React.useEffect(() => {
     getCarts();
@@ -234,8 +235,8 @@ export default function ProductCard({ product }: ProductProps) {
               ) : (
                 <Typography variant="body2">
                   {`${
-                    (product?._data?.product_variations[0]?.variations[0]
-                      ?.variation_location_details[0]?.qty_available ) ===
+                    product?._data?.product_variations[0]?.variations[0]
+                      ?.variation_location_details[0]?.qty_available ===
                     undefined
                       ? "0 "
                       : product?._data?.product_variations[0]?.variations[0]?.variation_location_details[0]?.qty_available
@@ -281,8 +282,8 @@ export default function ProductCard({ product }: ProductProps) {
               ).toFixed(2)}
               displayType={"text"}
               thousandSeparator={true}
-              prefix={"₦"} 
-              /> 
+              prefix={"₦"}
+            />
           </Box>
         </Box>
       </Box>

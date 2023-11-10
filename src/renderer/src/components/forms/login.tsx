@@ -10,7 +10,7 @@ import { setLoading } from "../../redux/slices/loader";
 import APIService from "../../service/api_service";
 import toast from "react-hot-toast";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { getDatabase } from "../../database";
+import { getDatabase } from "../../../../main/database";
 
 const ClockInForm = () => {
   const [show, setShow] = React.useState(false);
@@ -47,7 +47,6 @@ const ClockInForm = () => {
         localStorage.setItem("refreshToken", resp?.refresh_token);
         localStorage.setItem("username", values.username);
         localStorage.setItem("pass", values.password);
-        
       })
       .catch((error) => {
         dispatch(setLoading(false));
@@ -62,17 +61,21 @@ const ClockInForm = () => {
       });
   };
 
-  const loginFromDB = async (values: any) => {
-    const username = localStorage.getItem("username");
-    if (username) {
-      // Update user's credential
-      localStorage.setItem("username", values.username);
-      localStorage.setItem("pass", values.password);
-      dispatch(setLoading(false));
-      setOpenDialog(true);
+  const loginFromDB = async (username: string, password: string) => {
+    dispatch(setLoading(true));
+    const usrname = localStorage.getItem("username");
+    const pass = localStorage.getItem("pass");
+    if (usrname === username &&  pass === password) {
+      setTimeout(() => {
+        localStorage.setItem("username", values.username);
+        localStorage.setItem("pass", values.password);
+        dispatch(setLoading(false));
+        setOpenDialog(true);
+      }, 5000);
     } else {
+      toast.error("Incorrect login credentials")
       dispatch(setLoading(false));
-      toast.error("You need an internet connection to proceed.");
+      // toast.error("You need an internet connection to proceed.");
     }
   };
 
@@ -83,13 +86,13 @@ const ClockInForm = () => {
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      // setOpenDialog(true);
+      
       dispatch(setLoading(true));
 
       if (isOnline) {
         loginFromAPI(values);
       } else {
-        loginFromDB(values);
+        loginFromDB(values.username, values.password);
       }
     },
   });

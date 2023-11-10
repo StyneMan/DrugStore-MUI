@@ -30,12 +30,14 @@ const Searchbar = () => {
 
   const searchClick = () => {
     if (searchKey) {
-      const filtered = products?.data?.filter((item: any) =>
-        item?.name.toLowerCase().includes(searchKey.toLowerCase())
+      console.log("JH ", products);
+
+      const filtered = products?.filter((item: any) =>
+        item?.name?.toLowerCase().includes(searchKey.toLowerCase())
       );
       dispatch(setFilteredProducts(filtered));
     } else {
-      dispatch(setFilteredProducts(products?.data));
+      dispatch(setFilteredProducts(products));
     }
   };
 

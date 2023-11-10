@@ -1,6 +1,6 @@
 import { Box, List, Toolbar, Typography } from "@mui/material";
 import React from "react";
-import { getDatabase } from "../../../database";
+import { getDatabase } from "../../../../../main/database";
 import OrderCard from "../../../components/cards/order_card";
 import DraftCard from "../../../components/cards/draft_card";
 
@@ -9,7 +9,7 @@ export default function Drafts() {
 
   async function getCarts() {
     try {
-      const db = await getDatabase("drugstore");
+      const db = await getDatabase();
 
       db.drafts.find().$.subscribe(function (drafts) {
         if (!drafts) {
