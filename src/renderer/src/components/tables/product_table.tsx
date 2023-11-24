@@ -1,20 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import {
-  DataGrid,
-//   GridToolbarContainer,
-//   GridToolbarColumnsButton,
-//   GridToolbarFilterButton,
-//   GridToolbarExport,
-//   GridToolbarDensitySelector,
-} from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 
 import CustomNoRowsOverlay from "../nodata/";
 import tempProducts from "../../data/products";
 import { Avatar, Box, Typography } from "@mui/material";
 
 import inventoryImage from "../../assets/images/inventory_2.svg";
-
-
 
 export default function ProductsTable() {
   const columns = [
@@ -74,7 +66,6 @@ export default function ProductsTable() {
           columns={columns}
           rowHeight={86}
           disableColumnFilter={true}
-          
           //   autoHeight
           components={{
             // Toolbar: CustomToolbar,

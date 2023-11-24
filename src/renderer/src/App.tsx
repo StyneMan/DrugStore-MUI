@@ -11,7 +11,6 @@ import AddCustomer from "./screens/customers/add_customer";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import PaymentMethod from "./screens/home/payment_method";
-import { Toaster } from "react-hot-toast";
 import { setOnline } from "./redux/slices/loader";
 import APIService from "./service/api_service";
 import { getDatabase } from "../../main/database";
@@ -20,32 +19,77 @@ import { setProducts } from "./redux/slices/product";
 import { setFilteredProducts } from "./redux/slices/search";
 import { setCategories } from "./redux/slices/categories";
 import { RootState } from "./redux/store";
-import { setPaymentMethods } from "./redux/slices/purchase";
+import { Toaster } from "react-hot-toast";
+import { setCustomerMeta, setCustomers } from "./redux/slices/customers";
+import {
+  setBusinessLocations,
+  setCurrentBusinessLocation,
+} from "./redux/slices/business_locations";
+import useSales from "./hooks/useSales";
+import { setSales, setSalesMeta } from "./redux/slices/purchase";
+import useProducts from "./hooks/useProducts";
+import useCategories from "./hooks/useCategories";
 
 function App() {
   const dispatch = useDispatch();
-  const accessToken = localStorage.getItem('accessToken');
-  const [dbPath, setDBPath] = React.useState("");
+  const userId: number = parseInt(`${localStorage.getItem("userId") ?? 0}`);
+  const location_ID: number = parseInt(
+    `${localStorage.getItem("location_id") ?? 0}`
+  );
+  const business_ID: number = parseInt(
+    `${localStorage.getItem("business_id") ?? 0}`
+  );
+  const accessToken = localStorage.getItem("accessToken");
+  // const [dbPath, setDBPath] = React.useState("");
   const isLoading = useSelector((state: RootState) => state.loader.isLoading);
   const isOnline = useSelector((state: RootState) => state.loader.isOnline);
-  // const filteredProducts = useSelector(
-  //   (state: RootState) => state.search.filteredProducts
-  // );
-  // const sorting = useSelector((state: RootState) => state.search.sorting);
+  const shouldReload = useSelector(
+    (state: RootState) => state.loader.shouldReload
+  );
+  const { data: salesData } = useSales(location_ID, userId);
+  const { data: productData } = useProducts();
+  const { data: categoriesData } = useCategories();
+
+  // console.log("SALES DATA :::  ", salesData);
 
   const getDbPath = async () => {
-    const response = await window.electron.ping();
-    const content = await window.electron.dbContent();
-    console.log("DB PATH  ===>>> ", content);
-    setDBPath(response);
+    const response = await window.electron?.ping();
+    // const hasInternet = await window.electron.isOnline();
+    // setDBPath(response);
+    // dispatch(setOnline(hasInternet));
     localStorage.setItem("dbPath", response);
     dispatch(setDatabasePath(response));
-    // console.log("DB CONT ===>>> ", response);
   };
 
   React.useEffect(() => {
+    if (salesData) {
+      dispatch(setSales(salesData?.data));
+      dispatch(setSalesMeta(salesData?.meta));
+      // console.log("SALES DATA :  ", salesData);
+      window.electron.sendSalesSummaryDataToMain(
+        JSON.stringify(salesData?.data)
+      );
+    }
+
+    if (productData) {
+      window.electron.sendDataToMain(JSON.stringify(productData?.data));
+      dispatch(setProducts(productData?.data));
+      dispatch(setFilteredProducts(productData?.data));
+    }
+
+    if (categoriesData) {
+      window.electron.sendCategoriesDataToMain(
+        JSON.stringify(categoriesData?.data)
+      );
+      dispatch(setCategories(categoriesData?.data));
+    }
+
+  }, [salesData, productData, categoriesData, dispatch]);
+
+
+  React.useEffect(() => {
     getDbPath();
-  }, []);
+  });
 
   const checkOnlineStatus = async () => {
     try {
@@ -69,79 +113,73 @@ function App() {
   });
 
   React.useEffect(() => {
+    const loadCart = async () => {
+      try {
+        const dbPath = localStorage.getItem("dbPath");
+
+        const carts = await window.electron.carts();
+        const drafts = await window.electron.drafts();
+
+        const db = await getDatabase(`${dbPath}`);
+        console.log("CART FROM MAIN :: ", carts);
+        console.log("DRAFT FROM MAIN :: ", drafts);
+
+        const sanitizedCart = JSON.parse(JSON.parse(carts));
+        const sanitizedDraft = JSON.parse(JSON.parse(drafts));
+
+        console.log("SANITIZED  CART  FROM  MAIN   :: ", sanitizedCart);
+        console.log("SANITIZED  DRAFT  FROM  MAIN   :: ", sanitizedDraft);
+
+        // Now insert into rxdb
+        await db?.carts?.insert(sanitizedCart);
+        await db?.drafts?.insert(sanitizedDraft);
+
+        window.electron.sendCartDataToMain(JSON?.parse(carts));
+        window.electron.sendDraftDataToMain(JSON?.parse(drafts));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    loadCart();
+    setTimeout(() => {
+      loadCart();
+    }, 6000);
+  }, []);
+
+  React.useEffect(() => {
     const initLogic = async () => {
-      if (dbPath && isOnline && accessToken) {
+      if (isOnline && accessToken) {
         APIService.getBusinessLocations()
           .then(async (res) => {
-            console.log("LOCATIONS REPORT ==>> ", res);
-            try {
-              const db = await getDatabase(dbPath);
-              const existingData = await db?.business_locations.find().exec();
+            console.log("BUSINESS LOCATIONS REPORT ==>> ", res.data);
+            dispatch(setBusinessLocations(res?.data));
+            window.electron.sendBusinessLocationDataToMain(
+              JSON.stringify(res?.data)
+            );
 
-              if (existingData) {
-                const convertedData = res?.data?.map((element: any) => {
-                  return {
-                    ...element,
-                    id: element?.id.toString(),
-                  };
-                });
+            if (
+              localStorage.getItem("locationId") &&
+              localStorage.getItem("businessId")
+            ) {
+              const locationID = localStorage.getItem("locationId");
+              const bizID = localStorage.getItem("businessId");
 
-                await db?.business_locations.remove();
+              console.log("LOCATION ID CHECKINSON HERE ::  ", locationID);
+              console.log("BUSINESS ID CHECKINSON HERE ::  ", bizID);
 
-                await db?.business_locations.bulkInsert(convertedData);
-              } else {
-                const convertedData = res?.data?.map((element: any) => {
-                  return {
-                    ...element,
-                    id: element?.id.toString(),
-                  };
-                });
-
-                await db?.business_locations.bulkInsert(convertedData);
-              }
-            } catch (error) {
-              console.log("ERROR BIX LOCS ", error);
+              const currLocation = res?.data?.filter(
+                (item) =>
+                  `${item?.business_id}`.toLowerCase() ===
+                    `${bizID}`.toLowerCase() &&
+                  `${item?.location_id}`.toLowerCase() ===
+                    `${locationID}`.toLowerCase()
+              );
+              console.log("CURRENT BUSINESS LOCATION ===>>> ", currLocation);
+              dispatch(setCurrentBusinessLocation(currLocation[0]));
             }
           })
           .catch((error) => {
             console.log("ERRO BIZ METHOD ==> ", error);
-            // getDatabase(dbPath).then(async (db) => {
-            //   const existingData = await db?.business_locations.find().exec();
-
-            //   console.log("SADF ", existingData);
-            // });
-          });
-
-        APIService.getPaymentMethods()
-          .then(async (res) => {
-            // console.log("pAYMENT METHODS ==>> ", res);
-            try {
-              const db = await getDatabase(dbPath);
-              const obj = {
-                id: new Date().getTime().toString(),
-                methods: { ...res },
-                timestamp: new Date().toISOString(),
-              };
-
-              const mArray = Object.values(res);
-              dispatch(setPaymentMethods(mArray));
-
-              const existingData = await db?.paymentmethods.findOne().exec();
-
-              if (existingData) {
-                // Document exists, update it
-                await db?.paymentmethods.remove();
-                await db?.paymentmethods?.insert(obj);
-              } else {
-                // Document doesn't exist, insert it
-                await db?.paymentmethods?.insert(obj);
-              }
-            } catch (error) {
-              console.log("PAY METTHODS ERROR ", error);
-            }
-          })
-          .catch((error) => {
-            console.log("ERRO PAYMENT METHOD ==> ", error);
           });
 
         APIService.getProductsStockReport()
@@ -152,173 +190,111 @@ function App() {
             console.log("ERRO STOCK REPORT ==> ", error);
           });
 
-        APIService.getCategories()
+
+        APIService.getCustomers()
           .then(async (res) => {
-            console.log("CATEGORIES REPORT ==>> ", res);
-            try {
-              const db = await getDatabase(dbPath);
-              const existingData = await db?.categories.find().exec();
-
-              if (existingData) {
-                const convertedData = res?.data?.map((element: any) => {
-                  return {
-                    ...element,
-                    id: element?.id.toString(),
-                  };
-                });
-
-                await db?.categories.remove();
-
-                await db?.categories.bulkInsert(convertedData);
-              } else {
-                const convertedData = res?.data?.map((element: any) => {
-                  return {
-                    ...element,
-                    id: element?.id.toString(),
-                  };
-                });
-
-                await db?.categories.bulkInsert(convertedData);
-              }
-            } catch (error) {
-              console.log("CATEGORY ERR ", error);
-            }
-          })
-          .catch((error) => {
-            console.log("ERRO CATEGORIES CATEGORIES ==> ", error);
-          });
-
-        APIService.getProducts()
-          .then(async (res) => {
-            console.log("PRODUCTS ==>> ", res);
-            try {
-              const db = await getDatabase(dbPath);
-              const existingData = await db?.products.find().exec();
-
-              if (existingData && existingData?.length > 0) {
-                console.log("SOMETHING DEY HERE ALREADY PRODUCTS !!!");
-
-                dispatch(setProducts(existingData));
-                dispatch(setFilteredProducts(existingData));
-
-                const convertedData = res?.data?.map((element: any) => {
-                  return {
-                    ...element,
-                    id: element?.id.toString(),
-                  };
-                });
-
-                await db?.products.remove();
-
-                await db?.products.bulkInsert(convertedData);
-              } else {
-                const convertedData = res?.data?.map((element: any) => {
-                  return {
-                    ...element,
-                    id: element?.id.toString(),
-                  };
-                });
-
-                await db?.products.bulkInsert(convertedData);
-              }
-            } catch (error) {
-              console.log("KJK ", error);
-            }
+            console.log("CUSTOMERS ==>> ", res);
+            window.electron.sendCustomersDataToMain(JSON.stringify(res?.data));
+            dispatch(setCustomerMeta(res?.meta));
+            const filtered = res?.data?.filter(
+              (item) => item?.type.toLowerCase() === "customer"
+            );
+            dispatch(setCustomers(filtered));
           })
           .catch((error) => {
             console.log("ERRO STOCK REPORT ==> ", error);
           });
 
-        APIService.getUsers()
-          .then(async (res) => {
-            console.log("CUSTOMERS USERS ==>> ", res);
-            try {
-              const db = await getDatabase(dbPath);
-              const existingData = await db?.users.find().exec();
-
-              if (existingData && existingData?.length > 0) {
-                console.log("SOMETHING DEY HERE ALREADY PRODUCTS !!!");
-
-                // Empty the array
-                existingData?.splice(0, existingData.length);
-
-                // await db?.products.remove();
-
-                // Filter out customers
-                const customers = res?.data?.filter(
-                  (item: any) => item?.user_type === "user_customer"
-                );
-
-                customers?.forEach(async (element: any) => {
-                  await db?.products.upsert({
-                    ...element,
-                    id: element?.id.toString(),
-                  });
-                });
-              } else {
-                // Filter out customers
-                const customers = res?.data?.filter(
-                  (item: any) => item?.user_type === "user_customer"
-                );
-                customers?.forEach(async (elem: any) => {
-                  await db?.users.insert({
-                    ...elem,
-                    id: elem?.id.toString(),
-                  });
-                });
-              }
-            } catch (error) {
-              console.log("KJK ", error);
-            }
-          })
-          .catch((error) => {
-            console.log("ERRO STOCK REPORT ==> ", error);
-          });
+        if (salesData) {
+          dispatch(setSales(salesData?.data));
+          dispatch(setSalesMeta(salesData?.meta));
+          // console.log("SALES DATA :  ", salesData);
+          window.electron.sendSalesSummaryDataToMain(
+            JSON.stringify(salesData?.data)
+          );
+        }
       } else {
-        // Load from stored data in DB
-        console.log("LOAD FROM DB HERE >>>>");
-        const dbPath = localStorage.getItem("dbPath");
-        console.log("DB PATH :: ", dbPath);
 
         try {
-          const db = await getDatabase(`${dbPath}`);
-
           // BUSINESS LOCATIONS
-          const offlineBizLocationsData = await db?.categories.find().exec();
+          const businessLocations = await window.electron.bizLocations();
+          const copybusinessLocations = businessLocations ?? [];
+          dispatch(
+            setBusinessLocations(JSON.parse(JSON.parse(copybusinessLocations)))
+          );
           console.log(
             "OFFLINE BUSINESS LOCATIONS :: ",
-            offlineBizLocationsData
+            JSON.parse(copybusinessLocations)
+          );
+          window.electron.sendBusinessLocationDataToMain(
+            JSON.parse(businessLocations)
           );
 
+          if (
+            localStorage.getItem("locationId") &&
+            localStorage.getItem("businessId")
+          ) {
+            const data = JSON.parse(JSON.parse(copybusinessLocations));
+            console.log("LOCATION ID, BIZ ID, ", data);
+            if (data) {
+              const currLocation = data.filter(
+                (item) =>
+                  `${item?.location_id}`.toLowerCase() ===
+                    localStorage.getItem("locationId")?.toLowerCase() &&
+                  `${item?.business_id}`.toLowerCase() ===
+                    localStorage.getItem("businessId")?.toString().toLowerCase()
+              );
+
+              console.log("CURRENT BUSINESS LOCATION ==> ", currLocation);
+              dispatch(setCurrentBusinessLocation(currLocation[0]));
+            }
+          }
+
           // CATEGORIES
-          const offlineCategoriesData = await db?.categories.find().exec();
-          console.log("OFFLINE CATEGORIES :: ", offlineCategoriesData);
-          dispatch(setCategories(offlineCategoriesData));
+          const categories = await window.electron.categories();
+          dispatch(setCategories(JSON.parse(JSON.parse(categories))));
+          window.electron.sendCategoriesDataToMain(JSON.parse(categories));
+
 
           // PRODUCTS
-          const offlineProdData = await db?.products.find().exec();
-          console.log("OFFLINE PRODUCTS :: ", offlineProdData);
-          dispatch(setProducts(offlineProdData));
-          dispatch(setFilteredProducts(offlineProdData));
+          const products = await window.electron.products();
+          console.log("OFFLINE PRODUCTS :: ", products);
+          dispatch(setProducts(JSON.parse(JSON.parse(products))));
+          dispatch(setFilteredProducts(JSON.parse(JSON.parse(products))));
+          window.electron.sendDataToMain(JSON.parse(products));
 
-          // PAYMENT METHODS
-          const offlinePaymentMethodsData = await db?.paymentmethods
-            .find()
-            .exec();
-          console.log("OFFLINE PAYMENT METHODS :: ", offlinePaymentMethodsData);
-          if (offlinePaymentMethodsData) {
-            const mArray = Object.values(
-              offlinePaymentMethodsData[0]?._data?.methods
+
+          // CUSTOMERS
+          const customers = await window.electron.customers();
+          dispatch(setCustomers(JSON.parse(JSON.parse(customers))));
+          window.electron.sendCustomersDataToMain(JSON.parse(customers));
+
+
+          // SALES SUMMARY
+          const salesSummary = await window.electron.salesSummary();
+          window.electron.sendSalesSummaryDataToMain(JSON.parse(salesSummary));
+          const salesParsed = JSON.parse(JSON.parse(salesSummary));
+          if (location_ID && business_ID) {
+            const filteredSales = salesParsed?.filter(
+              (item) =>
+                item?.location_id === location_ID &&
+                item?.business_id === business_ID
             );
-            dispatch(setPaymentMethods(mArray));
+            dispatch(setSales(filteredSales));
           }
         } catch (error) {
           console.log("ERROOR :: ", error);
         }
       }
+
+      // PENDING SELLS
+      const pendingSells = await window.electron.pendingSells();
+      window.electron.sendPendingSellsDataToMain(JSON.parse(pendingSells));
+
     };
     initLogic();
-  }, [isOnline, accessToken]);
+    
+  }, [isOnline, accessToken, shouldReload, salesData, dispatch, location_ID, business_ID]);
 
   return (
     <>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, Grid, IconButton, List, Typography } from "@mui/material";
 import React from "react";
 import CategoryCard from "../../../components/cards/category_card";
@@ -15,13 +16,16 @@ import ViewList from "@mui/icons-material/ViewList";
 import GridProductItem from "../../../components/cards/product_grid_item";
 import CategoryShimmer from "../../../components/shimmers/category_shimmer";
 
+import empty from "../../../assets/images/empty.png";
+import { RootState } from "../../../redux/store";
+
 interface CategoryProduct {
   data: any;
 }
 
 export default function CategoriesTab() {
-  const categories = useSelector((state) => state.category.categories);
-  console.log("CATEGORIS FROM REDUX STATE :: ", categories);
+  const categories = useSelector((state: RootState) => state.category.categories);
+  // console.log("CATEGORIS FROM REDUX STATE :: ", categories);
 
   const mColors = [
     { bgcolor: "#CCE4F2", color: "#0C2B6A", icon: syringe },
@@ -29,6 +33,7 @@ export default function CategoriesTab() {
     { bgcolor: "#0F408A", color: "#CCE4F2", icon: accessible },
     { bgcolor: "#0B1841", color: "#CCE4F2", icon: fluid },
   ];
+
 
   function assignRandomColors(cates: any[]) {
     return cates?.map((item: any) => {
@@ -44,19 +49,34 @@ export default function CategoriesTab() {
 
   return (
     <Grid container spacing={2} mt={2}>
-      {!categories
-        ? [1, 2, 3, 4, 5, 6, 7, 8].map((item: number) => (
-            <Grid key={item} item sm={4} md={4} lg={3}>
-              <CategoryShimmer />
+      {!categories ? (
+        [1, 2, 3, 4, 5, 6, 7, 8].map((item: number) => (
+          <Grid key={item} item sm={4} md={4} lg={3}>
+            <CategoryShimmer />
+          </Grid>
+        ))
+      ) : categories?.length < 1 ? (
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          height={"50vh"}
+          width={'100%'}
+        >
+          <img src={empty} alt="" />
+          <Typography mt={-2} textAlign={'center'} >No data found</Typography>
+        </Box>
+      ) 
+      : (
+        assignRandomColors(categories)?.map((item: any, index: number) => {
+          return (
+            <Grid key={index} item sm={4} md={4} lg={3}>
+              <CategoryCard item={item} />
             </Grid>
-          ))
-        : assignRandomColors(categories)?.map((item: any, index: number) => {
-            return (
-              <Grid key={index} item sm={4} md={4} lg={3}>
-                <CategoryCard item={item} />
-              </Grid>
-            );
-          })}
+          );
+        })
+      )}
     </Grid>
   );
 }

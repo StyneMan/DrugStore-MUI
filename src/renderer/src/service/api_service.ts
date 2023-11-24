@@ -3,6 +3,7 @@ import axiosInstance from "../utils/axios";
 class APIService {
   static fetcher = (url: string) =>
     axiosInstance.get(url).then((res) => res.data);
+
   static clockIn = (payload: unknown) =>
     axiosInstance.post("/oauth/token", payload).then((res) => res.data);
 
@@ -25,24 +26,27 @@ class APIService {
       .get("/connector/api/business-location")
       .then((res) => res.data);
 
-  static createCashRegister = (payload: any) =>
+  static createCashRegister = (payload: unknown) =>
     axiosInstance
       .post("/connector/api/cash-register", payload)
       .then((res) => res.data);
 
-  static addNewCustomer = (payload: any) =>
+  static addNewCustomer = (payload: unknown) =>
     axiosInstance
-      .post("/connector/api/user-registration", payload)
+      .post("/connector/api/contactapi", payload)
       .then((res) => res.data);
+
+  static getCustomers = () =>
+    axiosInstance.get("/connector/api/contactapi").then((res) => res.data);
 
   static getUsers = () =>
     axiosInstance.get("/connector/api/user").then((res) => res.data);
 
-  //   static post = (url, body, config = {}) => axiosInstance.post(url, body, config).then((res) => res);
+  static createSell = (payload: unknown) =>
+    axiosInstance.post("/connector/api/sell", payload).then((res) => res.data);
 
-  //   static update = (url, id, body) => axiosInstance.patch(`${url}/${id}`, body).then((res) => res);
-
-  //   static delete = (url, id) => axiosInstance.delete(`${url}/${id}`).then((res) => res);
+  static getSalesReport = (locationId: number, userId: number) =>
+    axiosInstance.get(`/connector/api/sell?location_id=${locationId}?user_id=${userId}?per_page=${-1}`).then((res) => res.data);
 }
 
 export default APIService;

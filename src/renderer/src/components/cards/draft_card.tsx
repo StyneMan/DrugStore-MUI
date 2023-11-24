@@ -1,11 +1,10 @@
 import { Edit } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-// import React from "react";
 import { NumericFormat } from "react-number-format";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 interface DraftProps {
-  data: any;
+  data;
 }
 
 export default function DraftCard({ data }: DraftProps) {

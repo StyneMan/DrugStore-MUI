@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
 import tempProducts, { ProductModel } from "../../../data/products";
-import SalesCard from "../../../components/cards/sales_card";
+// import SalesCard from "../../../components/cards/sales_card";
 import ItemCard from "./item_card";
 
 export default function ProductTable() {

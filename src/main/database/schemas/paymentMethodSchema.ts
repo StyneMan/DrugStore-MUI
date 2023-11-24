@@ -10,42 +10,45 @@ export const paymentMethodSchema = {
       maxLength: 1000,
     },
     methods: {
-      cash: {
-        type: "string",
-      },
-      card: {
-        type: "string",
-      },
-      cheque: {
-        type: "string",
-      },
-      bank_transfer: {
-        type: "string",
-      },
-      custom_pay_1: {
-        type: "string",
-      },
-      custom_pay_2: {
-        type: "string",
-      },
-      custom_pay_3: {
-        type: "string",
-      },
-      custom_pay_4: {
-        type: "string",
-      },
-      custom_pay_5: {
-        type: "string",
-      },
-      custom_pay_6: {
-        type: "string",
-      },
-      custom_pay_7: {
-        type: "string",
-      },
-      other: {
-        type: "string",
-      },
+      type: 'object',
+      properties: {
+        cash: {
+          type: "string",
+        },
+        card: {
+          type: "string",
+        },
+        cheque: {
+          type: "string",
+        },
+        bank_transfer: {
+          type: "string",
+        },
+        custom_pay_1: {
+          type: "string",
+        },
+        custom_pay_2: {
+          type: "string",
+        },
+        custom_pay_3: {
+          type: "string",
+        },
+        custom_pay_4: {
+          type: "string",
+        },
+        custom_pay_5: {
+          type: "string",
+        },
+        custom_pay_6: {
+          type: "string",
+        },
+        custom_pay_7: {
+          type: "string",
+        },
+        other: {
+          type: "string",
+        },
+      }
     },
     timestamp: {
       type: "date-time",

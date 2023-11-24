@@ -1,46 +1,24 @@
 import { Grid, ListItem, Typography, useTheme } from "@mui/material";
-import React from "react";
 import { NumericFormat } from "react-number-format";
 import { useSelector } from "react-redux";
-import { ToastBar, Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { Info } from "@mui/icons-material";
 import { getDatabase } from "../../../../main/database";
 import { ProductProps } from "./product_card";
+import { RootState } from "../../redux/store";
 
 const GridProductItem = ({ product }: ProductProps) => {
   const theme = useTheme();
-  const [data, setData] = React.useState<any>([]);
-  const dbasePath = useSelector((state) => state.database.dbasePath);
+  const dbasePath = useSelector((state: RootState) => state.database.dbasePath);
 
-  async function getCarts() {
-    try {
-      const db = await getDatabase(dbasePath);
-
-      db.carts.find().$.subscribe(async function (heroes) {
-        if (!heroes) {
-          // heroesList.innerHTML = 'Loading..';
-          console.log("EMPTY DATABASE ::: ");
-          return;
-        }
-
-        setData(heroes);
-      });
-    } catch (error) {
-      console.log("CATCH ERROR ::: ", error);
-    }
-  }
-
-  React.useEffect(() => {
-    getCarts();
-  }, []);
-
-  React.useEffect(() => {
-    console.log("DATA", data);
-  }, [data]);
+  const currentCustomer = useSelector(
+    (state: RootState) => state.customers.currentCustomer
+  );
 
   const addCart = async () => {
     try {
       const db = await getDatabase(dbasePath);
+      const existingData = await db?.carts.find().exec();
       const obj = {
         id: new Date().getTime().toString(),
         items: [
@@ -54,41 +32,53 @@ const GridProductItem = ({ product }: ProductProps) => {
                 product?.product_variations[0]?.variations[0]
                   ?.default_sell_price
             ).toFixed(2),
+            productId: product?._data?.id ?? product?.id,
+            priceWithTax: parseInt(
+              product?._data?.product_variations[0]?.variations[0]
+                ?.sell_price_inc_tax ??
+                product?.product_variations[0]?.variations[0]
+                  ?.sell_price_inc_tax
+            ).toFixed(2),
+            variationId:
+              product?._data?.product_variations[0]?.variations[0]
+                ?.product_variation_id ??
+              product?.product_variations[0]?.variations[0]
+                ?.product_variation_id,
+            productType: product?._data?.type ?? product?.type,
+            productUnitId: product?._data?.unit?.id ?? product?.unit?.id,
           },
         ],
         timestamp: new Date().toISOString(),
       };
 
-      if (data?.length > 0) {
-        // There is something already
-        console.log("SOMETHING EXISTS ", data);
+      // console.log("OBJECT TO INSERT TO CART ::: ", obj);
 
-        // Loop through each cart document in data
-        for (const elem of data) {
+      if (existingData && existingData?.length > 0) {
+        // There is something already
+        for (const elem of existingData) {
           // Check if this product is already in cart
-          const itemExists = elem._data.items.some(
-            (it: any) => it.name.toLowerCase() === product?.name.toLowerCase()
+          const itemExists = elem?._data?.items.some(
+            (it) =>
+              it.name.toLowerCase() ===
+              (product?._data?.name ?? product?.name)?.toLowerCase()
           );
 
           if (itemExists) {
-            // setAdded(true);
-            console.log("Already ADDED !!! ");
-            toast.error("Product already added!", {
-              duration: 4000,
-              icon: (
-                <Info
-                  fontSize="small"
-                  sx={{ color: theme.palette.error.dark }}
-                />
-              ),
-              iconTheme: {
-                primary: "#000",
-                secondary: "#fff",
+            toast.error("Product already added!!", {
+              icon: <Info color="error" />,
+              style: {
+                backgroundColor: "#fadcdcf6",
+                color: theme.palette.error.dark,
+                paddingLeft: 24,
+                paddingRight: 24,
+                paddingTop: 16,
+                paddingBottom: 16,
+                fontSize: 21,
               },
+              position: "top-center",
             });
           } else {
-            // setAdded(false);
-            console.log("NOT YET ADDED ...", elem._data.items);
+            // console.log("NOT YET ADDED ...", elem._data.items);
 
             // Clone the existing items array
             const updatedItems = [...elem._data.items];
@@ -104,6 +94,13 @@ const GridProductItem = ({ product }: ProductProps) => {
                   product?.product_variations[0]?.variations[0]
                     ?.default_sell_price
               ).toFixed(2),
+              productId: product?._data?.id ?? product?.id,
+              priceWithTax: parseInt(
+                product?._data?.product_variations[0]?.variations[0]
+                  ?.sell_price_inc_tax ??
+                  product?.product_variations[0]?.variations[0]
+                    ?.sell_price_inc_tax
+              ).toFixed(2),
             });
 
             // Use RxDB's update() method to update the "items" array
@@ -117,46 +114,40 @@ const GridProductItem = ({ product }: ProductProps) => {
         }
       } else {
         // console.log("NOTHING YET !! ");
-        const resp = await db?.carts.insert(obj);
-        console.log("RESPONSE >> ", resp);
+        await db?.carts.insert(obj);
+        // console.log("RESPONSE >> ", resp);
       }
     } catch (error) {
       console.log("ERROR", error);
     }
   };
-
   return (
     <ListItem
       divider
       disableGutters
       disablePadding
       button
-      onClick={() => addCart()}
+      onClick={() => {
+        if (!currentCustomer) {
+          console.log("NO Customer selected !!! ");
+          toast.error("Select customer first!", {
+            icon: <Info color="error" />,
+            style: {
+              backgroundColor: "#fadcdcf6",
+              color: theme.palette.error.dark,
+              paddingLeft: 24,
+              paddingRight: 24,
+              paddingTop: 16,
+              paddingBottom: 16,
+              fontSize: 21,
+            },
+            position: "top-center",
+          });
+        } else {
+          addCart();
+        }
+      }}
     >
-      <Toaster position="bottom-center">
-        {(t) => (
-          <ToastBar
-            toast={t}
-            position="bottom-center"
-            style={{
-              backgroundColor: theme.palette.error.light,
-              paddingTop: 2,
-              paddingBottom: 2,
-              paddingLeft: 48,
-              paddingRight: 48,
-              border: `1px solid ${theme.palette.error.main}`,
-            }}
-          >
-            {({ icon, message }) => (
-              <>
-                {icon}
-                {message}
-                {t.type !== "loading" && <></>}
-              </>
-            )}
-          </ToastBar>
-        )}
-      </Toaster>
       <Grid container spacing={1} py={2}>
         <Grid item sm={2} md={2}>
           <img
@@ -202,7 +193,7 @@ const GridProductItem = ({ product }: ProductProps) => {
           <NumericFormat
             style={{ fontSize: 16, fontFamily: "Roboto, sans-serif" }}
             value={parseInt(
-              product?._data?.product_variations[0]?.variations[0]
+              product?.product_variations[0]?.variations[0]
                 ?.default_sell_price
             ).toFixed(2)}
             displayType={"text"}

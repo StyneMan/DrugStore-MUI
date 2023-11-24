@@ -1,19 +1,18 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import fakeIndexedDB from "fake-indexeddb";
-// import fakeIDBKeyRange from "fake-indexeddb/"
-// const db = new Dexie("MyDatabase");
 
 import { addRxPlugin, createRxDatabase } from "rxdb";
 // import { getRxStorageDexie } from "rxdb/plugins/storage-dexie";
 import { cartSchema } from "./schemas/cartschema";
-import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
+// import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
 import { RxDBQueryBuilderPlugin } from "rxdb/plugins/query-builder";
 import { getRxStorageDexie } from "rxdb/plugins/storage-dexie";
 
-import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
+import { RxDBUpdatePlugin } from "rxdb/plugins/update";
 
-import fakeIDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange';
+import fakeIDBKeyRange from "fake-indexeddb/lib/FDBKeyRange";
 import { draftSchema } from "./schemas/draftschema";
-import { categorySchema } from "./schemas/categorySchema";
+import { categorySchema } from "./schemas/categoryschema";
 import { authSchema } from "./schemas/authSchema";
 import { paymentMethodSchema } from "./schemas/paymentMethodSchema";
 import { businessLocationSchema } from "./schemas/businessLocationSchema";
@@ -21,9 +20,12 @@ import { cashRegisterSchema } from "./schemas/cashRegisterSchema";
 import { stockSchema } from "./schemas/stockSchema";
 import { productSchema } from "./schemas/productSchema";
 import { userSchema } from "./schemas/userSchema";
+import { sellSchema } from "./schemas/sellSchema";
+import { customerSchema } from "./schemas/customerSchema";
+import { pendingSellSchema } from "./schemas/pendingSellSchema";
 
 addRxPlugin(RxDBQueryBuilderPlugin);
-addRxPlugin(RxDBDevModePlugin);
+// addRxPlugin(RxDBDevModePlugin);
 addRxPlugin(RxDBUpdatePlugin);
 
 // export default async function AppDatabase() {
@@ -86,40 +88,40 @@ export async function getDatabase(name: string) {
         indexedDB: fakeIndexedDB,
         IDBKeyRange: fakeIDBKeyRange,
       }),
-      ignoreDuplicate: true
+      ignoreDuplicate: true,
     });
 
     // console.log("creating cart-collection..");
     await db.addCollections({
-      business_locations: { 
+      business_locations: {
         schema: businessLocationSchema,
       },
     });
 
-     // console.log("creating cart-collection..");
-     await db.addCollections({
-      cash_registers: { 
+    // console.log("creating cart-collection..");
+    await db.addCollections({
+      cash_registers: {
         schema: cashRegisterSchema,
       },
     });
 
-     // console.log("creating cart-collection..");
-     await db.addCollections({
-      product_stock_reports: { 
+    // console.log("creating cart-collection..");
+    await db.addCollections({
+      product_stock_reports: {
         schema: stockSchema,
       },
     });
 
-     // console.log("creating draft-collection..");
-     await db.addCollections({
+    // console.log("creating draft-collection..");
+    await db.addCollections({
       products: {
         schema: productSchema,
       },
     });
- 
+
     // console.log("creating cart-collection..");
     await db.addCollections({
-      carts: { 
+      carts: {
         schema: cartSchema,
       },
     });
@@ -138,30 +140,47 @@ export async function getDatabase(name: string) {
       },
     });
 
-     // console.log("creating auth-collection..");
-     await db.addCollections({
+    // console.log("creating auth-collection..");
+    await db.addCollections({
       auth: {
         schema: authSchema,
       },
     });
 
-     // console.log("creating payment-method-collection..");
-     await db.addCollections({
+    // console.log("creating payment-method-collection..");
+    await db.addCollections({
       paymentmethods: {
         schema: paymentMethodSchema,
       },
     });
 
-     // console.log("creating payment-method-collection..");
-     await db.addCollections({
+    // console.log("creating payment-method-collection..");
+    await db.addCollections({
       users: {
         schema: userSchema,
+      },
+    });
+
+    await db.addCollections({
+      customers: {
+        schema: customerSchema,
+      },
+    });
+
+    await db.addCollections({
+      sells: {
+        schema: sellSchema,
+      },
+    });
+
+    await db.addCollections({
+      pendingsells: {
+        schema: pendingSellSchema,
       },
     });
 
     return db;
   } catch (error) {
     console.log("CAUGHT ERROR", error);
-    
   }
 }

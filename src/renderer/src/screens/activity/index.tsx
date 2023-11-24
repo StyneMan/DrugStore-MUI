@@ -1,17 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ArrowBack } from "@mui/icons-material";
-import { Avatar, Button, Chip, IconButton, Toolbar } from "@mui/material";
+import { Button, IconButton, Toolbar } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
 import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { MActivity, tempActivities } from "../../data/activities";
 import ItemContent from "./components/item_content";
-// import SalesSummary from "./tabs/sales_summary";
-// import CurrentRegister from "./tabs/end_of_day";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -47,6 +45,8 @@ interface StyledTabsProps {
 
 const StyledTabs = styled((props: StyledTabsProps) => (
   <Tabs
+    orientation="vertical"
+    variant="scrollable"
     {...props}
     style={{ width: "18%" }}
     TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
@@ -63,46 +63,6 @@ const StyledTabs = styled((props: StyledTabsProps) => (
     backgroundColor: "#635ee7",
   },
 });
-
-// interface StyledTabProps {
-//   label: string;
-// }
-
-// const StyledTab = styled((props: StyledTabProps) => (
-//   <Tab disableRipple {...props} />
-// ))(({ theme }) => ({
-//   textTransform: "none",
-//   fontWeight: theme.typography.fontWeightRegular,
-//   fontSize: 16,
-//   marginRight: theme.spacing(1),
-//   fontFamily: "Inter",
-//   paddingLeft: 24,
-//   paddingRight: 24,
-//   backgroundColor: "white",
-//   marginTop: theme.spacing(1),
-//   marginBottom: theme.spacing(1),
-//   height: 16,
-//   color: "grey",
-//   "&.Mui-selected": {
-//     color: "#000",
-//     fontWeight: theme.typography.fontWeightBold,
-//     backgroundColor: "white",
-//     fontFamily: "Inter",
-//     borderRadius: 10,
-//     paddingLeft: 16,
-//     paddingRight: 16,
-//   },
-//   "&.Mui-focusVisible": {
-//     backgroundColor: "gray",
-//   },
-// }));
-
-// function a11yProps(index: number) {
-//   return {
-//     id: `vertical-tab-${index}`,
-//     "aria-controls": `vertical-tabpanel-${index}`,
-//   };
-// }
 
 interface TabButtonProps {
   value: number;
@@ -200,8 +160,6 @@ const Activity = () => {
         }}
       >
         <StyledTabs
-          orientation="vertical"
-          variant="scrollable"
           value={value}
           onChange={handleChange}
           aria-label="Vertical tabs example"

@@ -2,7 +2,6 @@ import { Box, TextField, Typography, Button, IconButton } from "@mui/material";
 import { useFormik } from "formik";
 import React from "react";
 import * as Yup from "yup";
-// import { useNavigate } from 'react-router-dom';
 import CustomDialog from "../dialog";
 import OpenRegisterForm from "./open_register";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,16 +9,14 @@ import { setLoading } from "../../redux/slices/loader";
 import APIService from "../../service/api_service";
 import toast from "react-hot-toast";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { getDatabase } from "../../../../main/database";
+import { RootState } from "../../redux/store";
 
 const ClockInForm = () => {
   const [show, setShow] = React.useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const dispatch = useDispatch();
 
-  // const isAuth = useSelector((state: any) => state.auth.isAuth);
-  const isOnline = useSelector((state: any) => state.loader.isOnline);
-  // const navigate = useNavigate();
+  const isOnline = useSelector((state: RootState) => state.loader.isOnline);
 
   const loginSchema = Yup.object().shape({
     username: Yup.string().required("Username is required!"),
@@ -28,7 +25,7 @@ const ClockInForm = () => {
       .required("Password is required!"),
   });
 
-  const loginFromAPI = (values: any) => {
+  const loginFromAPI = (values) => {
     const payload = {
       grant_type: "password",
       client_id: 3,
@@ -40,13 +37,25 @@ const ClockInForm = () => {
 
     APIService.clockIn(payload)
       .then(async (resp) => {
-        dispatch(setLoading(false));
-        setOpenDialog(true);
-        console.log("RES ==>> ", resp);
+
+        // console.log("RES ==>> ", resp);
         localStorage.setItem("accessToken", resp?.access_token);
         localStorage.setItem("refreshToken", resp?.refresh_token);
         localStorage.setItem("username", values.username);
         localStorage.setItem("pass", values.password);
+
+        window.electron.sendAuthToMain(
+          JSON.stringify({
+            accessToken: resp?.access_token,
+            refreshToken: resp?.refresh_token,
+            username: values.username,
+            password: values.password,
+          })
+        );
+
+        dispatch(setLoading(false));
+        setOpenDialog(true);
+       
       })
       .catch((error) => {
         dispatch(setLoading(false));
@@ -57,15 +66,28 @@ const ClockInForm = () => {
             "Check your internet connection"
           }`
         );
-        console.log("ERR ==>> ", error);
+        console.error("ERR ==>> ", error);
       });
   };
 
   const loginFromDB = async (username: string, password: string) => {
     dispatch(setLoading(true));
-    const usrname = localStorage.getItem("username");
-    const pass = localStorage.getItem("pass");
-    if (usrname === username &&  pass === password) {
+
+    const authData = await window.electron.auth();
+    const parsedAuth = JSON.parse(authData);
+
+    const usrname = localStorage.getItem("username") ?? parsedAuth?.username;
+    const pass = localStorage.getItem("pass") ?? parsedAuth?.password;
+    if (usrname === username && pass === password) {
+      window.electron.sendAuthToMain(
+        JSON.stringify({
+          accessToken: null,
+          refreshToken: null,
+          username: values.username,
+          password: values.password,
+        })
+      );
+
       setTimeout(() => {
         localStorage.setItem("username", values.username);
         localStorage.setItem("pass", values.password);
@@ -73,9 +95,8 @@ const ClockInForm = () => {
         setOpenDialog(true);
       }, 5000);
     } else {
-      toast.error("Incorrect login credentials")
+      toast.error("Incorrect login credentials");
       dispatch(setLoading(false));
-      // toast.error("You need an internet connection to proceed.");
     }
   };
 
@@ -86,7 +107,6 @@ const ClockInForm = () => {
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      
       dispatch(setLoading(true));
 
       if (isOnline) {

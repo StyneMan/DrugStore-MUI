@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Typography,
   Button,
@@ -18,101 +19,56 @@ import { setLoading } from "../../redux/slices/loader";
 import { getDatabase } from "../../../../main/database";
 import APIService from "../../service/api_service";
 import toast from "react-hot-toast";
-// import APIService from "../../service/api_service";
+import { RootState } from "../../redux/store";
+import formatDate from "../../utils/dateFormatter";
 
 type OpenRegProp = {
-  setOpen: any;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const OpenRegisterForm = ({ setOpen }: OpenRegProp) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isLoaded, setLoaded] = React.useState(false);
-  const [dbPath, setDBPath] = React.useState<string | undefined>();
-  const [bizLocations, setBizLocations] = React.useState<any[] | undefined>([]);
+
   const [selectedLocation, setSelectedLocation] = React.useState<any>();
-  const isOnline = useSelector((state: any) => state.loader.isOnline);
+  const isOnline = useSelector((state: RootState) => state.loader.isOnline);
+  const businessLocations = useSelector((state: RootState) => state.business_locations.businessLocations);
+
+  // console.log("BIx LOCS :: ", businessLocations);
+  
 
   const cashRegisterSchema = Yup.object().shape({
     amount: Yup.string().required("Cash in hand is required!"),
     location: Yup.string().required("Select a business location!"),
   });
 
-  const getDbPath = async () => {
-    const response = await window.electron.ping();
-
-    setDBPath(response);
-    setLoaded(true);
-    console.log("DB PATH OPEN_REGISTER.TSX <<< ===>>> ", response);
-  };
-
-  React.useEffect(() => {
-    getDbPath();
-  }, []);
-
-  React.useEffect(() => {
-    const getNow = async () => {
-      // const content = await window.electron.dbContent();
-      // console.log("DB CONTENT NOW ===>>> ", content);
-      const db = await getDatabase(`${localStorage.getItem("dbPath")}`);
-      const existingData = await db?.business_locations.find().exec();
-      //  existingData;
-      console.log("Db BIZ LOCATE ===>>> ", existingData);
-      //
-      setBizLocations(existingData);
-    };
-
-    getNow();
-  });
-
-  // console.log("DB PATH L STOTAGE :: ", localStorage.getItem("dbPath"));
-
-  function padTo2Digits(num: number) {
-    return num.toString().padStart(2, "0");
-  }
-
-  function formatDate(date: any) {
-    return (
-      [
-        date.getFullYear(),
-        padTo2Digits(date.getMonth() + 1),
-        padTo2Digits(date.getDate()),
-      ].join("-") +
-      " " +
-      [
-        padTo2Digits(date.getHours()),
-        padTo2Digits(date.getMinutes()),
-        padTo2Digits(date.getSeconds()),
-      ].join(":")
-    );
-  }
-
-  const createRegisterOnline = async (payload: any) => {
+  const createRegisterOnline = async (payload: unknown) => {
     dispatch(setLoading(true));
     try {
       const resp = await APIService.createCashRegister(payload);
-      console.log("RESOPNS SERVER :: ", resp);
-      // dispatch(setLoading(false));
+      localStorage.setItem("userId", resp?.data?.user_id);
+      localStorage.setItem("businessId", resp?.data?.business_id);
     } catch (error) {
       console.log("CASH REG ONLINE ERROR ", error);
       dispatch(setLoading(false));
     }
   };
 
-  const createRegisterOffline = async (payload: any) => {
+  const createRegisterOffline = async (payload: unknown) => {
     dispatch(setLoading(true));
     try {
-      const db = await getDatabase(`${dbPath}`);
+
+      const db = await getDatabase(`${localStorage.getItem('dbPath')}`);
       await db?.cash_registers.insert(payload);
 
       console.log(payload);
       dispatch(setLoading(false));
       toast.success("Cash register created successfully!");
-    } catch (error: any) {
+    } catch (error) {
       console.log("REG OFFLINE ERROR ", error);
 
       dispatch(setLoading(false));
-      toast.error(`${error?.message || "Failed to create cash register!"}`);
+      toast.error(`${"Failed to create cash register!"}`);
     }
   };
 
@@ -123,16 +79,18 @@ const OpenRegisterForm = ({ setOpen }: OpenRegProp) => {
     },
     validationSchema: cashRegisterSchema,
     onSubmit: async (values) => {
-      console.log("AMOUNT", values.amount);
 
       const payload = {
         id: new Date().getTime(),
         location_id: selectedLocation?.id,
-        initial_amount: parseFloat(values.amount),
+        initial_amount: parseInt(
+          values.amount.toString().replace("₦", "").replace(",", "")
+        ),
         status: "open",
         created_at: formatDate(new Date()),
       };
 
+      
       if (isOnline) {
         await createRegisterOnline(payload);
       }
@@ -195,12 +153,15 @@ const OpenRegisterForm = ({ setOpen }: OpenRegProp) => {
               value={values.location}
               onChange={(e) => {
                 handleChange(e);
-                const filtered = bizLocations?.filter(
+               
+                const filtered = businessLocations?.filter(
                   (item) => item.name === e.target.value
                 );
+
                 if (filtered) {
-                  console.log("NOW IS ", filtered[0]?._data);
-                  setSelectedLocation(filtered[0]?._data);
+                  setSelectedLocation(filtered[0]);
+                  localStorage.setItem('locationId', filtered[0]?.location_id)
+                  localStorage.setItem('location_id', filtered[0]?.id)
                 }
               }}
               renderValue={(selected) => {
@@ -214,11 +175,11 @@ const OpenRegisterForm = ({ setOpen }: OpenRegProp) => {
               <MenuItem disabled value="">
                 <em>Select Location</em>
               </MenuItem>
-              {bizLocations?.map((item: any, index: number) => (
+              {Array.isArray(businessLocations) ? businessLocations?.map((item, index: number) => (
                 <MenuItem key={index} value={item?.name}>
                   {item?.name}
                 </MenuItem>
-              ))}
+              )) : <></>}
             </Select>
             <FormHelperText>
               {touched.location && errors.location}

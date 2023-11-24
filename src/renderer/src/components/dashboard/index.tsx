@@ -1,16 +1,10 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-// import Button from '@mui/material/Button';
 import List from "@mui/material/List";
-// import Divider from '@mui/material/Divider';
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-// import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from "@mui/material/ListItemText";
-// import InboxIcon from '@mui/icons-material/MoveToInbox';
-// import MailIcon from '@mui/icons-material/Mail';
-// import MenuIcon from "@mui/icons-material/Menu"
 import DensitySmallIcon from "@mui/icons-material/DensitySmall";
 import {
   AppBar,
@@ -31,20 +25,30 @@ import { styled, useTheme } from "@mui/material/styles";
 
 import SyncIcon from "@mui/icons-material/Sync";
 import GridViewIcon from "@mui/icons-material/GridView";
-import ReportIcon from "@mui/icons-material/Report";
-import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
-import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import ProfileDropDownContent from "../profile/dropdown_content";
-import APIService from "../../service/api_service";
 import { useDispatch, useSelector } from "react-redux";
-// import useProducts from "../../hooks/useProducts";
+import {
+  Info,
+  InsertChartOutlined,
+  PersonSearchOutlined,
+  SupportAgentOutlined,
+  WidgetsOutlined,
+  Wifi,
+  WifiOff,
+} from "@mui/icons-material";
+import { RootState } from "../../redux/store";
+import toast from "react-hot-toast";
+import APIService from "../../service/api_service";
 import { setProducts } from "../../redux/slices/product";
-// import useCategories from "../../hooks/useCategories";
 import { setFilteredProducts } from "../../redux/slices/search";
 import { setCategories } from "../../redux/slices/categories";
-import { getDatabase } from "../../../../main/database";
-import { Wifi, WifiOff } from "@mui/icons-material";
-import { setPaymentMethods } from "../../redux/slices/purchase";
+import {
+  setBusinessLocations,
+  setCurrentBusinessLocation,
+} from "../../redux/slices/business_locations";
+
+import "./spin.css";
+import { setSales, setSalesMeta } from "../../redux/slices/purchase";
 
 type Anchor = "top" | "left" | "bottom" | "right";
 
@@ -79,302 +83,109 @@ export default function Dashboard() {
 
   const theme = useTheme();
   const navigate = useNavigate();
+
+  const userId: number = parseInt(`${localStorage.getItem("userId") ?? 0}`);
+  const location_ID: number = parseInt(
+    `${localStorage.getItem("location_id") ?? 0}`
+  );
+
   const currlocation = useLocation();
+  const [isRotating, setRotating] = React.useState(false);
   const [showSearchbar, setShowSearchbar] = React.useState(true);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const dispatch = useDispatch();
-  const isOnline = useSelector((state) => state.loader.isOnline);
-  // const dbasePath = useSelector((state) => state.database.dbasePath);
-  // const filteredProducts = useSelector(
-  //   (state) => state.search.filteredProducts
-  // );
-
-  // const { data: productsData } = useProducts();
-  // const { data: categoriesData } = useCategories();
-
-  // const commitCategories = async (data: any) => {
-  //   try {
-  //     const db = await getDatabase(`${localStorage.getItem("dbPath")}`);
-
-  //     const obj = {
-  //       id: new Date().getTime().toString(),
-  //       data: data,
-  //       timestamp: new Date().toISOString(),
-  //     };
-
-  //     // Check for existing data
-  //     const existingData = await db?.categories.find().exec();
-
-  //     if (existingData) {
-  //       await Promise.all(existingData.map((data) => data.remove()));
-  //     }
-
-  //     const resp = await db?.categories.insert(obj);
-  //     console.log("INSERTED CATEGORY RESPONSE :: ", resp);
-  //   } catch (error) {
-  //     console.log("ERROR", error);
-  //   }
-  // };
-
-  // async function getProducts() {
-  //   try {
-  //     const db = await getDatabase(dbasePath);
-
-  //     db.products.find().$.subscribe(async function (products) {
-  //       if (!products) {
-  //         // heroesList.innerHTML = 'Loading..';
-  //         console.log("EMPTY DATABASE ::: ");
-  //         return;
-  //       }
-
-  //       console.log("PRODUCTS FOUND ::: ", products);
-  //       dispatch(setProducts(products));
-
-  //       if (filteredProducts?.length < 0) {
-  //         dispatch(setFilteredProducts(products));
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.log("CATCH ERROR ::: ", error);
-  //   }
-  // }
-
-  // React.useEffect(() => {
-  //   getProducts();
-  // }, []);
-
-  // React.useEffect(() => {
-  //   // console.log("My PRODUCTS DSHBBOARD ==>> ", productsData);
-  //   // console.log("My CATEGORIES DSHBBOARD ==>> ", categoriesData);
-  //   if (productsData) {
-  //     dispatch(setProducts(productsData));
-  //     dispatch(setFilteredProducts(productsData?.data));
-  //   }
-  // }, [ dispatch, productsData]);
-
-  // React.useEffect(() => {
-  //   if (categoriesData && isOnline) {
-  //     commitCategories(categoriesData?.data);
-  //   }
-  // }, [categoriesData, isOnline]);
-
-  React.useEffect(() => {
-    const dbPath = localStorage.getItem("dbPath");
-    const initLogic = async () => {
-      if (dbPath && isOnline) {
-        APIService.getPaymentMethods()
-          .then(async (res) => {
-            try {
-              const db = await getDatabase(dbPath);
-              const obj = {
-                id: new Date().getTime().toString(),
-                methods: { ...res },
-                timestamp: new Date().toISOString(),
-              };
-
-              const mArray = Object.values(res);
-              dispatch(setPaymentMethods(mArray));
-
-              const existingData = await db?.paymentmethods.findOne().exec();
-
-              if (existingData) {
-                // Document exists, update it
-                await db?.paymentmethods.remove();
-                await db?.paymentmethods?.insert(obj);
-              } else {
-                // Document doesn't exist, insert it
-                await db?.paymentmethods?.insert(obj);
-              }
-            } catch (error) {
-              console.log("K PAYMET JK ", error);
-            }
-          })
-          .catch((error) => {
-            console.log("ERRO PAYMENT METHOD ==> ", error);
-          });
-
-        APIService.getProductsStockReport()
-          .then((res) => {
-            console.log("STOCK REPORT ==>> ", res);
-          })
-          .catch((error) => {
-            console.log("ERRO STOCK REPORT ==> ", error);
-          });
-
-        // APIService.getCategories()
-        //   .then(async (res) => {
-        //     console.log("CATEGORIES REPORT ==>> ", res);
-        //     try {
-        //       const db = await getDatabase(dbPath);
-        //       const existingData = await db?.categories.find().exec();
-
-        //       if (existingData && existingData?.length > 0) {
-        //         console.log("SOMETHING DEY HERE ALREADY CATEGORY !!!");
-        //         dispatch(setCategories(existingData));
-
-        //         existingData?.splice(0, existingData.length);
-        //         // await db?.categories.remove();
-
-        //         res?.data?.forEach(async (element: any) => {
-        //           await db?.categories?.upsert({
-        //             ...element,
-        //             id: element?.id.toString(),
-        //           });
-        //         });
-        //       } else {
-        //         res?.data?.forEach(async (elem: any) => {
-        //           await db?.categories?.insert({
-        //             ...elem,
-        //             id: elem?.id.toString(),
-        //           });
-        //         });
-        //       }
-        //     } catch (error) {
-        //       console.log("CAT ERR ", error);
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     console.log("ERRO CATEGORIES CATEGORIES ==> ", error);
-        //   });
-
-        // APIService.getProducts()
-        //   .then(async (res) => {
-        //     try {
-        //       const db = await getDatabase(dbPath);
-        //       const existingData = await db?.products.find().exec();
-
-        //       if (existingData && existingData?.length > 0) {
-        //         console.log("SOMETHING DEY HERE ALREADY PRODUCTS !!!");
-
-        //         dispatch(setProducts(existingData));
-        //         dispatch(setFilteredProducts(existingData));
-
-        //         // Empty the array
-        //         existingData?.splice(0, existingData.length);
-
-        //         // await db?.products.remove();
-        //         res?.data?.forEach(async (element: any) => {
-        //           await db?.products.upsert({
-        //             ...element,
-        //             id: element?.id.toString(),
-        //           });
-        //         });
-        //       } else {
-        //         res?.data?.forEach(async (elem: any) => {
-        //           await db?.products.insert({
-        //             ...elem,
-        //             id: elem?.id.toString(),
-        //           });
-        //         });
-        //       }
-        //     } catch (error) {
-        //       console.log("KJK ", error);
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     console.log("ERRO STOCK REPORT ==> ", error);
-        //   });
-
-        // APIService.getUsers()
-        //   .then(async (res) => {
-        //     console.log("CUSTOMERS USERS ==>> ", res);
-        //     try {
-        //       const db = await getDatabase(dbPath);
-        //       const existingData = await db?.users.find().exec();
-
-        //       if (existingData && existingData?.length > 0) {
-        //         console.log("SOMETHING DEY HERE ALREADY PRODUCTS !!!");
-
-        //         // dispatch(setProducts(offlineProdData));
-        //         // dispatch(setFilteredProducts(offlineProdData));
-
-        //         // Empty the array
-        //         existingData?.splice(0, existingData.length);
-
-        //         // await db?.products.remove();
-
-        //         // Filter out customers
-        //         const customers = res?.data?.filter(
-        //           (item: any) => item?.user_type === "user_customer"
-        //         );
-
-        //         customers?.forEach(async (element: any) => {
-        //           await db?.products.upsert({
-        //             ...element,
-        //             id: element?.id.toString(),
-        //           });
-        //         });
-        //       } else {
-        //         // Filter out customers
-        //         const customers = res?.data?.filter(
-        //           (item: any) => item?.user_type === "user_customer"
-        //         );
-        //         customers?.forEach(async (elem: any) => {
-        //           await db?.users.insert({
-        //             ...elem,
-        //             id: elem?.id.toString(),
-        //           });
-        //         });
-        //       }
-        //     } catch (error) {
-        //       console.log("KJK ", error);
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     console.log("ERRO STOCK REPORT ==> ", error);
-        //   });
-      } else {
-        // Load from stored data in DB
-        console.log("LOAD FROM DB HERE >>>>");
-        const dbPath = localStorage.getItem("dbPath");
-        console.log("DB PATH :: ", dbPath);
-
-        try {
-          const db = await getDatabase(`${dbPath}`);
-
-          // CATEGORIES
-          const offlineBizLocationsData = await db?.categories.find().exec();
-          console.log(
-            "OFFLINE BUSINESS LOCATIONS :: ",
-            offlineBizLocationsData
-          );
-          // dispatch(setCategories(offlineCategoriesData));
-
-          // CATEGORIES
-          const offlineCategoriesData = await db?.categories.find().exec();
-          console.log("OFFLINE CATEGORIES :: ", offlineCategoriesData);
-          dispatch(setCategories(offlineCategoriesData));
-
-          // PRODUCTS
-          const offlineProdData = await db?.products.find().exec();
-          console.log("OFFLINE PRODUCTS :: ", offlineProdData);
-          dispatch(setProducts(offlineProdData));
-          dispatch(setFilteredProducts(offlineProdData));
-
-          // PAYMENT METHODS
-          const offlinePaymentMethodsData = await db?.paymentmethods
-            .find()
-            .exec();
-          console.log("OFFLINE PAYMENT METHODS :: ", offlinePaymentMethodsData);
-          if (offlinePaymentMethodsData) {
-            const mArray = Object.values(
-              offlinePaymentMethodsData[0]?._data?.methods
-            );
-            dispatch(setPaymentMethods(mArray));
-          }
-        } catch (error) {
-          console.log("ERROOR :: ", error);
-        }
-      }
-    };
-    initLogic();
-  }, [isOnline]);
+  const isOnline = useSelector((state: RootState) => state.loader.isOnline);
+  // const pendingSells = useSelector((state: RootState) => state.purchase);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const handleSync = async () => {
+    if (!isOnline) {
+      toast.error("Internet connection is required!", {
+        icon: <Info color="error" />,
+        style: {
+          backgroundColor: "#fadcdcf6",
+          color: theme.palette.error.dark,
+          paddingLeft: 24,
+          paddingRight: 24,
+          paddingTop: 16,
+          paddingBottom: 16,
+          fontSize: 21,
+        },
+        position: "top-center",
+      });
+    } else {
+      // Start spinning icon here
+      setRotating(true);
+
+      // Perform sync here
+      try {
+        // PRODUCT SYNC
+        const productData = await APIService.getProducts();
+        if (productData) {
+          window.electron.sendDataToMain(JSON.stringify(productData?.data));
+          dispatch(setProducts(productData?.data));
+          dispatch(setFilteredProducts(productData?.data));
+        }
+
+        // CATEGORY SYNC
+        const categoryData = await APIService.getCategories();
+        if (categoryData) {
+          window.electron.sendCategoriesDataToMain(
+            JSON.stringify(categoryData?.data)
+          );
+          dispatch(setCategories(categoryData?.data));
+        }
+
+        // BUSINESS LOCATION SYNC
+        const businessLocationsData = await APIService.getBusinessLocations();
+        if (businessLocationsData) {
+          dispatch(setBusinessLocations(businessLocationsData?.data));
+          window.electron.sendBusinessLocationDataToMain(
+            JSON.stringify(businessLocationsData?.data)
+          );
+
+          if (
+            localStorage.getItem("locationId") &&
+            localStorage.getItem("businessId")
+          ) {
+            const locationID = localStorage.getItem("locationId");
+            const bizID = localStorage.getItem("businessId");
+
+            const currLocation = businessLocationsData?.data?.filter(
+              (item) =>
+                `${item?.business_id}`.toLowerCase() ===
+                  `${bizID}`.toLowerCase() &&
+                `${item?.location_id}`.toLowerCase() ===
+                  `${locationID}`.toLowerCase()
+            );
+            dispatch(setCurrentBusinessLocation(currLocation[0]));
+          }
+        }
+
+        // SALES REPORT SYNC
+        const salesData = await APIService.getSalesReport(location_ID, userId);
+        if (salesData) {
+          dispatch(setSales(salesData?.data));
+          dispatch(setSalesMeta(salesData?.meta));
+          // console.log("SALES DATA :  ", salesData);
+          window.electron.sendSalesSummaryDataToMain(
+            JSON.stringify(salesData?.data)
+          );
+        }
+
+        setRotating(false);
+
+        // PENDING SELLS
+      } catch (error) {
+        console.error("ERROR IN SYNC :: :: ", error);
+      }
+    }
   };
 
   const open = Boolean(anchorEl);
@@ -390,25 +201,25 @@ export default function Dashboard() {
     {
       title: "Customers",
       route: "/dashboard/customers",
-      icon: GridViewIcon,
+      icon: PersonSearchOutlined,
       key: "customers",
     },
     {
       title: "Report",
       route: "/dashboard/reports",
-      icon: ReportIcon,
+      icon: InsertChartOutlined,
       key: "report",
     },
     {
       title: "Activity",
       route: "/dashboard/activity",
-      icon: HistoryToggleOffIcon,
+      icon: WidgetsOutlined,
       key: "activity",
     },
     {
       title: "Support",
       route: "/dashboard/supports",
-      icon: ContactSupportIcon,
+      icon: SupportAgentOutlined,
       key: "support",
     },
   ];
@@ -420,7 +231,6 @@ export default function Dashboard() {
     anchor: Anchor
   ) => {
     setSelectedIndex(index);
-    // toggleDrawer(anchor, false);
     setState({ ...state, [anchor]: false });
     navigate(route);
   };
@@ -451,17 +261,6 @@ export default function Dashboard() {
       setShowSearchbar(false);
     }
   }, [currlocation]);
-
-  React.useEffect(() => {
-    // Get all products from  API
-    APIService.getProducts()
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log("ERROR ", error);
-      });
-  }, []);
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
@@ -602,7 +401,6 @@ export default function Dashboard() {
               </Box>
             </Toolbar>
           </AppBar>
-          {/* <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button> */}
           <main>
             <Outlet />
           </main>
@@ -641,6 +439,7 @@ export default function Dashboard() {
               alignItems={"center"}
             >
               <Button
+                className="spinBtn"
                 sx={{
                   display: "flex",
                   flexDirection: "column",
@@ -649,10 +448,15 @@ export default function Dashboard() {
                   textTransform: "capitalize",
                   color: "black",
                 }}
+                onClick={() => handleSync()}
               >
-                <SyncIcon fontSize="large" />
-                <Typography fontSize={21}>Sync</Typography>
+                <SyncIcon
+                  className={isRotating ? "spin" : "no-spin"}
+                  fontSize="large"
+                />
+                <Typography>Sync</Typography>
               </Button>
+              {/* <Typography color={"gray"}>Last Sync: 12:30pm</Typography> */}
             </Box>
           </Drawer>
         </React.Fragment>

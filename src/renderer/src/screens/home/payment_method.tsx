@@ -1,4 +1,4 @@
-import { KeyboardBackspace } from "@mui/icons-material";
+import { DoneAll, KeyboardBackspace } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -8,30 +8,174 @@ import {
   TextField,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React from "react";
-// import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-// import { RootState } from "../../redux/store";
 import { NumericFormat } from "react-number-format";
 import CustomDialog from "../../components/dialog";
 import Receipt from "../../components/receipt";
-// import { getDatabase } from "../../../../main/database";
+import APIService from "../../service/api_service";
+import { RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import formatDate from "../../utils/dateFormatter";
+import { setLoading, setReload } from "../../redux/slices/loader";
+import {
+  setAmountPaid,
+  setChange as setChangeLeft,
+} from "../../redux/slices/purchase";
+import toast from "react-hot-toast";
 
 const PaymentMethod = () => {
-  const [open, setOpen] = React.useState<boolean>(false);
   const [openReceipt, setOpenReceipt] = React.useState<boolean>(false);
   const [isConfirmed, setConfirmed] = React.useState<boolean>(false);
   const [isTouched, setTouched] = React.useState<boolean>(false);
+  const [organized, setOrganized] = React.useState<unknown[]>([]);
   const [cashPaid, setCashPaid] = React.useState<number>(0);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [change, setChange] = React.useState<number>(0);
   const currLocation = useLocation();
   const navigate = useNavigate();
-  const { paymentMethod, tax, total, subTotal, customerName } =
-    currLocation.state;
+  const dispatch = useDispatch();
 
-  // const currentCustomer = useSelector(
-  //   (state: RootState) => state.purchase.currentCustomer
-  // );
+  const theme = useTheme();
+
+  const {
+    paymentMethod,
+    tax,
+    total,
+    subTotal,
+    customerName,
+    orderNo,
+    itemsOrdered,
+    bank,
+    accName,
+    accNum,
+  } = currLocation.state;
+
+  const currentCustomer = useSelector(
+    (state: RootState) => state.customers.currentCustomer
+  );
+  const currentBusinessLocation = useSelector(
+    (state: RootState) => state.business_locations.currentBusinessLocation
+  );
+  const isOnline: boolean = useSelector(
+    (state: RootState) => state.loader.isOnline
+  );
+  const shouldReload: boolean = useSelector(
+    (state: RootState) => state.loader.shouldReload
+  );
+
+  React.useEffect(() => {
+    if (itemsOrdered) {
+      const filtered = itemsOrdered?.map((item) => {
+        return {
+          product_id: parseInt(item?.productId),
+          variation_id:
+            parseInt(item?.variationId) || parseInt(item?.productId),
+          quantity: item?.quantity,
+          unit_price: parseInt(item?.unitPrice),
+          product_type: item?.productType,
+          line_discount_type: "fixed",
+          line_discount_amount: 0,
+          item_tax: 0,
+          enable_stock: 1,
+          product_unit_id: item?.productUnitId,
+          sub_unit_id: item?.productUnitId,
+          base_unit_multiplier: 1,
+        };
+      });
+
+      setOrganized(filtered);
+    }
+  }, [itemsOrdered]);
+
+  const sell = async () => {
+    try {
+      setOpen(false);
+      dispatch(setLoading(true));
+      dispatch(setChangeLeft(change));
+      dispatch(setAmountPaid(cashPaid));
+      // const db = await getDatabase(`${localStorage.getItem("dbPath")}`);
+      const paymentObj = {
+        amount: paymentMethod?.name?.toLowerCase().includes("cash")
+          ? cashPaid
+          : total,
+        method: paymentMethod?.name,
+        note: `Payment for #${orderNo} by ${customerName}`,
+      };
+
+      const payload = {
+        _token: localStorage.getItem("accessToken"),
+        location_id: currentBusinessLocation?.id,
+        contact_id: parseInt(currentCustomer?.id) || 12,
+        transaction_date: formatDate(new Date()),
+        invoice_no: `${orderNo}`,
+        final_total: total,
+        status: "final",
+        sale_note: "Sell from DrugStore desktop application",
+        staff_note: "",
+        is_suspend: 0,
+        price_group: 0,
+        recur_interval_type: "days",
+        delivered_to: `${customerName}`,
+        shipping_charges_modal: 0,
+        shipping_status_modal: null,
+        change_return: paymentMethod?.name?.toLowerCase().includes("cash")
+          ? change
+          : 0,
+        additional_notes: "",
+        products: organized,
+        payments: [paymentObj],
+      };
+
+      // console.log("SELL PAYLOAD >>> ", JSON.stringify(payload));
+
+      if (isOnline) {
+        await APIService.createSell({
+          sells: [payload],
+        });
+
+        dispatch(setReload(!shouldReload));
+      } else {
+        console.log("OFFLINE SALE ... ");
+        // Save to rxdb and push online when there is internet
+        // Send to main process
+        const pendingSells = await window.electron.pendingSells();
+        console.log("CURRENT PENDING SELLS  ", pendingSells);
+        
+        // console.log("CHECK PENDING >>> ",  JSON?.stringify([...pendingSells, { sells: [payload] }]));
+        window.electron.sendPendingSellsDataToMain(
+          JSON?.stringify([{ sells: [payload] }])
+        );
+        
+        window.electron.sendCartDataToMain(JSON?.parse("[]"));
+      }
+
+      window.electron.sendCartDataToMain(JSON?.parse("[]"));
+
+      // console.log("SELL RESPONSE ... ", response);
+      dispatch(setLoading(false));
+
+      toast.success("Order successfully sold!", {
+        icon: <DoneAll color="success" />,
+        style: {
+          backgroundColor: theme.palette.success.light,
+          color: theme.palette.success.dark,
+          paddingLeft: 24,
+          paddingRight: 24,
+          paddingTop: 16,
+          paddingBottom: 16,
+          fontSize: 21,
+        },
+        position: "top-center",
+      });
+      setConfirmed(true);
+    } catch (error) {
+      dispatch(setLoading(false));
+      console.log("SELL ERROR :: ", error);
+    }
+  };
 
   const renderConfirmAlert = (
     <Box
@@ -54,8 +198,8 @@ const PaymentMethod = () => {
         width="100%"
       >
         <Button
-          variant="contained"
-          sx={{ textTransform: "capitalize", color: "white", p: 1.5, mb: 1 }}
+          variant="text"
+          sx={{ textTransform: "capitalize", color: "black", p: 1.5, mb: 1 }}
           onClick={async () => {
             setOpen(false);
           }}
@@ -63,10 +207,10 @@ const PaymentMethod = () => {
           Cancel
         </Button>
         <Button
-          sx={{ textTransform: "capitalize", color: "black", p: 1.5, mt: 1 }}
+          variant="contained"
+          sx={{ textTransform: "capitalize", color: "white", p: 1.5, mt: 1 }}
           onClick={() => {
-            setConfirmed(true);
-            setOpen(false);
+            sell();
           }}
         >
           Confirm
@@ -95,7 +239,7 @@ const PaymentMethod = () => {
         setOpen={setOpenReceipt}
         content={
           <Receipt
-            paymentMethod={paymentMethod}
+            paymentMethod={paymentMethod?.name}
             subTotal={subTotal}
             tax={tax}
             total={total}
@@ -135,11 +279,11 @@ const PaymentMethod = () => {
           textTransform={"capitalize"}
         >
           {`${
-            paymentMethod.toLowerCase().includes("cash")
+            paymentMethod?.label.toLowerCase().includes("cash")
               ? "Collect Cash"
-              : paymentMethod.toLowerCase().includes("credit")
+              : paymentMethod?.label.toLowerCase().includes("credit")
               ? "Credit Payment for " + customerName
-              : paymentMethod
+              : paymentMethod?.label
           } `}
         </Typography>
         <Card
@@ -168,7 +312,7 @@ const PaymentMethod = () => {
               px={4}
               pb={1}
               display={
-                !paymentMethod.toLowerCase().includes("credit")
+                !paymentMethod?.name?.toLowerCase().includes("credit")
                   ? "none"
                   : "flex"
               }
@@ -192,11 +336,15 @@ const PaymentMethod = () => {
               />
             </Box>
 
-            {paymentMethod.toLowerCase().includes("cash") ? <></> : <Divider />}
+            {paymentMethod?.name?.toLowerCase().includes("cash") ? (
+              <></>
+            ) : (
+              <Divider />
+            )}
 
             <Box
               px={4}
-              pt={paymentMethod.toLowerCase().includes("cash") ? 0 : 2}
+              pt={paymentMethod?.name?.toLowerCase().includes("cash") ? 0 : 2}
               pb={1}
               display={"flex"}
               flexDirection={"row"}
@@ -286,7 +434,7 @@ const PaymentMethod = () => {
                 prefix={"₦"}
               />
             </Box>
-            {paymentMethod.toLowerCase().includes("cash") && (
+            {paymentMethod?.name?.toLowerCase().includes("cash") && (
               <>
                 <br />
                 <Box my={1} width={"100%"} height={1.2} bgcolor={"#eee"} />
@@ -321,8 +469,15 @@ const PaymentMethod = () => {
                     }}
                     sx={{ width: 100 }}
                     onChange={(e) => {
+                      // console.log("CURR LOCATION :: :: ", currentBusinessLocation);
+
                       setCashPaid(parseInt(e.target.value));
                       setTouched(true);
+                      const result =
+                        parseInt(
+                          e.target.value.replace("₦", "").replace(",", "")
+                        ) - total;
+                      setChange(result);
                     }}
                     customInput={TextField}
                     error={Boolean(isTouched && cashPaid === 0)}
@@ -337,33 +492,45 @@ const PaymentMethod = () => {
             )}
             <br />
             <Typography textAlign={"center"}>
-              {`${paymentMethod}`.toLowerCase().includes("transfer")
+              {`${paymentMethod?.label}`.toLowerCase().includes("transfer")
                 ? "Pay"
-                : `${paymentMethod}`.toLowerCase().includes("cash")
+                : `${paymentMethod?.label}`.toLowerCase().includes("cash")
                 ? "Change Due"
                 : "Amount Due"}
             </Typography>
-            <Typography
-              textAlign={"center"}
-              variant="h4"
-              color={"black"}
-              fontWeight={900}
-            >
-              ₦10,700
-            </Typography>
-            {paymentMethod.includes("transfer") ? <br /> : <></>}
+            <NumericFormat
+              style={{
+                fontSize: 21,
+                fontWeight: 500,
+                textAlign: "center",
+                fontFamily: "sans-serif",
+              }}
+              value={(`${paymentMethod?.label}`.toLowerCase().includes("cash")
+                ? change
+                : total
+              ).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₦"}
+            />
+
+            {paymentMethod?.name.includes("transfer") ? <br /> : <></>}
             <br />
             <Typography
-              display={paymentMethod.includes("transfer") ? "flex" : "none"}
+              display={
+                paymentMethod?.name?.includes("transfer") ? "flex" : "none"
+              }
               textAlign={"center"}
               color={"gray"}
               fontWeight={600}
               fontSize={18}
             >
-              2110912635
+              {accNum}
             </Typography>
             <Box
-              display={paymentMethod.includes("transfer") ? "flex" : "none"}
+              display={
+                paymentMethod?.name?.includes("transfer") ? "flex" : "none"
+              }
               flexDirection={"row"}
               justifyContent={"center"}
               alignItems={"center"}
@@ -374,7 +541,7 @@ const PaymentMethod = () => {
                 color={"gray"}
                 pr={2}
               >
-                {"First Bank "}
+                {bank}
               </Typography>
               <Typography
                 gutterBottom
@@ -382,7 +549,7 @@ const PaymentMethod = () => {
                 color={"gray"}
                 pl={2}
               >
-                {" DrugstoreNG"}
+                {accName}
               </Typography>
             </Box>
           </Box>
@@ -402,9 +569,9 @@ const PaymentMethod = () => {
         >
           {isConfirmed
             ? "Print Receipt"
-            : `${paymentMethod}`.toLowerCase().includes("transfer")
+            : `${paymentMethod?.label}`.toLowerCase().includes("transfer")
             ? "Confirm Transfer Manually"
-            : `${paymentMethod}`.toLowerCase().includes("credit")
+            : `${paymentMethod?.label}`.toLowerCase().includes("credit")
             ? "Add Order on Credit"
             : "Print Receipt"}
         </Button>
@@ -418,6 +585,7 @@ const PaymentMethod = () => {
               mt: 0.5,
               color: "black",
             }}
+            onClick={() => navigate("/dashboard/home")}
           >
             Skip
           </Button>

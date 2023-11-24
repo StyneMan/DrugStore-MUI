@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ArrowBack } from "@mui/icons-material";
 import { IconButton, Toolbar } from "@mui/material";
 import React from "react";
@@ -10,6 +11,8 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import SalesSummary from "./tabs/sales_summary";
 import CurrentRegister from "./tabs/end_of_day";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -28,11 +31,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <>{children}</>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -45,6 +44,8 @@ interface StyledTabsProps {
 
 const StyledTabs = styled((props: StyledTabsProps) => (
   <Tabs
+    orientation="vertical"
+    variant="scrollable"
     {...props}
     style={{ width: "18%" }}
     TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
@@ -106,6 +107,44 @@ const Reports = () => {
   const navigate = useNavigate();
 
   const [value, setValue] = React.useState(0);
+  const [groupedSales, setGroupedSales] = React.useState<any>();
+  const sales = useSelector((state: RootState) => state.purchase.sales);
+
+  // console.log("SALES ", sales);
+
+  React.useEffect(() => {
+    if (sales) {
+      // Group transactions by date
+      const groupedTransactions = sales.reduce((grouped, transaction) => {
+        const date = new Date(`${transaction?.updated_at}`).toLocaleDateString(
+          "en-GB"
+        );
+
+        console.log("DATE FORMATTED :: ", date);
+
+        // Check if there's already a group for the date, if not, create one
+        if (!grouped[date]) {
+          grouped[date] = [];
+        }
+
+        // Add the current transaction to the group
+        grouped[date].push(transaction);
+
+        return grouped;
+      }, {});
+
+      const sortedGroups = Object.keys(groupedTransactions)
+        .sort(
+          ([dateA], [dateB]) => Date.parse(`${dateA}`) - Date.parse(`${dateB}`)
+        )
+        .map((date) => ({
+          date: date,
+          transactions: groupedTransactions[date],
+        }));
+
+      setGroupedSales(sortedGroups);
+    }
+  }, [sales]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -114,8 +153,8 @@ const Reports = () => {
   return (
     <Box height={"100vh"} width={"100vw"}>
       <Toolbar />
-      <br/>
-      <br/>
+      <br />
+      <br />
       <Box
         display="flex"
         flexDirection={"row"}
@@ -124,9 +163,9 @@ const Reports = () => {
         px={3}
         py={2}
         zIndex={500}
-        width={'100%'}
-        position={'fixed'}
-        bgcolor={'#ECF0F4'}
+        width={"100%"}
+        position={"fixed"}
+        bgcolor={"#ECF0F4"}
       >
         <IconButton onClick={() => navigate("/dashboard/")}>
           <ArrowBack sx={{ color: "black" }} />
@@ -135,7 +174,7 @@ const Reports = () => {
           Report
         </Typography>
       </Box>
-      <br/>
+      <br />
       <Box
         m={4}
         sx={{
@@ -144,20 +183,18 @@ const Reports = () => {
         }}
       >
         <StyledTabs
-          orientation="vertical"
-          variant="scrollable"
           value={value}
           onChange={handleChange}
           aria-label="Vertical tabs example"
-          sx={{ py: 2, mt: 10, position: 'fixed', width: '20%' }}
+          sx={{ py: 2, mt: 10, position: "fixed", width: "20%" }}
         >
           <StyledTab label="Sales Summary" {...a11yProps(0)} />
           <StyledTab label="Drawer History" {...a11yProps(1)} />
           <StyledTab label="End of the day" {...a11yProps(2)} />
         </StyledTabs>
-        <Box width={"78%"} left={'20%'} position={'absolute'} >
+        <Box width={"78%"} left={"20%"} position={"absolute"}>
           <TabPanel value={value} index={0}>
-            <SalesSummary />
+            <SalesSummary data={groupedSales} />
           </TabPanel>
           <TabPanel value={value} index={1}>
             Item Two

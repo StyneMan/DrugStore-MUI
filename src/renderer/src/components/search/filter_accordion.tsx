@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box } from "@mui/system";
 import React from "react";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
@@ -15,7 +17,8 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilteredProducts, setSorting } from "../../redux/slices/search";
-import { getDatabase } from "../../../../main/database";
+// import { getDatabase } from "../../../../main/database";
+import { RootState } from "../../redux/store";
 
 interface Props {
   setAnchorEl: any;
@@ -31,11 +34,11 @@ const priceMarks = [
     label: "",
   },
   {
-    value: 20,
+    value: 15,
     label: "₦20,000",
   },
   {
-    value: 60,
+    value: 50,
     label: "₦100,000",
   },
   {
@@ -51,8 +54,9 @@ export default function CollapseSection({ setAnchorEl }: Props) {
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
 
-  const [categories, setCategories] = React.useState<any[]>([]);
-  // const [products, setProducts] = React.useState<any[]>([]);
+  // const [categories, setCategories] = React.useState<any[]>([]);
+  const [startVal, setStartVal] = React.useState<number>(0);
+  const [endVal, setEndVal] = React.useState<number>(30000);
 
   const [sortLowHigh, setSortLowHigh] = React.useState(false);
   const [sortHighLow, setSortHighLow] = React.useState(false);
@@ -62,45 +66,36 @@ export default function CollapseSection({ setAnchorEl }: Props) {
 
   const [value, setValue] = React.useState<number[]>([0, 20]);
 
-  const sorting = useSelector((state) => state.search.sorting);
-  // const categories = useSelector((state) => state.category.categories);
-  const dbasePath = useSelector((state) => state.database.dbasePath);
+  const sorting: any = useSelector((state: RootState) => state.search.sorting);
+  const categories = useSelector((state: RootState) => state.category.categories);
   const filteredProducts = useSelector(
-    (state) => state.search.filteredProducts
+    (state: RootState) => state.search.filteredProducts
   );
-  const products = useSelector((state) => state.product.products);
+  const products = useSelector((state: RootState) => state.product.products);
 
-  // console.log("UNFILTARED :: ", products);
-  // console.log("FILTARED :: ", filteredProducts);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
 
     console.log("CURRENT VAL", newValue);
+    const start = rangeConverter(newValue[0]);
+    const end = rangeConverter(newValue[1]);
+    console.log("START CONVERTED >>> ", start);
+    console.log("END CONVERTED >>> ", end);
+
+   if (start && end) {
+    setStartVal(start);
+    setEndVal(end);
+   }
+
+    dispatch(
+      setSorting({
+        name: "price-range",
+        value: "slide",
+      })
+    );
   };
 
-  async function getCategories() {
-    try {
-      const db = await getDatabase(dbasePath);
-
-      db.categories.find().$.subscribe(async function (mCategories) {
-        if (!mCategories) {
-          console.log("EMPTY DATABASE ::: ");
-          return;
-        }
-        setCategories(mCategories);
-      });
-    } catch (error) {
-      console.log("CATCH ERROR ::: ", error);
-    }
-  }
-
-  // console.log("CATEGORIY CHECK  :: ", products?.data);
-
-  React.useEffect(() => {
-    getCategories();
-    // setProducts(mproducts);
-  }, []);
 
   React.useEffect(() => {
     if (sorting?.name === "alphabet-sort") {
@@ -122,6 +117,52 @@ export default function CollapseSection({ setAnchorEl }: Props) {
     return priceMarks.findIndex((mark) => mark.value === value) + 1;
   }
 
+  function rangeConverter(num: number) {
+    if (num === 0) {
+      return 0;
+    } else if (num === 5) {
+      return 7500;
+    } else if (num === 10) {
+      return 15000;
+    } else if (num === 15) {
+      return 20000;
+    } else if (num === 20) {
+      return 30000;
+    } else if (num === 25) {
+      return 40000;
+    } else if (num === 30) {
+      return 50000;
+    } else if (num === 35) {
+      return 60000;
+    } else if (num === 40) {
+      return 75000;
+    } else if (num === 45) {
+      return 90000;
+    } else if (num === 50) {
+      return 100000;
+    } else if (num === 55) {
+      return 110000;
+    } else if (num === 60) {
+      return 120000;
+    } else if (num === 65) {
+      return 130000;
+    } else if (num === 70) {
+      return 140000;
+    } else if (num === 75) {
+      return 150000;
+    } else if (num === 80) {
+      return 160000;
+    } else if (num === 85) {
+      return 170000;
+    } else if (num === 90) {
+      return 180000;
+    } else if (num === 95) {
+      return 190000;
+    } else if (num === 100) {
+      return 200000;
+    }
+  }
+
   const applyFilter = () => {
     setAnchorEl(null);
     console.log("CURRENT SORTING CRITERIAV ==>> ", sorting);
@@ -133,7 +174,7 @@ export default function CollapseSection({ setAnchorEl }: Props) {
           console.log("DATA INSPECT : ", a);
 
           // Use localeCompare for case-insensitive sorting
-          return a?._data?.name?.localeCompare(b?._data?.name);
+          return a?.name?.localeCompare(b?.name);
         });
 
         // console.log("SORTED PRODUCTS ==>> ", sortedData);
@@ -142,7 +183,7 @@ export default function CollapseSection({ setAnchorEl }: Props) {
       } else {
         const sortedData = products?.slice().sort((a, b) => {
           // Use localeCompare for case-insensitive sorting
-          return b?._data?.name?.localeCompare(a?._data?.name);
+          return b?.name?.localeCompare(a?.name);
         });
         // console.log("SORTED PRODUCTS ==>> ", sortedData);
         dispatch(setFilteredProducts(sortedData));
@@ -151,11 +192,21 @@ export default function CollapseSection({ setAnchorEl }: Props) {
       if (sorting?.value === "low-high") {
         const sortedData = products?.slice().sort((a, b) => {
           // Use localeCompare for case-insensitive sorting
-          console.log("A VALUS ", a?._data?.product_variations[0]?.variations[0]?.default_sell_price);
-          console.log("B VALUE ", b?._data?.product_variations[0]?.variations[0]?.default_sell_price);
+          console.log(
+            "A VALUS ",
+            a?.product_variations[0]?.variations[0]?.default_sell_price
+          );
+          console.log(
+            "B VALUE ",
+            b?.product_variations[0]?.variations[0]?.default_sell_price
+          );
 
-          const aVal = `${a?._data?.product_variations[0]?.variations[0]?.default_sell_price}` || '0.0';
-          const bVal = `${b?._data?.product_variations[0]?.variations[0]?.default_sell_price}` || '0.0';
+          const aVal =
+            `${a?.product_variations[0]?.variations[0]?.default_sell_price}` ||
+            "0.0";
+          const bVal =
+            `${b?.product_variations[0]?.variations[0]?.default_sell_price}` ||
+            "0.0";
 
           return parseFloat(aVal) - parseFloat(bVal);
         });
@@ -167,10 +218,10 @@ export default function CollapseSection({ setAnchorEl }: Props) {
           // Use localeCompare for case-insensitive sorting
           return (
             parseInt(
-              b?._data?.product_variations[0]?.variations[0]?.default_sell_price
+              b?.product_variations[0]?.variations[0]?.default_sell_price
             ) -
             parseInt(
-              a?._data?.product_variations[0]?.variations[0]?.default_sell_price
+              a?.product_variations[0]?.variations[0]?.default_sell_price
             )
           );
         });
@@ -183,6 +234,19 @@ export default function CollapseSection({ setAnchorEl }: Props) {
       const filteredData = products?.filter(
         (item: any) =>
           item?.category?.name.toLowerCase() === sorting?.value.toLowerCase()
+      );
+
+      dispatch(setFilteredProducts(filteredData));
+    } else {
+      // Range slider of price filter
+      const filteredData = products?.filter(
+        (item: any) =>
+          parseInt(
+            item?.product_variations[0]?.variations[0]?.default_sell_price
+          ) >= startVal &&
+          parseInt(
+            item?.product_variations[0]?.variations[0]?.default_sell_price
+          ) <= endVal
       );
 
       dispatch(setFilteredProducts(filteredData));
@@ -388,9 +452,8 @@ export default function CollapseSection({ setAnchorEl }: Props) {
                   value={item?.name}
                   control={<Radio />}
                   label={item?.name}
-                  onChange={(e, checked) => {
-                    // console.log("ChANGHS ---- ", e.target?.value);
-                    console.log("ChANGHS ---- ", item?.name);
+                  onChange={(_e, _checked: boolean) => {
+                    // console.log("ChANGHS ---- ", item?.name);
                     dispatch(
                       setSorting({
                         name: "category-sort",
@@ -409,12 +472,6 @@ export default function CollapseSection({ setAnchorEl }: Props) {
 
       <Box sx={{ width: "100%", my: 2 }}>
         <Slider
-          // defaultValue={0}
-          // getAriaValueText={valuetext}
-          // //   valueLabelDisplay="auto"
-          // marks={priceMarks}
-          // aria-label="Always visible"
-          // valueLabelDisplay="on"
           sx={{ flex: 1 }}
           // aria-label="Restricted values"
           aria-label="Always visible"

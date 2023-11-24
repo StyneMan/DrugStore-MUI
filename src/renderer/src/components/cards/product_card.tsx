@@ -1,5 +1,3 @@
-import React from "react";
-// import { ProductModel } from "../../data/products";
 import {
   Box,
   Card,
@@ -8,62 +6,33 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-// import inventoryImage from "../../assets/images/inventory_2.svg";
 
-// import electron from "electron";
-// import { getRxStorageIpcRenderer } from "rxdb/plugins/electron";
-// import { getRxStorageDexie } from "rxdb/plugins/storage-dexie";
 import { getDatabase } from "../../../../main/database";
 import { NumericFormat } from "react-number-format";
-import { ToastBar, Toaster, toast } from "react-hot-toast";
-import { Info } from "@mui/icons-material";
+import toast from "react-hot-toast";
+
 import { useSelector } from "react-redux";
+import { Info } from "@mui/icons-material";
+import { RootState } from "../../redux/store";
 
 export interface ProductProps {
-  product: any;
+  product;
 }
 
 export default function ProductCard({ product }: ProductProps) {
   const theme = useTheme();
-  const [isAdded, setAdded] = React.useState(false);
-  const [data, setData] = React.useState<any>([]);
 
   const currentCustomer = useSelector(
-    (state) => state.purchase.currentCustomer
+    (state: RootState) => state.customers.currentCustomer
   );
-  const dbasePath = useSelector((state) => state.database.dbasePath);
-
-  async function getCarts() {
-    try {
-      const db = await getDatabase(dbasePath);
-
-      db.carts.find().$.subscribe(async function (heroes) {
-        if (!heroes) {
-          // heroesList.innerHTML = 'Loading..';
-          console.log("EMPTY DATABASE ::: ");
-          return;
-        }
-
-        setData(heroes);
-      });
-    } catch (error) {
-      console.log("CATCH ERROR ::: ", error);
-    }
-  }
-
-  // console.log("PRODUCTS : ", product);
-
-  React.useEffect(() => {
-    getCarts();
-  }, []);
-
-  React.useEffect(() => {
-    console.log("DATA", data);
-  }, [data]);
+  const dbasePath = useSelector((state: RootState) => state.database.dbasePath);
 
   const addCart = async () => {
+    
     try {
       const db = await getDatabase(dbasePath);
+      const existingData = await db?.carts.find().exec();
+     
       const obj = {
         id: new Date().getTime().toString(),
         items: [
@@ -77,58 +46,73 @@ export default function ProductCard({ product }: ProductProps) {
                 product?.product_variations[0]?.variations[0]
                   ?.default_sell_price
             ).toFixed(2),
+            productId: product?._data?.id ?? product?.id,
+            priceWithTax: parseInt(
+              product?._data?.product_variations[0]?.variations[0]
+                ?.sell_price_inc_tax ??
+                product?.product_variations[0]?.variations[0]
+                  ?.sell_price_inc_tax
+            ).toFixed(2),
+            variationId:
+              product?._data?.product_variations[0]?.variations[0]
+                ?.product_variation_id ??
+              product?.product_variations[0]?.variations[0]
+                ?.product_variation_id,
+            productType: product?._data?.type ?? product?.type,
+            productUnitId: product?._data?.unit?.id ?? product?.unit?.id,
           },
         ],
         timestamp: new Date().toISOString(),
       };
 
-      if (data?.length > 0) {
-        // There is something already
-        // console.log("SOMETHING EXISTS ", data);
 
-        // Loop through each cart document in data
-        for (const elem of data) {
+      if (existingData && existingData?.length > 0) {
+        // There is something already
+        for (const elem of existingData) {
           // Check if this product is already in cart
-          const itemExists = elem._data.items.some(
-            (it: any) =>
+          const itemExists = elem?._data?.items.some(
+            (it) =>
               it.name.toLowerCase() ===
               (product?._data?.name ?? product?.name)?.toLowerCase()
           );
 
           if (itemExists) {
-            setAdded(true);
-            // console.log("Already ADDED !!! ");
-            toast.error("Product already added!");
-            // {
-            //   duration: 4000,
-            //   icon: (
-            //     <Info
-            //       fontSize="small"
-            //       sx={{ color: theme.palette.error.dark }}
-            //     />
-            //   ),
-            //   iconTheme: {
-            //     primary: "#000",
-            //     secondary: "#fff",
-            //   },
-            // });
+            toast.error("Product already added!!", {
+              icon: <Info color="error" />,
+              style: {
+                backgroundColor: "#fadcdcf6",
+                color: theme.palette.error.dark,
+                paddingLeft: 24,
+                paddingRight: 24,
+                paddingTop: 16,
+                paddingBottom: 16,
+                fontSize: 21,
+              },
+              position: "top-center",
+            });
           } else {
-            setAdded(false);
-            console.log("NOT YET ADDED ...", elem._data.items);
+            // console.log("NOT YET ADDED ...", elem._data.items);
 
             // Clone the existing items array
             const updatedItems = [...elem._data.items];
 
             // Push the new item into the updated items array
             updatedItems.push({
-              name: product?.name,
-              image: product?.image_url,
+              name: product?._data?.name ?? product?.name,
+              image: product?._data?.image_url ?? product?.image_url,
               quantity: 1,
               unitPrice: parseInt(
                 product?._data?.product_variations[0]?.variations[0]
                   ?.default_sell_price ??
                   product?.product_variations[0]?.variations[0]
                     ?.default_sell_price
+              ).toFixed(2),
+              productId: product?._data?.id ?? product?.id,
+              priceWithTax: parseInt(
+                product?._data?.product_variations[0]?.variations[0]
+                  ?.sell_price_inc_tax ??
+                  product?.product_variations[0]?.variations[0]
+                    ?.sell_price_inc_tax
               ).toFixed(2),
             });
 
@@ -142,9 +126,9 @@ export default function ProductCard({ product }: ProductProps) {
           }
         }
       } else {
-        console.log("NOTHING YET !! ");
-        const resp = await db?.carts.insert(obj);
-        console.log("RESPONSE >> ", resp);
+        // console.log("NOTHING YET !! ");
+         await db?.carts.insert(obj);
+        // console.log("RESPONSE >> ", resp);
       }
     } catch (error) {
       console.log("ERROR", error);
@@ -152,31 +136,18 @@ export default function ProductCard({ product }: ProductProps) {
   };
 
   return (
-    <Card>
-      <Toaster position="bottom-center">
-        {(t) => (
-          <ToastBar
-            toast={t}
-            position="bottom-center"
-            style={{
-              backgroundColor: theme.palette.error.light,
-              paddingTop: 2,
-              paddingBottom: 2,
-              paddingLeft: 48,
-              paddingRight: 48,
-              border: `1px solid ${theme.palette.error.main}`,
-            }}
-          >
-            {({ icon, message }) => (
-              <>
-                {icon}
-                {message}
-                {t.type !== "loading" && <></>}
-              </>
-            )}
-          </ToastBar>
-        )}
-      </Toaster>
+    <Card
+      elevation={
+        parseInt(
+          `${product?._data?.product_variations[0]?.variations[0]?.variation_location_details[0]?.qty_available}`
+        ) <= 0 ||
+        parseInt(
+          `${product?.product_variations[0]?.variations[0]?.variation_location_details[0]?.qty_available}`
+        ) <= 0
+          ? 0
+          : 1
+      }
+    >
       <Box
         borderRadius={2}
         display="flex"
@@ -184,10 +155,32 @@ export default function ProductCard({ product }: ProductProps) {
         justifyContent={"space-between"}
         alignItems={"start"}
         component={CardActionArea}
+        disabled={
+          parseInt(
+            `${product?._data?.product_variations[0]?.variations[0]?.variation_location_details[0]?.qty_available}`
+          ) <= 0 ||
+          parseInt(
+            `${product?.product_variations[0]?.variations[0]?.variation_location_details[0]?.qty_available}`
+          ) <= 0
+            ? true
+            : false
+        }
         onClick={() => {
           if (!currentCustomer) {
-            console.log("NO Customer selected !!! ");
-            toast.error("Select customer first!");
+            // console.log("No Customer selected !!! ");
+            toast.error("Select customer first!", {
+              icon: <Info color="error" />,
+              style: {
+                backgroundColor: "#fadcdcf6",
+                color: theme.palette.error.dark,
+                paddingLeft: 24,
+                paddingRight: 24,
+                paddingTop: 16,
+                paddingBottom: 16,
+                fontSize: 21,
+              },
+              position: "top-center",
+            });
           } else {
             addCart();
           }
@@ -234,8 +227,8 @@ export default function ProductCard({ product }: ProductProps) {
               ) : (
                 <Typography variant="body2">
                   {`${
-                    (product?._data?.product_variations[0]?.variations[0]
-                      ?.variation_location_details[0]?.qty_available ) ===
+                    product?._data?.product_variations[0]?.variations[0]
+                      ?.variation_location_details[0]?.qty_available ===
                     undefined
                       ? "0 "
                       : product?._data?.product_variations[0]?.variations[0]?.variation_location_details[0]?.qty_available
@@ -276,13 +269,13 @@ export default function ProductCard({ product }: ProductProps) {
             <NumericFormat
               style={{ fontSize: 16, fontFamily: "Roboto, sans-serif" }}
               value={parseInt(
-                product?._data?.product_variations[0]?.variations[0]
+                product?.product_variations[0]?.variations[0]
                   ?.default_sell_price
               ).toFixed(2)}
               displayType={"text"}
               thousandSeparator={true}
-              prefix={"₦"} 
-              /> 
+              prefix={"₦"}
+            />
           </Box>
         </Box>
       </Box>

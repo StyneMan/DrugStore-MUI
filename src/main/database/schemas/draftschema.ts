@@ -10,35 +10,42 @@ export const draftSchema = {
       maxLength: 1000,
     },
     customer: {
-      id: {
-        type: "string",
-      },
-      name: {
-        type: "string",
-      },
-      phone: {
-        type: "string",
-      },
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+        },
+        name: {
+          type: "string",
+        },
+        phone: {
+          type: "string",
+        },
+      }
     },
     amount: {
       type: "number",
     },
-    items: [
-      {
-        name: {
-          type: "string",
+    items: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties:  {
+          name: {
+            type: "string",
+          },
+          image: {
+            type: "string",
+          },
+          quantity: {
+            type: "number",
+          },
+          unitPrice: {
+            type: "number",
+          },
         },
-        image: {
-          type: "string",
-        },
-        quantity: {
-          type: "number",
-        },
-        unitPrice: {
-          type: "number",
-        },
-      },
-    ],
+      }
+    },
     timestamp: {
       type: "date-time",
     },

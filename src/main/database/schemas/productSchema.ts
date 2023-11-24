@@ -25,8 +25,8 @@ export const productSchema = {
     category: {
       type: "object",
       properties: {
-        type: "ref",
-        ref: "category",
+        type: { type: 'string' },
+        ref: { type: 'category' },
       },
     },
     created_by: {

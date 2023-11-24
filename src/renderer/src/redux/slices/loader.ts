@@ -6,12 +6,14 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 interface LoaderState {
   isLoading: boolean;
   isOnline: boolean;
+  shouldReload: boolean;
 }
 
 // Define the initial state using that type
 const initialState: LoaderState = {
   isLoading: false,
   isOnline: false,
+  shouldReload: false,
 };
 
 export const loaderSlice = createSlice({
@@ -26,10 +28,13 @@ export const loaderSlice = createSlice({
     setOnline: (state, action: PayloadAction<boolean>) => {
       state.isOnline = action.payload;
     },
+    setReload: (state, action: PayloadAction<boolean>) => {
+      state.shouldReload = action.payload;
+    }
   },
 });
 
-export const { setLoading, setOnline } = loaderSlice.actions;
+export const { setLoading, setOnline, setReload } = loaderSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 // export const getLoading = (state: RootState) => state.loader.isLoading;

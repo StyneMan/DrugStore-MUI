@@ -8,21 +8,13 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { NumericFormat } from "react-number-format";
 
 interface OrderProps {
-  order: any;
-  rxDoc: any;
+  order;
+  rxDoc;
   index: number;
 }
 
 export default function OrderCard({ order, rxDoc, index }: OrderProps) {
-  // const [count, setCount] = React.useState(3);
 
-  // React.useEffect(() => {
-  //   console.log("RXDOC", rxDoc);
-  //   console.log("ORDER", order);
-  // }, );
-
-  console.log("RXDOC", rxDoc);
-  console.log("ORDER", order);
 
   return (
     <Box
@@ -62,8 +54,6 @@ export default function OrderCard({ order, rxDoc, index }: OrderProps) {
             height={36}
             sx={{ cursor: "pointer" }}
             onClick={async () => {
-              // await rxDoc?.modify((docData: any) => {
-              console.log("RX DOC SD:: ", rxDoc?._data.items[index].quantity);
 
               if (rxDoc?._data.items[index].quantity > 1) {
                 await rxDoc?.update({
@@ -73,9 +63,7 @@ export default function OrderCard({ order, rxDoc, index }: OrderProps) {
                   },
                 });
               }
-              //   console.log("RX DOC AFTER :: ", docData?.items[index].quantity);
-              //   return docData;
-              // });
+              
             }}
           >
             <RemoveIcon />
@@ -130,9 +118,8 @@ export default function OrderCard({ order, rxDoc, index }: OrderProps) {
             sx={{ cursor: "pointer" }}
             onClick={async () => {
               const re = rxDoc?._data?.items?.filter(
-                (item: any) => item.name !== rxDoc.items[index]?.name
+                (item) => item.name !== rxDoc.items[index]?.name
               );
-              console.log("FILTERED :: ", re);
 
               await rxDoc?.update({
                 $set: {
@@ -140,7 +127,6 @@ export default function OrderCard({ order, rxDoc, index }: OrderProps) {
                 },
               });
 
-              // await rxDoc?.remove;
             }}
           >
             <DeleteForeverIcon sx={{ color: "grey" }} />

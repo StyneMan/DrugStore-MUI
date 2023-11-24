@@ -1,14 +1,37 @@
 import { Box, Card, Grid, Typography } from "@mui/material";
-import React from "react";
-import { SalesSummaryModel } from "../../data/salessummary";
+import { NumericFormat } from "react-number-format";
 
 interface SalesCardProps {
-  data: SalesSummaryModel;
+  data;
 }
 
 export default function SalesCard({ data }: SalesCardProps) {
+  function getOrdinalSuffix(day: number) {
+    if (day >= 11 && day <= 13) {
+      return "th";
+    }
+    switch (day % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  }
+
+  // Format the date with day and ordinal suffix
+  const date =  new Date(Date.parse(`${data?.updated_at}`));
+  const day = date.getDate();
+  const ordinalSuffix = getOrdinalSuffix(day);
+  const formattedDate = `${day}${ordinalSuffix} ${date.toLocaleString("en-US", {
+    month: "short",
+  })}`;
+
   return (
-    <Card elevation={0} sx={{my: 2, p: 3}} >
+    <Card elevation={0} sx={{ my: 2, p: 3 }}>
       <Box display={"flex"}>
         <Grid container spacing={1}>
           {/* Order No Column */}
@@ -21,7 +44,7 @@ export default function SalesCard({ data }: SalesCardProps) {
             alignItems={"start"}
           >
             <Typography fontSize={13} fontWeight={300} textAlign={"start"}>
-              {data?.orderNo}
+              {`#${data?.id}`}
             </Typography>
           </Grid>
 
@@ -34,9 +57,13 @@ export default function SalesCard({ data }: SalesCardProps) {
             justifyContent={"start"}
             alignItems={"start"}
           >
-            <Typography fontSize={15} textAlign={"start"}>
-              {`₦${data?.totalAmount}`}
-            </Typography>
+            <NumericFormat
+              style={{ fontSize: 15, fontFamily: "sans-serif" }}
+              value={parseFloat(data?.final_total)?.toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₦"}
+            />
           </Grid>
 
           {/* No of items Column */}
@@ -49,7 +76,7 @@ export default function SalesCard({ data }: SalesCardProps) {
             alignItems={"start"}
           >
             <Typography fontSize={13} fontWeight={300} textAlign={"start"}>
-              {data?.noItems}
+              {data?.sell_lines?.length}
             </Typography>
           </Grid>
 
@@ -62,9 +89,15 @@ export default function SalesCard({ data }: SalesCardProps) {
             justifyContent={"start"}
             alignItems={"start"}
           >
-            <Typography fontSize={15} textAlign={"start"}>
-              {`${data?.modePayment}`}
-            </Typography>
+            {data?.payment_lines?.map((elem, key: number) => (
+              <Box key={key}>
+                <Typography fontSize={15} textAlign={"start"}>
+                  {`${elem?.method?.toString().replace("_", " ")}${
+                    data?.payment_lines?.length - key > 1 ? "/" : ""
+                  }`}
+                </Typography>
+              </Box>
+            ))}
           </Grid>
 
           {/* Amount Paid Column */}
@@ -76,9 +109,13 @@ export default function SalesCard({ data }: SalesCardProps) {
             justifyContent={"start"}
             alignItems={"start"}
           >
-            <Typography fontSize={15} textAlign={"start"}>
-              {`₦${data?.amountPaid}`}
-            </Typography>
+            <NumericFormat
+              style={{ fontSize: 15, fontFamily: "sans-serif" }}
+              value={parseFloat(data?.final_total)?.toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₦"}
+            />
           </Grid>
 
           {/* Amount Due Column */}
@@ -90,9 +127,13 @@ export default function SalesCard({ data }: SalesCardProps) {
             justifyContent={"start"}
             alignItems={"start"}
           >
-            <Typography fontSize={15} textAlign={"start"}>
-              {`₦${data?.amountDue}`}
-            </Typography>
+            <NumericFormat
+              style={{ fontSize: 15, fontFamily: "sans-serif", marginLeft: 10 }}
+              value={parseFloat("0")?.toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₦"}
+            />
           </Grid>
 
           {/* Time Column */}
@@ -105,7 +146,11 @@ export default function SalesCard({ data }: SalesCardProps) {
             alignItems={"start"}
           >
             <Typography fontSize={13} fontWeight={300} textAlign={"start"}>
-              {data?.time}
+              {new Intl.DateTimeFormat("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              }).format(Date.parse(data?.updated_at))}
             </Typography>
           </Grid>
 
@@ -119,7 +164,7 @@ export default function SalesCard({ data }: SalesCardProps) {
             alignItems={"start"}
           >
             <Typography fontSize={13} fontWeight={300} textAlign={"start"}>
-              {data?.date}
+              {formattedDate}
             </Typography>
           </Grid>
         </Grid>

@@ -2,11 +2,18 @@
   "name": "electron-mui",
   "private": true,
   "version": "0.0.0",
-  "main": "./out/main/main.js",
+  "main": "./dist/main/main.js",
+  "author": {
+    "email": "stanleynyekpeye@gmail.com",
+    "name": "Stanley Nyekpeye"
+  },
   "scripts": {
     "dev": "electron-vite dev -w",
     "build": "tsc && electron-vite build",
-    "preview": "electron-vite preview"
+    "preview": "electron-vite preview",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -16,11 +23,14 @@
     "@mui/x-data-grid": "^6.15.0",
     "@mui/x-date-pickers": "^6.15.0",
     "@reduxjs/toolkit": "^1.9.7",
+    "@std/esm": "^0.26.0",
     "axios": "^1.5.1",
+    "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "dexie": "^4.0.0-alpha.4",
     "fake-indexeddb": "^4.0.2",
     "formik": "^2.4.5",
+    "is-online": "^10.0.0",
     "jsonc": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -37,6 +47,7 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@types/electron": "^1.6.10",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-slick": "^0.23.10",
@@ -44,6 +55,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
     "electron": "^27.0.2",
+    "electron-builder": "^24.6.4",
     "electron-vite": "^1.0.28",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",

@@ -9,15 +9,13 @@ import Close from "@mui/icons-material/Close";
 import CollapseSection from "./filter_accordion";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilteredProducts, setSearchKey } from "../../redux/slices/search";
-// import tempProducts from "../../data/products";
-// import ControlledAccordions from "./filter_accordion";
-// import CustomizedAccordions from "./filter_accordion";
+import { RootState } from "../../redux/store";
 
 const Searchbar = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const dispatch = useDispatch();
-  const searchKey = useSelector((state) => state.search.searchKey);
-  const products = useSelector((state) => state.product.products);
+  const searchKey = useSelector((state: RootState) => state.search.searchKey);
+  const products = useSelector((state: RootState) => state.product.products);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -30,9 +28,9 @@ const Searchbar = () => {
 
   const searchClick = () => {
     if (searchKey) {
-      console.log("JH ", products);
+      // console.log("JH ", products);
 
-      const filtered = products?.filter((item: any) =>
+      const filtered = products?.filter((item) =>
         item?.name?.toLowerCase().includes(searchKey.toLowerCase())
       );
       dispatch(setFilteredProducts(filtered));
@@ -73,10 +71,9 @@ const Searchbar = () => {
               paddingBottom: 8,
             },
           }}
-          flex={1}
           variant="filled"
           fullWidth
-          sx={{ borderRadius: 10 }}
+          sx={{ borderRadius: 10, flex: 1 }}
         />
         <Button
           variant="contained"

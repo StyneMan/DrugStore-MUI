@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Grid, List, Typography } from "@mui/material";
 import ProductCard from "../../../components/cards/product_card";
 import { useSelector } from "react-redux";
@@ -15,12 +16,8 @@ export default function ProductTab() {
   const filteredProducts = useSelector(
     (state: RootState) => state.search.filteredProducts
   );
-  // const products = useSelector((state: RootState) => state.product.products);
-  // const sorting = useSelector((state: RootState) => state.search.sorting);
 
-  // console.log("FILTERED PRODUCTS TAB :: ", filteredProducts);
-  // console.log("PRODUCTS  TAB :: ", products);
-  // console.log("PRODUCTS  TAB SORTING :: ", sorting);
+  console.log("PRODICTS: ", filteredProducts);
 
   return (
     <Grid

@@ -29,14 +29,48 @@ a:hover {
   color: #535bf2;
 } */
 
+/* For Chrome, Safari, and Opera */
+::-webkit-scrollbar {
+  width: 8px; /* Set the width of the scrollbar */
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Set the color of the thumb */
+  border-radius: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Hide the scrollbar when not scrolling */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #356caa; /* Adjust color on hover if needed */
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: #356caa; /* Adjust color on active state if needed */
+}
+
+/* Hide the scrollbar track when not scrolling */
+::-webkit-scrollbar-track:hover {
+  background-color: #CCE4F2; /* Adjust color on hover if needed */
+}
+
+::-webkit-scrollbar-track:active {
+  background-color: #CCE4F2; /* Adjust color on active state if needed */
+}
+
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  color: #606F7A;
-  background-color: #ECF0F4;
+  color: #606f7a;
+  user-select: none;
+  background-color: #ecf0f4;
 }
 
 /* h1 {

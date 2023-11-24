@@ -1,26 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  Autocomplete,
   Box,
   Button,
   Card,
   Grid,
+  TextField,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import React from "react";
 
-// import { tempPaymentMethods } from "../../../data/payment_methods";
 import { getDatabase } from "../../../../../main/database";
 import { NumericFormat } from "react-number-format";
-import { ToastBar, Toaster, toast } from "react-hot-toast";
-import { CheckCircleOutline } from "@mui/icons-material";
+import { toast } from "react-hot-toast";
+import { CheckCircleOutline, Info } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import CustomDialog from "../../../components/dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../../redux/slices/loader";
 import { RootState } from "../../../redux/store";
-import { setPaymentMethods } from "../../../redux/slices/purchase";
+import { setCurrentBusinessLocation } from "../../../redux/slices/business_locations";
+import { setCurrentCustomer } from "../../../redux/slices/customers";
+import AccountForm from "../../../components/forms/account";
 
 export default function OrderSummary() {
   const [subTotal, setSubTotal] = React.useState(0);
@@ -28,105 +31,138 @@ export default function OrderSummary() {
   const [total, setTotal] = React.useState(0);
   const [data, setData] = React.useState<any>([]);
   const [open, setOpen] = React.useState(false);
+  const [openAccount, setOpenAccount] = React.useState(false);
+  const [openCustomer, setOpenCustomer] = React.useState(false);
   const [isSelected, setSelected] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
-  const [selectedMethod, setSelectedMethod] = React.useState<string | null>(
-    null
-  );
-  const [deviceType, setDeviceType] = React.useState("mobile");
-  // const [paymentMethods, setPaymentMethods] = React.useState<any>([]);
+  const [selectedMethod, setSelectedMethod] = React.useState<any>(null);
+  const [currentBusinessLocation, setCurrBusinessLocation] =
+    React.useState<any>([]);
 
   const dispatch = useDispatch();
 
   const currentCustomer = useSelector(
-    (state) => state.purchase.currentCustomer
+    (state: RootState) => state.customers.currentCustomer
+  );
+  const customers = useSelector(
+    (state: RootState) => state.customers.customers
   );
   const dbasePath = useSelector((state: RootState) => state.database.dbasePath);
-  const paymentMethods = useSelector(
-    (state: RootState) => state.purchase.paymentMethods
+  const businessLocations = useSelector(
+    (state: RootState) => state.business_locations.businessLocations
   );
 
   const navigate = useNavigate();
-
   const theme = useTheme();
-  const tablet = useMediaQuery(theme.breakpoints.only("sm"));
 
   async function getCarts() {
     try {
       const db = await getDatabase(dbasePath);
 
-      db.carts
+      db?.carts
         .find()
         .sort({
           id: "asc",
         })
         .$.subscribe(function (heroes) {
           if (!heroes) {
-            // heroesList.innerHTML = 'Loading..';
             return;
           }
           setData(heroes[0]);
 
-          let summer = 0;
+          let summer = 0,
+            taxer = 0;
 
           heroes.forEach((elem) => {
             // console.log("VALUE !!!! ", elem?._data);
-            elem?._data.items?.forEach((el: any) => {
+            elem?._data.items?.forEach((el) => {
               summer = summer + el?.quantity * el?.unitPrice;
+              taxer = taxer + (el?.priceWithTax - el?.unitPrice);
             });
           });
 
           setSubTotal(summer);
-          const tx = 0.075 * summer;
-          setTax(tx);
-          setTotal(tx + summer);
+          // const tx = 0.075 * summer;
+          setTax(taxer);
+          setTotal(taxer + summer);
         });
-
-        console.log("DATABASE CONTENT RIGHT HERE ::: ", db);
-        
-    } catch (error) {
-      console.log("CATCH ERROR ::: ", error);
-    }
-  }
-
-  // console.log("CURRENT CUSTOMIRAMITE :: ", currentCustomer);
-
-  async function getPaymentMethods() {
-    try {
-      const db = await getDatabase(dbasePath);
-
-      db.paymentmethods.find().$.subscribe(async function (pMethod) {
-        if (!pMethod) {
-          // heroesList.innerHTML = 'Loading..';
-          console.log("EMPTY DATABASE ::: ");
-          return;
-        }
-
-        console.log("p METHODS ::: ", pMethod[0]?._data);
-
-        const mArray = Object.values(pMethod[0]?._data?.methods);
-        dispatch(setPaymentMethods(mArray));
-      });
     } catch (error) {
       console.log("CATCH ERROR ::: ", error);
     }
   }
 
   React.useEffect(() => {
-    getPaymentMethods();
-  }, []);
+    if (businessLocations) {
+      const filtered = businessLocations?.filter(
+        (item) => item?.location_id === localStorage.getItem("locationId")
+      );
+      setCurrBusinessLocation(filtered[0]);
+      dispatch(setCurrentBusinessLocation(filtered[0]));
+    }
+  }, [businessLocations, dispatch]);
 
   React.useEffect(() => {
     getCarts();
-  });
+  }, []);
 
-  React.useEffect(() => {
-    if (tablet) {
-      setDeviceType("tablet");
+  const checkCustomer = () => {
+    if (!currentCustomer) {
+      // Show dialog to select customer here
+      setOpenCustomer(true);
     } else {
-      setDeviceType("pc");
+      saveDraft();
     }
-  }, [tablet]);
+  };
+
+  const saveDraft = async () => {
+    try {
+      dispatch(setLoading(true));
+      const db = await getDatabase(`${localStorage.getItem("dbPath")}`);
+      const draftObj = {
+        id: new Date().getTime().toString(),
+        customer: currentCustomer,
+        amount: total,
+        items: data?._data.items,
+        timestamp: new Date().toISOString(),
+      };
+
+      const resp = await db?.drafts.insert(draftObj);
+      dispatch(setLoading(false));
+
+      // Now remove from order
+      await db?.carts.remove();
+      // Now send an empty array to main process
+      window.electron.sendCartDataToMain(JSON?.parse("[]"));
+
+      toast.success("Successfully saved as draft. ", {
+        duration: 8000,
+        position: "bottom-center",
+        icon: (
+          <CheckCircleOutline
+            fontSize="small"
+            sx={{ color: theme.palette.success.dark }}
+          />
+        ),
+        iconTheme: {
+          primary: theme.palette.success.main,
+          secondary: theme.palette.success.light,
+        },
+        style: {
+          backgroundColor: theme.palette.success.light,
+          border: "1px solid",
+          borderColor: theme.palette.success.dark,
+          paddingLeft: 21,
+          paddingRight: 21,
+          paddingTop: 8,
+          paddingBottom: 8,
+        },
+      });
+
+      console.log("ADDED DRAFTS RESPONSE >> ", resp);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const renderConfirmDeleteOrder = (
     <Box
@@ -150,7 +186,9 @@ export default function OrderSummary() {
           variant="contained"
           sx={{ textTransform: "capitalize", color: "white", p: 1, mb: 1 }}
           onClick={async () => {
-            await data?.remove();
+            const db = await getDatabase(`${localStorage.getItem("dbPath")}`);
+            await db?.carts.remove();
+            window.electron.sendCartDataToMain(JSON?.parse("[]"));
             setOpen(false);
           }}
         >
@@ -168,12 +206,102 @@ export default function OrderSummary() {
     </Box>
   );
 
+  const renderSelectCustomer = (
+    <Box
+      px={4}
+      pt={5}
+      pb={4}
+      display={"flex"}
+      flexDirection={"column"}
+      justifyContent={"center"}
+      alignItems={"center"}
+      width={400}
+    >
+      <Typography
+        textAlign={"center"}
+        my={3}
+        fontWeight={900}
+        fontSize={24}
+        gutterBottom
+      >
+        {"Enter Customer Name"}
+      </Typography>
+      <Autocomplete
+        id="free-solo-demo"
+        freeSolo
+        fullWidth
+        sx={{ mb: 1.5 }}
+        onChange={(e, val) => {
+          const filtered = customers?.filter((elem) => elem?.name === val);
+          dispatch(setCurrentCustomer(filtered[0]));
+          // console.log("TEXT VALUE :: ", filtered);
+        }}
+        options={customers?.map((option) => option.name)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            placeholder="Type customer name here"
+            fullWidth
+          />
+        )}
+      />
+      <Box
+        pt={3}
+        display={"flex"}
+        flexDirection={"column"}
+        justifyContent={"start"}
+        alignItems={"stretch"}
+        width={256}
+      >
+        <Button
+          variant="contained"
+          sx={{ textTransform: "capitalize", color: "white", p: 2, mb: 1 }}
+          onClick={async () => {
+            setOpenCustomer(false);
+            saveDraft();
+          }}
+        >
+          Save Draft
+        </Button>
+        <Button
+          sx={{ textTransform: "capitalize", color: "black", p: 2 }}
+          onClick={() => {
+            setOpenCustomer(false);
+          }}
+        >
+          Skip
+        </Button>
+      </Box>
+    </Box>
+  );
+
   return (
     <Card>
       <CustomDialog
         open={open}
         setOpen={setOpen}
         content={renderConfirmDeleteOrder}
+      />
+      <CustomDialog
+        open={openAccount}
+        setOpen={setOpenAccount}
+        content={
+          <AccountForm
+            setOpen={setOpenAccount}
+            currentCustomer={currentCustomer}
+            data={data}
+            selectedMethod={selectedMethod}
+            subTotal={subTotal}
+            tax={tax}
+            total={total}
+          />
+        }
+      />
+      <CustomDialog
+        showClose={false}
+        open={openCustomer}
+        setOpen={setOpenCustomer}
+        content={renderSelectCustomer}
       />
       <Box
         display={"flex"}
@@ -292,42 +420,46 @@ export default function OrderSummary() {
               scrollbarColor: "red blue",
             }}
           >
-            {paymentMethods?.map((item: any, index: number) => (
-              <Box key={index} p={2} borderRadius={1}>
-                <Box
-                  bgcolor={
-                    selectedIndex === index
-                      ? theme.palette.primary.light
-                      : "#ECF0F4"
-                  }
-                  boxShadow={
-                    selectedIndex === index
-                      ? "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
-                      : "none"
-                  }
-                  display={"flex"}
-                  borderRadius={2}
-                  p={3}
-                  flexDirection={"column"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  component={Button}
-                  onClick={() => {
-                    setSelectedIndex(index);
-                    setSelectedMethod(item);
-                    setSelected(true);
-                  }}
-                >
-                  <Typography
-                    fontSize={13}
-                    textAlign={"center"}
-                    lineHeight={1.0}
+            {currentBusinessLocation?.payment_methods?.map(
+              (item: any, index: number) => (
+                <Box key={index} p={2} borderRadius={1}>
+                  <Box
+                    bgcolor={
+                      selectedIndex === index
+                        ? theme.palette.primary.light
+                        : "#ECF0F4"
+                    }
+                    boxShadow={
+                      selectedIndex === index
+                        ? "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
+                        : "none"
+                    }
+                    display={"flex"}
+                    borderRadius={2}
+                    p={3}
+                    flexDirection={"column"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    component={Button}
+                    onClick={() => {
+                      console.log("CURRENT PAYMENT METHOD ::  ", item);
+
+                      setSelectedIndex(index);
+                      setSelectedMethod(item);
+                      setSelected(true);
+                    }}
                   >
-                    {item}
-                  </Typography>
+                    <Typography
+                      fontSize={13}
+                      textAlign={"center"}
+                      lineHeight={1.0}
+                    >
+                      {item?.label}
+                    </Typography>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              )
+            )}
           </Box>
         </Box>
 
@@ -350,16 +482,42 @@ export default function OrderSummary() {
               variant="contained"
               sx={{ p: 1, width: 156 }}
               onClick={() => {
-                navigate("/dashboard/paymentmethod", {
-                  state: {
-                    paymentMethod: selectedMethod,
-                    tax: tax,
-                    total: total,
-                    subTotal: subTotal,
-                    customer: currentCustomer,
-                    customerName: `${currentCustomer?.first_name} ${currentCustomer?.last_name}`
-                  },
-                });
+                if (!currentCustomer) {
+                  toast.error("Select customer first!", {
+                    icon: <Info color="error" />,
+                    style: {
+                      backgroundColor: "#fadcdcf6",
+                      color: theme.palette.error.dark,
+                      paddingLeft: 24,
+                      paddingRight: 24,
+                      paddingTop: 16,
+                      paddingBottom: 16,
+                      fontSize: 21,
+                    },
+                    position: "top-center",
+                  });
+                } else {
+                  if (
+                    `${selectedMethod?.name}`.toLowerCase().includes("transfer")
+                  ) {
+                    setOpenAccount(true);
+                  } else {
+                    navigate("/dashboard/paymentmethod", {
+                      state: {
+                        paymentMethod: selectedMethod,
+                        tax: tax,
+                        total: total,
+                        subTotal: subTotal,
+                        customer: currentCustomer,
+                        orderNo: `${data?._data?.id}`,
+                        itemsOrdered: data?._data?.items,
+                        customerName: `${
+                          currentCustomer?.first_name ?? currentCustomer?.name
+                        } ${currentCustomer?.last_name ?? ""}`,
+                      },
+                    });
+                  }
+                }
               }}
             >
               Place Order
@@ -374,78 +532,10 @@ export default function OrderSummary() {
                 bgcolor: "#CCE4F2",
                 color: "black",
               }}
-              onClick={async () => {
-                try {
-                  dispatch(setLoading(true));
-                  const db = await getDatabase(
-                    `${localStorage.getItem("dbPath")}`
-                  );
-                  const draftObj = {
-                    id: new Date().getTime().toString(),
-                    customer: currentCustomer,
-                    amount: total,
-                    items: data?._data.items,
-                    timestamp: new Date().toISOString(),
-                  };
-
-                  const resp = await db?.drafts.insert(draftObj);
-                  dispatch(setLoading(false));
-
-                  toast.success("Successfully saved as draft. ", {
-                    duration: 8000,
-                    icon: (
-                      <CheckCircleOutline
-                        fontSize="small"
-                        sx={{ color: theme.palette.success.dark }}
-                      />
-                    ),
-                    iconTheme: {
-                      primary: "#000",
-                      secondary: "#fff",
-                    },
-                  });
-
-                  // Now remove from order
-                  await data?.remove();
-
-                  console.log("ADDED DRAFTS RESPONSE >> ", resp);
-                } catch (error) {
-                  dispatch(setLoading(false));
-                  console.log("ERROR ==>> ", error?.message);
-                }
-                //
-              }}
+              onClick={checkCustomer}
             >
               Save Draft
             </Button>
-            <Toaster position="bottom-center">
-              {(t) => (
-                <ToastBar
-                  toast={t}
-                  position="bottom-center"
-                  style={{
-                    backgroundColor: theme.palette.success.light,
-                    paddingTop: 2,
-                    paddingBottom: 2,
-                    paddingLeft: 48,
-                    paddingRight: 48,
-                    border: `1px solid ${theme.palette.success.main}`,
-                  }}
-                >
-                  {({ icon, message }) => (
-                    <>
-                      {icon}
-                      {message}
-                      {t.type !== "loading" && (
-                        <a onClick={() => toast.dismiss(t.id)}>
-                          <p style={{ borderBottom: "1px solid" }}>Undo. </p>
-                        </a>
-                      )}
-                    </>
-                  )}
-                </ToastBar>
-              )}
-            </Toaster>
           </Box>
           <Button
             disabled={!data}
