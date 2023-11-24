@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "electron-vite dev -w",
     "build": "tsc && electron-vite build",
-    "preview": "electron-vite preview"
+    "preview": "electron-vite preview" 
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
