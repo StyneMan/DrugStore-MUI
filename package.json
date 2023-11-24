@@ -1,7 +1,7 @@
 {
   "name": "electron-mui",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./out/main/main.js",
   "author": {
     "email": "stanleynyekpeye@gmail.com",
@@ -10,7 +10,10 @@
   "scripts": {
     "dev": "electron-vite dev -w",
     "build": "tsc && electron-vite build",
-    "preview": "electron-vite preview" 
+    "preview": "electron-vite preview",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -20,11 +23,11 @@
     "@mui/x-data-grid": "^6.15.0",
     "@mui/x-date-pickers": "^6.15.0",
     "@reduxjs/toolkit": "^1.9.7",
-    "@std/esm": "^0.26.0",
     "axios": "^1.5.1",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "dexie": "^4.0.0-alpha.4",
+    "esm": "^3.2.25",
     "fake-indexeddb": "^4.0.2",
     "formik": "^2.4.5",
     "is-online": "^10.0.0",
@@ -44,7 +47,6 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
-    "@types/electron": "^1.6.10",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-slick": "^0.23.10",
