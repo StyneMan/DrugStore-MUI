@@ -2,7 +2,7 @@
   "name": "electron-mui",
   "private": true,
   "version": "0.0.0",
-  "main": "./dist/main/main.js",
+  "main": "./out/main/main.js",
   "author": {
     "email": "stanleynyekpeye@gmail.com",
     "name": "Stanley Nyekpeye"
@@ -10,10 +10,7 @@
   "scripts": {
     "dev": "electron-vite dev -w",
     "build": "tsc && electron-vite build",
-    "preview": "electron-vite preview",
-    "build:win": "npm run build && electron-builder --win",
-    "build:mac": "npm run build && electron-builder --mac",
-    "build:linux": "npm run build && electron-builder --linux"
+    "preview": "electron-vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
