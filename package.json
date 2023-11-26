@@ -2,18 +2,18 @@
   "name": "electron-mui",
   "private": true,
   "version": "1.0.2",
-  "main": "./out/main/main.js",
+  "main": "./dist/main/main.js",
   "author": {
     "email": "stanleynyekpeye@gmail.com",
     "name": "Stanley Nyekpeye"
   },
   "scripts": {
-    "dev": "electron-vite dev -w",
+    "dev": "electron-vite dev  --outDir=dist",
+    "start": "electron-vite preview --outDir=dist",
     "build": "tsc && electron-vite build",
     "preview": "electron-vite preview",
-    "build:win": "npm run build && electron-builder --win",
-    "build:mac": "npm run build && electron-builder --mac",
-    "build:linux": "npm run build && electron-builder --linux"
+    "package": "electron-vite build --outDir=dist && electron-forge package",
+    "make ": "electron-vite build --outDir=dist && electron-forge make"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -27,6 +27,7 @@
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "dexie": "^4.0.0-alpha.4",
+    "electron-is-dev": "^2.0.0",
     "esm": "^3.2.25",
     "fake-indexeddb": "^4.0.2",
     "formik": "^2.4.5",
@@ -47,6 +48,12 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.1.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-slick": "^0.23.10",
@@ -54,7 +61,6 @@
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
     "electron": "^27.0.2",
-    "electron-builder": "^24.6.4",
     "electron-vite": "^1.0.28",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",

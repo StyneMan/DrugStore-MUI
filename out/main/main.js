@@ -1,5 +1,5 @@
 "use strict";
-const electron$1 = require("electron");
+const require$$0$3 = require("electron");
 const path = require("node:path");
 const require$$3 = require("util");
 const fs = require("fs");
@@ -55,7 +55,7 @@ function getAugmentedNamespace(n2) {
   });
   return a2;
 }
-var electron = {};
+var electron$1 = {};
 var rxStorageIpcRenderer = {};
 var cjs = {};
 var Observable$1 = {};
@@ -12222,7 +12222,7 @@ function exposeIpcMainRxStorage(args2) {
       }
     });
   });
-})(electron);
+})(electron$1);
 var storageDexie = {};
 var rxStorageDexie = {};
 var dexieHelper = {};
@@ -40901,18 +40901,26 @@ async function getDatabase(name) {
     console.log("CAUGHT ERROR", error);
   }
 }
+const electron = require$$0$3;
+if (typeof electron === "string") {
+  throw new TypeError("Not running in an Electron environment!");
+}
+const isEnvSet = "ELECTRON_IS_DEV" in process.env;
+const getFromEnv = Number.parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
+var electronIsDev = isEnvSet ? getFromEnv : !electron.app.isPackaged;
+const isDev = /* @__PURE__ */ getDefaultExportFromCjs(electronIsDev);
 let mainWindow;
-const databasePath = path__namespace.join(electron$1.app.getPath("userData"), "mydb");
+const databasePath = path__namespace.join(require$$0$3.app?.getPath("userData"), "mydb");
 const storagePath = path__namespace.join(
-  electron$1.app.getPath("userData"),
+  require$$0$3.app?.getPath("userData"),
   "virtualrx_drugstore.json"
 );
 const salesStoragePath = path__namespace.join(
-  electron$1.app.getPath("userData"),
+  require$$0$3.app?.getPath("userData"),
   "virtualrx_drugstore_sales.json"
 );
 const pendingSellsStoragePath = path__namespace.join(
-  electron$1.app.getPath("userData"),
+  require$$0$3.app?.getPath("userData"),
   "virtualrx_drugstore_pending_sells.json"
 );
 let productsJson = [];
@@ -40926,73 +40934,79 @@ let pendingSellsJson = [];
 let paymentMethodsJson = {};
 let authJson = {};
 function getDeviceDimensions() {
-  const mainScreen = electron$1.screen.getPrimaryDisplay();
+  const mainScreen = require$$0$3.screen.getPrimaryDisplay();
   const width = mainScreen.bounds.width;
   const height = mainScreen.bounds.height;
   return { width, height };
 }
 async function createWindow() {
   const { height, width } = getDeviceDimensions();
-  mainWindow = new electron$1.BrowserWindow({
+  mainWindow = new require$$0$3.BrowserWindow({
     minWidth: width * 0.75,
     minHeight: height * 0.99,
     width: 1400,
     height: 850,
     webPreferences: {
-      preload: path__namespace.join(__dirname, "../../out/preload/preload.js"),
+      preload: path__namespace.join(__dirname, "../../dist/preload/preload.js"),
       webSecurity: false,
       nodeIntegration: true,
       nodeIntegrationInWorker: true
     }
   });
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
+  mainWindow.loadURL(
+    isDev ? "http://localhost:5173" : `file://${path__namespace.join(__dirname, "../../dist/renderer/index.html")}`
+  );
   try {
-    electron$1.ipcMain.handle("isOnline", async () => false);
+    require$$0$3.ipcMain.handle("isOnline", async () => false);
     if (fs.existsSync(storagePath)) {
       const dbSource = fs.readFileSync(storagePath, "utf8");
-      electron$1.ipcMain.handle("dbContent", () => JSON.parse(dbSource));
-      electron$1.ipcMain.handle("ping", () => databasePath);
+      require$$0$3.ipcMain.handle("dbContent", () => JSON.parse(dbSource));
+      require$$0$3.ipcMain.handle("ping", () => databasePath);
       if (databasePath) {
         await getDatabase(databasePath);
         const storage = storageDexie.getRxStorageDexie();
-        electron.exposeIpcMainRxStorage({
+        electron$1.exposeIpcMainRxStorage({
           key: "main-storage",
           storage,
-          ipcMain: electron$1.ipcMain
+          ipcMain: require$$0$3.ipcMain
         });
       }
       const parseData = JSON.parse(dbSource);
       console.log("PARSED DATA FROM FS :: ", parseData);
       const authContent = parseData?.collections[0]?.content;
       console.log("AUTH  MAIN ", authContent);
-      electron$1.ipcMain.handle("auth", () => JSON.stringify(authContent));
+      require$$0$3.ipcMain.handle("auth", () => JSON.stringify(authContent));
       const bizLocationsContent = parseData?.collections[3]?.content;
       const copy = bizLocationsContent;
       console.log("BUSINESS LOCATIONS MAIN ", copy);
-      electron$1.ipcMain.handle("bizLocations", () => JSON.stringify(copy));
+      require$$0$3.ipcMain.handle("bizLocations", () => JSON.stringify(copy));
       const categoriesContent = parseData?.collections[2]?.content;
       const categoriesCopy = categoriesContent;
-      electron$1.ipcMain.handle("categories", () => JSON.stringify(categoriesCopy));
+      require$$0$3.ipcMain.handle("categories", () => JSON.stringify(categoriesCopy));
       const productsContent = parseData?.collections[1]?.content;
       const productCopy = productsContent;
-      electron$1.ipcMain.handle("products", () => JSON.stringify(productCopy));
+      require$$0$3.ipcMain.handle("products", () => JSON.stringify(productCopy));
       const customersContent = parseData?.collections[5]?.content;
       const customersCopy = customersContent;
-      electron$1.ipcMain.handle("customers", () => JSON.stringify(customersCopy));
+      require$$0$3.ipcMain.handle("customers", () => JSON.stringify(customersCopy));
       const cartsContent = parseData?.collections[6]?.content;
       const cartsCopy = cartsContent;
       console.log("CART MAIN  COPY CHECKER   ", cartsCopy);
-      electron$1.ipcMain.handle("carts", () => JSON.stringify(cartsCopy));
+      require$$0$3.ipcMain.handle("carts", () => JSON.stringify(cartsCopy));
       const draftsContent = parseData?.collections[7]?.content;
       const draftsCopy = draftsContent;
       console.log("CART MAIN  COPY CHECKER   ", draftsCopy);
-      electron$1.ipcMain.handle("drafts", () => JSON.stringify(draftsCopy));
+      require$$0$3.ipcMain.handle("drafts", () => JSON.stringify(draftsCopy));
     }
     if (fs.existsSync(salesStoragePath)) {
       const dbSource = fs.readFileSync(salesStoragePath, "utf8");
       const parseData = JSON.parse(dbSource);
       const salesContent = parseData?.sales;
       console.log("SALES  MAIN ", salesContent);
-      electron$1.ipcMain.handle("salesSummary", () => JSON.stringify(salesContent));
+      require$$0$3.ipcMain.handle("salesSummary", () => JSON.stringify(salesContent));
     }
     if (fs.existsSync(pendingSellsStoragePath)) {
       const dbSource = fs.readFileSync(pendingSellsStoragePath, "utf8");
@@ -41000,40 +41014,39 @@ async function createWindow() {
       console.log("PARSED DATA FROM FS PENDING SELLS :: ", parseData);
       const pendingSellsContent = parseData?.pending_sells;
       console.log("PENDING SELLS  MAIN ", pendingSellsContent);
-      electron$1.ipcMain.handle("pendingSells", () => JSON.stringify(pendingSellsContent));
+      require$$0$3.ipcMain.handle("pendingSells", () => JSON.stringify(pendingSellsContent));
     }
-    mainWindow.loadURL("http://localhost:5173");
     mainWindow.on("closed", () => {
-      electron$1.app.quit();
+      require$$0$3.app.quit();
     });
-    electron$1.ipcMain.on("data-from-auth", (_event, data) => {
+    require$$0$3.ipcMain.on("data-from-auth", (_event, data) => {
       authJson = data;
     });
-    electron$1.ipcMain.on("data-from-renderer", (_event, data) => {
+    require$$0$3.ipcMain.on("data-from-renderer", (_event, data) => {
       productsJson = data;
     });
-    electron$1.ipcMain.on("data-from-categories", (_event, data) => {
+    require$$0$3.ipcMain.on("data-from-categories", (_event, data) => {
       categoriesJson = data;
     });
-    electron$1.ipcMain.on("data-from-customers", (_event, data) => {
+    require$$0$3.ipcMain.on("data-from-customers", (_event, data) => {
       customersJson = data;
     });
-    electron$1.ipcMain.on("data-from-payment-method", (_event, data) => {
+    require$$0$3.ipcMain.on("data-from-payment-method", (_event, data) => {
       paymentMethodsJson = data;
     });
-    electron$1.ipcMain.on("data-from-cart", (_event, data) => {
+    require$$0$3.ipcMain.on("data-from-cart", (_event, data) => {
       cartsJson = data;
     });
-    electron$1.ipcMain.on("data-from-draft", (_event, data) => {
+    require$$0$3.ipcMain.on("data-from-draft", (_event, data) => {
       draftsJson = data;
     });
-    electron$1.ipcMain.on("data-from-business-locations", (_event, data) => {
+    require$$0$3.ipcMain.on("data-from-business-locations", (_event, data) => {
       businessLocationsJson = data;
     });
-    electron$1.ipcMain.on("data-from-sales-summary", (_event, data) => {
+    require$$0$3.ipcMain.on("data-from-sales-summary", (_event, data) => {
       salesSummaryJson = data;
     });
-    electron$1.ipcMain.on("data-from-pending-sells", (_event, data) => {
+    require$$0$3.ipcMain.on("data-from-pending-sells", (_event, data) => {
       console.log("PENDING SELLS :: :: ::", data);
       pendingSellsJson = data;
     });
@@ -41041,10 +41054,10 @@ async function createWindow() {
     console.log("ERROR ORC : ", error);
   }
 }
-electron$1.app.on("ready", async function() {
+require$$0$3.app.on("ready", async function() {
   createWindow();
 });
-electron$1.app.on("before-quit", () => {
+require$$0$3.app.on("before-quit", () => {
   saveAndCloseDatabase();
 });
 async function saveAndCloseDatabase() {
@@ -41072,14 +41085,14 @@ async function saveAndCloseDatabase() {
     fs.writeFileSync(salesStoragePath, JSON.stringify(salesJson));
     fs.writeFileSync(pendingSellsStoragePath, JSON.stringify(pendingJson));
     setTimeout(() => {
-      electron$1.app.quit();
+      require$$0$3.app.quit();
     }, 3e3);
   } catch (error) {
     console.log("ERRO ON SAVE ", error);
   }
 }
-electron$1.app.on("window-all-closed", () => {
+require$$0$3.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
-    electron$1.app.quit();
+    require$$0$3.app.quit();
   }
 });

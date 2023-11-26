@@ -1,10 +1,8 @@
-
 import {
   app,
   BrowserWindow,
   screen,
   ipcMain,
-  // contextBridge,
 } from "electron";
 import * as path from "node:path";
 import electron from "electron";
@@ -12,23 +10,22 @@ import { exposeIpcMainRxStorage } from "rxdb/plugins/electron";
 import { getRxStorageDexie } from "rxdb/plugins/storage-dexie";
 import { getDatabase } from "./database";
 import fs from "fs";
-// import isOnline from "is-online";
-
+import isDev from "electron-is-dev";
 
 let mainWindow: BrowserWindow | null;
 
 // Set up the RxDB database path
-const databasePath = path.join(app.getPath("userData"), "mydb");
+const databasePath = path.join(app?.getPath("userData"), "mydb");
 const storagePath = path.join(
-  app.getPath("userData"),
+  app?.getPath("userData"),
   "virtualrx_drugstore.json"
 );
 const salesStoragePath = path.join(
-  app.getPath("userData"),
+  app?.getPath("userData"),
   "virtualrx_drugstore_sales.json"
 );
 const pendingSellsStoragePath = path.join(
-  app.getPath("userData"),
+  app?.getPath("userData"),
   "virtualrx_drugstore_pending_sells.json"
 );
 
@@ -42,7 +39,6 @@ let salesSummaryJson: unknown[] = [];
 let pendingSellsJson: unknown[] = [];
 let paymentMethodsJson: unknown = {};
 let authJson: unknown = {};
-
 
 function getDeviceDimensions() {
   const mainScreen = screen.getPrimaryDisplay();
@@ -59,16 +55,24 @@ async function createWindow() {
     width: 1400,
     height: 850,
     webPreferences: {
-      preload: path.join(__dirname, "../../out/preload/preload.js"),
+      preload: path.join(__dirname, "../../dist/preload/preload.js"),
       webSecurity: false,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
     },
   });
 
-  // contextBridge.exposeInMainWorld('electron', {});
 
-  // mainWindow.webContents.openDevTools();
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
+
+   // Vite DEV server URL
+   mainWindow.loadURL(
+    isDev
+      ? "http://localhost:5173"
+      : `file://${path.join(__dirname, "../../dist/renderer/index.html")}`
+  );
 
   try {
     ipcMain.handle("isOnline", async () => false);
@@ -80,7 +84,7 @@ async function createWindow() {
       ipcMain.handle("ping", () => databasePath);
 
       if (databasePath) {
-       await getDatabase(databasePath);
+        await getDatabase(databasePath);
         const storage = getRxStorageDexie();
         exposeIpcMainRxStorage({
           key: "main-storage",
@@ -102,33 +106,27 @@ async function createWindow() {
       console.log("BUSINESS LOCATIONS MAIN ", copy);
       ipcMain.handle("bizLocations", () => JSON.stringify(copy));
 
-
       const categoriesContent = parseData?.collections[2]?.content;
       const categoriesCopy = categoriesContent;
       ipcMain.handle("categories", () => JSON.stringify(categoriesCopy));
-      
 
       const productsContent = parseData?.collections[1]?.content;
       const productCopy = productsContent;
       ipcMain.handle("products", () => JSON.stringify(productCopy));
 
-
       const customersContent = parseData?.collections[5]?.content;
       const customersCopy = customersContent;
       ipcMain.handle("customers", () => JSON.stringify(customersCopy));
-
 
       const cartsContent = parseData?.collections[6]?.content;
       const cartsCopy = cartsContent;
       console.log("CART MAIN  COPY CHECKER   ", cartsCopy);
       ipcMain.handle("carts", () => JSON.stringify(cartsCopy));
 
-
       const draftsContent = parseData?.collections[7]?.content;
       const draftsCopy = draftsContent;
       console.log("CART MAIN  COPY CHECKER   ", draftsCopy);
       ipcMain.handle("drafts", () => JSON.stringify(draftsCopy));
-
     }
 
     if (fs.existsSync(salesStoragePath)) {
@@ -151,8 +149,6 @@ async function createWindow() {
       ipcMain.handle("pendingSells", () => JSON.stringify(pendingSellsContent));
     }
 
-    // Vite DEV server URL
-    mainWindow.loadURL("http://localhost:5173");
 
     mainWindow.on("closed", () => {
       // Close the database when the application window is closed
@@ -162,7 +158,6 @@ async function createWindow() {
       // }, 7000);
       // });
     });
-
 
     ipcMain.on("data-from-auth", (_event, data) => {
       authJson = data;
@@ -259,4 +254,3 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-

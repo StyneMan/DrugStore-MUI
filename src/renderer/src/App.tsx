@@ -124,8 +124,8 @@ function App() {
         console.log("CART FROM MAIN :: ", carts);
         console.log("DRAFT FROM MAIN :: ", drafts);
 
-        const sanitizedCart = JSON.parse(JSON.parse(carts));
-        const sanitizedDraft = JSON.parse(JSON.parse(drafts));
+        const sanitizedCart = JSON?.parse(JSON?.parse(carts));
+        const sanitizedDraft = JSON?.parse(JSON?.parse(drafts));
 
         console.log("SANITIZED  CART  FROM  MAIN   :: ", sanitizedCart);
         console.log("SANITIZED  DRAFT  FROM  MAIN   :: ", sanitizedDraft);
